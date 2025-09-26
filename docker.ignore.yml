@@ -1,0 +1,45 @@
+##############################
+# Maven / Java
+##############################
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+##############################
+# Node.js / Angular (frontend)
+##############################
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.cache/
+frontend/.npm/
+
+##############################
+# IDE / Editors
+##############################
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.project
+.classpath
+.settings/
+
+##############################
+# Logs & Temp
+##############################
+*.log
+logs/
+*.tmp
+*.bak
+*.cache
+
+##############################
+# OS generated files
+##############################
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini

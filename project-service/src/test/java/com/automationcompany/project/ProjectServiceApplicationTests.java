@@ -1,4 +1,4 @@
-package com.automationcompany.project.project_service;
+package com.automationcompany.project;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

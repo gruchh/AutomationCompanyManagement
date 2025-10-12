@@ -1,0 +1,7 @@
+CREATE DATABASE IF automation_db;
+CREATE DATABASE IF employee_db;
+CREATE DATABASE IF project_db;
+
+GRANT ALL PRIVILEGES ON DATABASE automation_db TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE employee_db TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE project_db TO postgres;

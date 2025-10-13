@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-class EmployeeKeysDTO {
+public class EmployeeKeysDTO {
     private Long id;
     private Long employeeId;
     private String employeeName;

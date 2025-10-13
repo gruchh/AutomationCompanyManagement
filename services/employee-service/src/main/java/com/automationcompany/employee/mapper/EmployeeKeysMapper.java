@@ -1,5 +1,6 @@
 package com.automationcompany.employee.mapper;
 
+import com.automationcompany.employee.model.EmployeeKeys;
 import com.automationcompany.employee.model.dto.EmployeeKeysDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -33,5 +33,6 @@ public class EmployeeKeys {
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isActive = true;
 }

@@ -33,6 +33,7 @@ public class Message {
     private String subject;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isRead = false;
 
     @CreationTimestamp
@@ -42,5 +43,6 @@ public class Message {
     private LocalDateTime readAt;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isDeleted = false;
 }

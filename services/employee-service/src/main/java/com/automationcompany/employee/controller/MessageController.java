@@ -52,9 +52,6 @@ public class MessageController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Usuwa wiadomość
-     */
     @DeleteMapping("/{messageId}/{employeeId}")
     public ResponseEntity<Void> deleteMessage(
             @PathVariable Long messageId,
@@ -64,9 +61,6 @@ public class MessageController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Sprawdza czy wiadomość została przeczytana
-     */
     @GetMapping("/{messageId}/is-read")
     public ResponseEntity<Boolean> isMessageRead(@PathVariable Long messageId) {
         boolean isRead = messageService.isMessageRead(messageId);

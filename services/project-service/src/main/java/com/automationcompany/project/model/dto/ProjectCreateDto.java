@@ -1,8 +1,8 @@
 package com.automationcompany.project.model.dto;
 
 import com.automationcompany.project.model.ProjectPriority;
+import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -20,29 +19,33 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class ProjectCreateDto {
+
     @NotBlank(message = "Project name is required")
     @Size(max = 200, message = "Project name must not exceed 200 characters")
     private String name;
-    
+
     @Size(max = 50, message = "Project code must not exceed 50 characters")
     private String code;
-    
+
     private String description;
-    
+
     @NotNull(message = "Start date is required")
     private LocalDate startDate;
-    
+
     private LocalDate endDate;
-    
+
     @NotNull(message = "Status is required")
     private ProjectStatus status;
-    
+
     private ProjectPriority priority;
-    
-    @DecimalMin(value = "0.0", inclusive = false, message = "Budget must be greater than 0")
-    private BigDecimal budget;
-    
+
+    @NotNull(message = "Service type is required")
+    private ProjectServiceType serviceType;
+
+    @Size(max = 150, message = "Location must not exceed 150 characters")
+    private String location;
+
     private Set<Long> employeeIds;
-    
+
     private Long projectManagerId;
 }

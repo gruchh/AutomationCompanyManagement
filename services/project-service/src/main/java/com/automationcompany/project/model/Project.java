@@ -1,11 +1,13 @@
 package com.automationcompany.project.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -45,16 +47,17 @@ public class Project {
     @Column(length = 50)
     private ProjectPriority priority;
 
-    @Column(precision = 15, scale = 2)
-    private BigDecimal budget;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 100)
+    private ProjectServiceType serviceType;
 
-    @Column(precision = 15, scale = 2)
-    private BigDecimal actualCost;
+    @Column(length = 150)
+    private String location;
 
     @ElementCollection
     @CollectionTable(
-        name = "project_employees",
-        joinColumns = @JoinColumn(name = "project_id")
+            name = "project_employees",
+            joinColumns = @JoinColumn(name = "project_id")
     )
     @Column(name = "employee_id")
     @Builder.Default

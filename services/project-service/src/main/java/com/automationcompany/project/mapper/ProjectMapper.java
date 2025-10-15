@@ -6,6 +6,7 @@ import org.mapstruct.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(
         componentModel = "spring",
@@ -14,6 +15,7 @@ import java.util.List;
 )
 public interface ProjectMapper {
 
+    @Mapping(target = "employeeIds", source = "employeeIds")
     ProjectDto toDto(Project project);
     List<ProjectDto> toDtoList(List<Project> projects);
 
@@ -22,7 +24,6 @@ public interface ProjectMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    @Mapping(target = "actualCost", constant = "0")
     Project toEntity(ProjectCreateDto createDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -31,7 +32,6 @@ public interface ProjectMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    @Mapping(target = "employeeIds", ignore = true)
     void updateEntityFromDto(ProjectUpdateDto updateDto, @MappingTarget Project project);
 
     @Mapping(target = "employees", ignore = true)
@@ -40,9 +40,11 @@ public interface ProjectMapper {
 
     default ProjectWithEmployeesDto toWithEmployeesDto(Project project, List<EmployeeDto> employees, EmployeeDto projectManager) {
         ProjectWithEmployeesDto dto = toWithEmployeesDto(project);
-        if (employees != null) {
-            dto.setEmployees(new HashSet<>(employees));
-        }
+
+        Optional.ofNullable(employees)
+                .map(HashSet::new)
+                .ifPresent(dto::setEmployees);
+
         dto.setProjectManager(projectManager);
         return dto;
     }

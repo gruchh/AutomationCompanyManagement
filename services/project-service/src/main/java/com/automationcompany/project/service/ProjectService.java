@@ -1,9 +1,8 @@
 package com.automationcompany.project.service;
 
-import com.automationcompany.project.client.EmployeeClient;
-import com.automationcompany.project.exception.ProjectNotFoundException;
 import com.automationcompany.project.exception.DuplicateProjectCodeException;
 import com.automationcompany.project.exception.InvalidEmployeeException;
+import com.automationcompany.project.exception.ProjectNotFoundException;
 import com.automationcompany.project.mapper.ProjectMapper;
 import com.automationcompany.project.model.Project;
 import com.automationcompany.project.model.ProjectStatus;
@@ -35,31 +34,25 @@ public class ProjectService {
     public ProjectDto getProjectById(Long id) {
         log.debug("Fetching project with id: {}", id);
         Project project = projectRepository.findById(id)
-            .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + id));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + id));
         return projectMapper.toDto(project);
     }
 
     public ProjectWithEmployeesDto getProjectWithEmployees(Long id) {
         log.debug("Fetching project with employees for id: {}", id);
         Project project = projectRepository.findById(id)
-            .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + id));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + id));
 
         List<EmployeeDto> employees = Collections.emptyList();
         if (project.getEmployeeIds() != null && !project.getEmployeeIds().isEmpty()) {
-            try {
-                employees = employeeClient.getEmployeesByIds(new ArrayList<>(project.getEmployeeIds()));
-            } catch (Exception e) {
-                log.error("Error fetching employees for project {}: {}", id, e.getMessage());
-            }
+            employees = employeeClient.getEmployeesByIds(new ArrayList<>(project.getEmployeeIds()));
+            employees = employees != null ? employees : Collections.emptyList();
         }
 
         EmployeeDto projectManager = null;
         if (project.getProjectManagerId() != null) {
-            try {
-                projectManager = employeeClient.getEmployeeById(project.getProjectManagerId());
-            } catch (Exception e) {
-                log.error("Error fetching project manager {}: {}", project.getProjectManagerId(), e.getMessage());
-            }
+            Optional<EmployeeDto> managerOpt = employeeClient.getEmployeeById(project.getProjectManagerId());
+            projectManager = managerOpt.orElse(null);
         }
 
         return projectMapper.toWithEmployeesDto(project, employees, projectManager);
@@ -77,7 +70,7 @@ public class ProjectService {
 
         Project project = projectMapper.toEntity(createDto);
         Project savedProject = projectRepository.save(project);
-        
+
         log.info("Project created successfully with id: {}", savedProject.getId());
         return projectMapper.toDto(savedProject);
     }
@@ -87,7 +80,7 @@ public class ProjectService {
         log.debug("Updating project with id: {}", id);
 
         Project project = projectRepository.findById(id)
-            .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + id));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + id));
 
         if (updateDto.getCode() != null && !updateDto.getCode().equals(project.getCode())) {
             if (projectRepository.existsByCode(updateDto.getCode())) {
@@ -101,7 +94,7 @@ public class ProjectService {
 
         projectMapper.updateEntityFromDto(updateDto, project);
         Project updatedProject = projectRepository.save(project);
-        
+
         log.info("Project updated successfully with id: {}", id);
         return projectMapper.toDto(updatedProject);
     }
@@ -123,7 +116,7 @@ public class ProjectService {
         log.debug("Assigning employees {} to project {}", employeeIds, projectId);
 
         Project project = projectRepository.findById(projectId)
-            .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + projectId));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + projectId));
 
         validateEmployees(employeeIds, null);
 
@@ -142,7 +135,7 @@ public class ProjectService {
         log.debug("Removing employees {} from project {}", employeeIds, projectId);
 
         Project project = projectRepository.findById(projectId)
-            .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + projectId));
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + projectId));
 
         if (project.getEmployeeIds() != null) {
             project.getEmployeeIds().removeAll(employeeIds);
@@ -179,27 +172,17 @@ public class ProjectService {
         }
 
         if (employeeIds != null && !employeeIds.isEmpty()) {
-            try {
-                List<EmployeeDto> employees = employeeClient.getEmployeesByIds(new ArrayList<>(employeeIds));
-                if (employees.size() != employeeIds.size()) {
-                    throw new InvalidEmployeeException("Some employee IDs are invalid");
-                }
-            } catch (Exception e) {
-                log.error("Error validating employees: {}", e.getMessage());
-                throw new InvalidEmployeeException("Unable to validate employees: " + e.getMessage());
+            List<EmployeeDto> employees = employeeClient.getEmployeesByIds(new ArrayList<>(employeeIds));
+            if (employees == null || employees.size() != employeeIds.size()) {
+                throw new InvalidEmployeeException("Some employee IDs are invalid");
             }
         }
     }
 
     private void validateEmployee(Long employeeId) {
-        try {
-            EmployeeDto employee = employeeClient.getEmployeeById(employeeId);
-            if (employee == null) {
-                throw new InvalidEmployeeException("Employee not found with id: " + employeeId);
-            }
-        } catch (Exception e) {
-            log.error("Error validating employee {}: {}", employeeId, e.getMessage());
-            throw new InvalidEmployeeException("Unable to validate employee: " + e.getMessage());
+        Optional<EmployeeDto> employeeOpt = employeeClient.getEmployeeById(employeeId);
+        if (employeeOpt.isEmpty()) {
+            throw new InvalidEmployeeException("Employee not found with id: " + employeeId);
         }
     }
 }

@@ -1,14 +1,13 @@
 package com.automationcompany.project.model.dto;
 
-import com.automationcompany.project.model.Project;
 import com.automationcompany.project.model.ProjectPriority;
+import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -26,8 +25,8 @@ public class ProjectWithEmployeesDto {
     private LocalDate endDate;
     private ProjectStatus status;
     private ProjectPriority priority;
-    private BigDecimal budget;
-    private BigDecimal actualCost;
+    private ProjectServiceType serviceType;
+    private String location;
     private Set<EmployeeDto> employees;
     private EmployeeDto projectManager;
     private LocalDateTime createdAt;

@@ -1,6 +1,5 @@
-package com.automationcompany.employee.model;
+package com.automationcompany.project.model.dto;
 
-import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Embeddable
-public class BankDetails {
+public class BankDetailsDto {
     private String bankAccountNumber;
     private String bankName;
     private String taxId;

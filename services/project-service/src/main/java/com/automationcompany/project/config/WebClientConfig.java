@@ -1,5 +1,6 @@
 package com.automationcompany.project.config;
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -8,8 +9,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     @Bean
-    public WebClient employeeWebClient(WebClient.Builder webClientBuilder) {
-        return webClientBuilder.baseUrl("http://localhost:8080/employee-service/api/employees")
-                               .build();
+    @LoadBalanced
+    public WebClient.Builder loadBalancedWebClientBuilder() {
+        return WebClient.builder();
+    }
+
+    @Bean
+    public WebClient employeeServiceWebClient(WebClient.Builder webClientBuilder) {  // ZMIENIONA NAZWA
+        return webClientBuilder
+                .baseUrl("http://employee-service/api/employees")
+                .build();
     }
 }

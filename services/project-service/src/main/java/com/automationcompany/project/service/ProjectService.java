@@ -1,5 +1,6 @@
 package com.automationcompany.project.service;
 
+import com.automationcompany.project.client.EmployeeWebClient;
 import com.automationcompany.project.exception.DuplicateProjectCodeException;
 import com.automationcompany.project.exception.InvalidEmployeeException;
 import com.automationcompany.project.exception.ProjectNotFoundException;
@@ -24,7 +25,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
-    private final EmployeeClient employeeClient;
+    private final EmployeeWebClient employeeClient;
 
     public List<ProjectDto> getAllProjects() {
         log.debug("Fetching all projects");

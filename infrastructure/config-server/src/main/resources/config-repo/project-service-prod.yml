@@ -44,6 +44,8 @@ eureka:
       defaultZone: ${EUREKA_URL}
   instance:
     prefer-ip-address: true
+    hostname: ${HOSTNAME:employee-service}
+    instance-id: ${spring.application.name}:${HOSTNAME:employee-service}:${server.port}
 
 management:
   endpoints:

@@ -1,4 +1,4 @@
-package com.automationcompany.employee.config;
+package com.automationcompany.project.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,12 +15,12 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Employee Service API")
+                        .title("Project Service API")
                         .version("1.0")
-                        .description("API for managing employees"))
+                        .description("API for managing projects"))
                 .servers(List.of(
-                        new Server().url("/employee-service").description("Via API Gateway"),
-                        new Server().url("http://localhost:8083").description("Direct Access (Dev only)")
+                        new Server().url("/project-service").description("Via API Gateway"),
+                        new Server().url("http://localhost:8088").description("Direct Access (Dev only)")
                 ));
     }
 }

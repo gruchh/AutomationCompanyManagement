@@ -10,23 +10,23 @@ spring:
             - id: employee-service
               uri: lb://employee-service
               predicates:
-                - Path=/api/employees/**
+                - Path=/employee-service/**
               filters:
-                - StripPrefix=2
+                - StripPrefix=1
 
             - id: project-service
               uri: lb://project-service
               predicates:
-                - Path=/api/projects/**
+                - Path=/project-service/**
               filters:
-                - StripPrefix=2
+                - StripPrefix=1
 
             - id: notification-service
               uri: lb://notification-service
               predicates:
-                - Path=/api/notifications/**
+                - Path=/notification-service/**
               filters:
-                - StripPrefix=2
+                - StripPrefix=1
 
           discovery:
             locator:
@@ -85,22 +85,21 @@ info:
 
 logging:
   level:
-    org.springframework.cloud.gateway: INFO
-    reactor.netty.http.client: INFO
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
 
 springdoc:
   api-docs:
     enabled: true
-    path: /v3/api-docs
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
     urls:
-      - name: employee-service
-        url: /api/employees/v3/api-docs
-      - name: project-service
-        url: /api/projects/v3/api-docs
-      - name: notification-service
-        url: /api/notifications/v3/api-docs
+      - name: Employee Service
+        url: /employee-service/v3/api-docs
+      - name: Project Service
+        url: /project-service/v3/api-docs
+      - name: Notification Service
+        url: /notification-service/v3/api-docs

@@ -1,6 +1,6 @@
-package com.automationcompany.employee.model;
 
-import jakarta.persistence.Embeddable;
+package com.automationcompany.project.model.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Embeddable
-public class EmergencyContact {
+public class EmergencyContactDto {
     private String name;
     private String phone;
     private String relation;

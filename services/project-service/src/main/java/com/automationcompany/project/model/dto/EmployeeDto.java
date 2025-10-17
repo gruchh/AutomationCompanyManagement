@@ -1,6 +1,6 @@
-package com.automationcompany.employee.model.dto;
+// Przykład EmployeeDto
+package com.automationcompany.project.model.dto;
 
-import com.automationcompany.employee.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,27 +14,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmployeeReadDTO {
-
+public class EmployeeDto {
     private Long id;
     private String firstName;
     private String lastName;
+    private String pesel;
     private String email;
     private String phoneNumber;
-    private String pesel;
     private LocalDate dateOfBirth;
     private LocalDate hireDate;
     private LocalDate terminationDate;
     private BigDecimal salary;
-    private PositionLevel positionLevel;
-    private DepartmentType department;
-    private EmploymentType employmentType;
-    private EmployeeStatus status;
-
-    private Address address;
-    private BankDetails bankDetails;
-    private EmergencyContact emergencyContact;
-
+    private String positionLevel;
+    private String department;
+    private String employmentType;
+    private String status;
+    private AddressDto address;
+    private BankDetailsDto bankDetails;
+    private EmergencyContactDto emergencyContact;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String createdBy;
+    private String updatedBy;
 }

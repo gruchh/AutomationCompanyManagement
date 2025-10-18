@@ -1,126 +1,124 @@
 package com.automationcompany.employee.service;
 
 import com.automationcompany.employee.exception.EmployeeNotFoundException;
-import com.automationcompany.employee.exception.MessageNotFoundException;
 import com.automationcompany.employee.mapper.MessageMapper;
 import com.automationcompany.employee.model.Employee;
-import com.automationcompany.employee.model.EmployeeKeys;
 import com.automationcompany.employee.model.Message;
 import com.automationcompany.employee.model.dto.MessageDTO;
-import com.automationcompany.employee.repository.EmployeeKeysRepository;
+import com.automationcompany.employee.model.dto.SendMessageDTO;
 import com.automationcompany.employee.repository.EmployeeRepository;
 import com.automationcompany.employee.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class MessageService {
 
-    private final MessageRepository messageRepository;
     private final EmployeeRepository employeeRepository;
-    private final EmployeeKeysRepository employeeKeysRepository;
-    private final RSAEncryptionService rsaService;
+    private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
+    private final KafkaTemplate<String, MessageDTO> kafkaTemplate;
 
-    @Transactional
-    public MessageDTO sendMessage(Long senderId, Long recipientId, String subject, String content) {
+    public MessageDTO sendMessageAndReturnDto(Long senderId, Long recipientId, String subject, String content) {
+        log.info("Sending message from senderId: {} to recipientId: {}", senderId, recipientId);
+
         Employee sender = employeeRepository.findById(senderId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Nadawca nie został znaleziony"));
+                .orElseThrow(() -> new EmployeeNotFoundException("Sender not found: " + senderId));
 
         Employee recipient = employeeRepository.findById(recipientId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Odbiorca nie został znaleziony"));
-
-        EmployeeKeys recipientKeys = employeeKeysRepository.findByEmployee(recipient)
-                .orElseThrow(() -> new IllegalStateException("Klucze odbiorcy nie zostały znalezione"));
-
-        PublicKey recipientPublicKey = rsaService.stringToPublicKey(recipientKeys.getPublicKey());
-        String encryptedContent = rsaService.encrypt(content, recipientPublicKey);
+                .orElseThrow(() -> new EmployeeNotFoundException("Recipient not found: " + recipientId));
 
         Message message = Message.builder()
                 .sender(sender)
                 .recipient(recipient)
                 .subject(subject)
-                .encryptedContent(encryptedContent)
-                .isRead(false)
-                .isDeleted(false)
-                .sentAt(LocalDateTime.now())
+                .content(content)
                 .build();
 
-        messageRepository.save(message);
+        Message savedMessage = messageRepository.save(message);
 
-        return messageMapper.toDTO(message, content);
+        MessageDTO messageDTO = messageMapper.toDTO(savedMessage);
+
+        kafkaTemplate.send("employee-messages", recipient.getEmail(), messageDTO);
+        log.info("Message sent successfully with ID: {}", savedMessage.getId());
+        return messageDTO;
+    }
+
+    public MessageDTO sendMessage(Long senderId, Long recipientId, SendMessageDTO dto) {
+        return sendMessageAndReturnDto(senderId, recipientId, dto.getSubject(), dto.getContent());
     }
 
     @Transactional(readOnly = true)
-    public List<MessageDTO> getReceivedMessages(Long employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Pracownik nie został znaleziony"));
+    public List<MessageDTO> getMessagesForRecipient(Long recipientId) {
+        log.info("Fetching messages for recipient: {}", recipientId);
 
-        EmployeeKeys employeeKeys = employeeKeysRepository.findByEmployee(employee)
-                .orElseThrow(() -> new IllegalStateException("Klucze pracownika nie zostały znalezione"));
-
-        List<Message> messages = messageRepository.findByRecipientAndIsDeletedFalse(employee);
-        PrivateKey privateKey = rsaService.stringToPrivateKey(employeeKeys.getEncryptedPrivateKey());
+        List<Message> messages = messageRepository
+                .findByRecipientIdAndIsDeletedFalseOrderBySentAtDesc(recipientId);
 
         return messages.stream()
-                .map(msg -> messageMapper.toDTO(
-                        msg,
-                        rsaService.decrypt(msg.getEncryptedContent(), privateKey)
-                ))
+                .map(messageMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<MessageDTO> getSentMessages(Long employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Pracownik nie został znaleziony"));
+    public List<MessageDTO> getMessagesBySender(Long senderId) {
+        log.info("Fetching sent messages for sender: {}", senderId);
 
-        List<Message> messages = messageRepository.findBySenderAndIsDeletedFalse(employee);
+        List<Message> messages = messageRepository
+                .findBySenderIdAndIsDeletedFalseOrderBySentAtDesc(senderId);
+
         return messages.stream()
-                .map(msg -> messageMapper.toDTO(msg, "[Zaszyfrowana treść]"))
+                .map(messageMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public void markAsRead(Long messageId, Long employeeId) {
-        Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new MessageNotFoundException("Wiadomość nie została znaleziona"));
+    public void markAsRead(Long messageId, Long userId) {
+        log.info("Marking message {} as read for user {}", messageId, userId);
 
-        if (!message.getRecipient().getId().equals(employeeId)) {
-            throw new IllegalArgumentException("Brak uprawnień do oznaczenia tej wiadomości");
+        Message message = messageRepository.findByIdAndRecipientId(messageId, userId)
+                .orElseThrow(() -> new EmployeeNotFoundException("Message not found or access denied"));
+
+        if (message.getIsRead()) {
+            log.warn("Message {} is already read", messageId);
+            return;
         }
 
         message.setIsRead(true);
         message.setReadAt(LocalDateTime.now());
         messageRepository.save(message);
+
+        log.info("Message {} marked as read", messageId);
     }
 
-    @Transactional
-    public void deleteMessage(Long messageId, Long employeeId) {
-        Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new MessageNotFoundException("Wiadomość nie została znaleziona"));
+    public void deleteMessage(Long messageId, Long userId) {
+        log.info("Deleting message {} for user {}", messageId, userId);
 
-        if (!message.getRecipient().getId().equals(employeeId)
-                && !message.getSender().getId().equals(employeeId)) {
-            throw new IllegalArgumentException("Brak uprawnień do usunięcia tej wiadomości");
-        }
+        Message message = messageRepository.findByIdAndRecipientId(messageId, userId)
+                .orElseThrow(() -> new EmployeeNotFoundException("Message not found or access denied"));
 
         message.setIsDeleted(true);
         messageRepository.save(message);
+
+        log.info("Message {} soft-deleted", messageId);
     }
 
     @Transactional(readOnly = true)
-    public boolean isMessageRead(Long messageId) {
-        Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new MessageNotFoundException("Wiadomość nie została znaleziona"));
-        return message.getIsRead();
+    public MessageDTO getMessageById(Long messageId, Long userId) {
+        log.info("Fetching message {} for user {}", messageId, userId);
+
+        Message message = messageRepository.findByIdAndRecipientId(messageId, userId)
+                .orElseThrow(() -> new EmployeeNotFoundException("Message not found or access denied"));
+
+        return messageMapper.toDTO(message);
     }
 }

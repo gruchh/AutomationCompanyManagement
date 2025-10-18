@@ -1,4 +1,4 @@
-  import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProjectFilters } from '../../../core/models/project-filters';
@@ -7,85 +7,84 @@ import { ProjectFilters } from '../../../core/models/project-filters';
   selector: 'app-filters',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './filters.html'
+  templateUrl: './filters.html',
 })
 export class Filters {
+  filtersChange = output<ProjectFilters>();
+  sortChange = output<string>();
 
-  @Output() filtersChange = new EventEmitter<ProjectFilters>();
-  @Output() sortChange = new EventEmitter<string>();
-
-  public currentFilters: ProjectFilters = {
+  currentFilters = signal<ProjectFilters>({
     searchTerm: '',
     status: 'all',
     serviceType: null,
     priority: null,
-    location: ''
-  };
+    location: '',
+  });
 
-  public currentSort = 'startDate-desc';
+  currentSort = signal('startDate-desc');
 
-  public statusOptions: { value: ProjectFilters['status'], label: string }[] = [
+  statusOptions: { value: ProjectFilters['status']; label: string }[] = [
     { value: 'all', label: 'Wszystkie' },
     { value: 'in_progress', label: 'W toku' },
     { value: 'completed', label: 'Zakończone' },
-    { value: 'new', label: 'Nowe' }
+    { value: 'new', label: 'Nowe' },
   ];
 
-  public serviceTypeOptions = [
+  serviceTypeOptions = [
     { value: null, label: 'Wszystkie' },
     { value: 'PRODUCTION_SUPPORT', label: 'Wsparcie produkcji' },
     { value: 'MACHINE_DESIGN', label: 'Projektowanie maszyn' },
     { value: 'MACHINE_REALIZATION', label: 'Realizacja maszyn' },
     { value: 'ELECTRICAL_DESIGN', label: 'Projektowanie elektryczne' },
     { value: 'ELECTRICAL_WORKS', label: 'Prace elektryczne' },
-    { value: 'HYDRAULICS', label: 'Hydraulika' }
+    { value: 'HYDRAULICS', label: 'Hydraulika' },
   ];
 
-  public priorityOptions = [
+  priorityOptions = [
     { value: null, label: 'Wszystkie' },
     { value: 'LOW', label: 'Niski' },
     { value: 'MEDIUM', label: 'Średni' },
     { value: 'HIGH', label: 'Wysoki' },
-    { value: 'CRITICAL', label: 'Krytyczny' }
+    { value: 'CRITICAL', label: 'Krytyczny' },
   ];
 
-  public selectStatus(status: ProjectFilters['status']): void {
-    this.currentFilters.status = status;
-    this.onFiltersChanged();
-  }
+  selectStatus = (status: ProjectFilters['status']) => {
+    this.currentFilters.update((f) => ({ ...f, status }));
+    this.emitFilters();
+  };
 
-  public selectServiceType(serviceType: string | null): void {
-    this.currentFilters.serviceType = serviceType;
-    this.onFiltersChanged();
-  }
+  selectServiceType = (serviceType: string | null) => {
+    this.currentFilters.update((f) => ({ ...f, serviceType }));
+    this.emitFilters();
+  };
 
-  public selectPriority(priority: string | null): void {
-    this.currentFilters.priority = priority;
-    this.onFiltersChanged();
-  }
+  selectPriority = (priority: string | null) => {
+    this.currentFilters.update((f) => ({ ...f, priority }));
+    this.emitFilters();
+  };
 
-  public onLocationChanged(): void {
-    this.onFiltersChanged();
-  }
+  onLocationChanged = () => {
+    this.emitFilters();
+  };
 
-  public onFiltersChanged(): void {
-    this.filtersChange.emit({ ...this.currentFilters });
-  }
+  emitFilters = () => {
+    this.filtersChange.emit(this.currentFilters());
+  };
 
-  public onSortChanged(): void {
-    this.sortChange.emit(this.currentSort);
-  }
+  onSortChanged = () => {
+    this.sortChange.emit(this.currentSort());
+  };
 
-  public resetFilters(): void {
-    this.currentFilters = {
+  resetFilters = () => {
+    this.currentFilters.set({
       searchTerm: '',
       status: 'all',
       serviceType: null,
       priority: null,
-      location: ''
-    };
-    this.currentSort = 'startDate-desc';
-    this.onFiltersChanged();
+      location: '',
+    });
+    this.currentSort.set('startDate-desc');
+    this.emitFilters();
     this.onSortChanged();
-  }
+  };
 }

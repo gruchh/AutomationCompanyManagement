@@ -1,17 +1,24 @@
-import { Injectable, ViewContainerRef, Type, signal } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ModalService {
-  public isModalOpen = signal(false);
+export class LoginModalService {
+  private isOpenSignal = signal(false);
 
-  public open(): void {
-    this.isModalOpen.set(true);
+  isOpen() {
+    return this.isOpenSignal.asReadonly();
   }
 
-  public close(): void {
-    this.isModalOpen.set(false);
+  open() {
+    this.isOpenSignal.set(true);
+  }
+
+  close() {
+    this.isOpenSignal.set(false);
+  }
+
+  toggle() {
+    this.isOpenSignal.update(v => !v);
   }
 }

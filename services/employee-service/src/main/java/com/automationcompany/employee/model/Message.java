@@ -1,5 +1,6 @@
 package com.automationcompany.employee.model;
 
+import com.automationcompany.employee.model.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Message {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,9 +30,9 @@ public class Message {
     private Employee recipient;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String encryptedContent;
+    private String content;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String subject;
 
     @Column(nullable = false)

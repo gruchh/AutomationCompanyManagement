@@ -1,82 +1,97 @@
 package com.automationcompany.employee.controller;
 
 import com.automationcompany.employee.model.dto.MessageDTO;
-import com.automationcompany.employee.model.dto.SendMessageRequest;
+import com.automationcompany.employee.model.dto.SendMessageDTO;
 import com.automationcompany.employee.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping("/api/employees/{recipientId}/messages")
 @RequiredArgsConstructor
-@Tag(name = "Message Management", description = "API for sending and managing messages between employees")
+@Tag(name = "Messages", description = "Employee messaging API")
 public class MessageController {
 
     private final MessageService messageService;
 
-    @PostMapping("/send/{senderId}")
-    @Operation(summary = "Send message", description = "Sends a message from sender to recipient")
+    @PostMapping
+    @Operation(summary = "Send message", description = "Sends message to specified employee")
     public ResponseEntity<MessageDTO> sendMessage(
-            @PathVariable Long senderId,
-            @RequestBody SendMessageRequest request) {
+            @Parameter(description = "Recipient employee ID")
+            @PathVariable Long recipientId,
+            @Valid @RequestBody SendMessageDTO dto,
+            Authentication authentication) {
 
-        MessageDTO message = messageService.sendMessage(
-                senderId,
-                request.getRecipientId(),
-                request.getSubject(),
-                request.getContent()
-        );
+        // W prawdziwej aplikacji pobierz z JWT/SecurityContext
+        Long senderId = 1L; // Hardcoded dla portfolio
+        MessageDTO messageDTO = messageService.sendMessageAndReturnDto(
+                senderId, recipientId, dto.getSubject(), dto.getContent());
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageDTO);
+    }
+
+    @GetMapping
+    @Operation(summary = "Get received messages", description = "Returns messages received by current user")
+    public ResponseEntity<List<MessageDTO>> getReceivedMessages(
+            @Parameter(description = "Current user ID")
+            @RequestParam Long userId) {
+
+        List<MessageDTO> messages = messageService.getMessagesForRecipient(userId);
+        return ResponseEntity.ok(messages);
+    }
+
+    @GetMapping("/sent")
+    @Operation(summary = "Get sent messages", description = "Returns messages sent by current user")
+    public ResponseEntity<List<MessageDTO>> getSentMessages(
+            @Parameter(description = "Current user ID")
+            @RequestParam Long userId) {
+
+        List<MessageDTO> messages = messageService.getMessagesBySender(userId);
+        return ResponseEntity.ok(messages);
+    }
+
+    @GetMapping("/{messageId}")
+    @Operation(summary = "Get single message", description = "Returns specific message with access check")
+    public ResponseEntity<MessageDTO> getMessage(
+            @Parameter(description = "Message ID")
+            @PathVariable Long messageId,
+            @Parameter(description = "Current user ID")
+            @RequestParam Long userId) {
+
+        MessageDTO message = messageService.getMessageById(messageId, userId);
         return ResponseEntity.ok(message);
     }
 
-    @GetMapping("/received/{employeeId}")
-    @Operation(summary = "Get received messages", description = "Retrieves all messages received by employee")
-    public ResponseEntity<List<MessageDTO>> getReceivedMessages(
-            @PathVariable Long employeeId) {
-        List<MessageDTO> messages = messageService.getReceivedMessages(employeeId);
-        return ResponseEntity.ok(messages);
-    }
-
-    @GetMapping("/sent/{employeeId}")
-    @Operation(summary = "Get sent messages", description = "Retrieves all messages sent by employee")
-    public ResponseEntity<List<MessageDTO>> getSentMessages(
-            @PathVariable Long employeeId) {
-        List<MessageDTO> messages = messageService.getSentMessages(employeeId);
-        return ResponseEntity.ok(messages);
-    }
-
-    @PutMapping("/{messageId}/read/{employeeId}")
-    @Operation(summary = "Mark message as read", description = "Marks message as read for specific employee")
+    @PatchMapping("/{messageId}/read")
+    @Operation(summary = "Mark message as read", description = "Marks specific message as read")
     public ResponseEntity<Void> markAsRead(
+            @Parameter(description = "Message ID")
             @PathVariable Long messageId,
-            @PathVariable Long employeeId) {
+            @Parameter(description = "Current user ID")
+            @RequestParam Long userId) {
 
-        messageService.markAsRead(messageId, employeeId);
+        messageService.markAsRead(messageId, userId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{messageId}/{employeeId}")
-    @Operation(summary = "Delete message", description = "Deletes message for specific employee")
+    @DeleteMapping("/{messageId}")
+    @Operation(summary = "Delete message", description = "Soft deletes specific message")
     public ResponseEntity<Void> deleteMessage(
+            @Parameter(description = "Message ID")
             @PathVariable Long messageId,
-            @PathVariable Long employeeId) {
+            @Parameter(description = "Current user ID")
+            @RequestParam Long userId) {
 
-        messageService.deleteMessage(messageId, employeeId);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{messageId}/is-read")
-    @Operation(summary = "Check if message is read", description = "Checks if message has been read")
-    public ResponseEntity<Boolean> isMessageRead(
-            @PathVariable Long messageId) {
-        boolean isRead = messageService.isMessageRead(messageId);
-        return ResponseEntity.ok(isRead);
+        messageService.deleteMessage(messageId, userId);
+        return ResponseEntity.noContent().build();
     }
 }

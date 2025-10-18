@@ -1,0 +1,45 @@
+@if (project()) {
+  <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-purple-400 transition-all duration-200 cursor-pointer w-full">
+    <div class="flex flex-col md:flex-row justify-between md:items-start">
+      <div class="flex items-start min-w-0">
+        <img [src]="project().client.logoUrl" alt="Logo klienta" class="w-12 h-12 rounded-xl mr-4 flex-shrink-0">
+        <div class="min-w-0">
+          <h4 class="text-lg font-bold text-gray-900 truncate">{{ project().title }}</h4>
+
+          <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-3 gap-y-1 text-sm text-gray-600 mt-1">
+            <span class="font-semibold">{{ project().client.name }}</span>
+
+            <span class="flex items-center">
+              <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              {{ project().location }}
+            </span>
+
+            <span class="flex items-center">
+              <svg class="h-4 w-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-4.67c.12-.24.232-.487.335-.737m-3.05-3.492a4.125 4.125 0 00-7.533-2.493c-1.723 0-3.125 1.402-3.125 3.125s1.402 3.125 3.125 3.125c.866 0 1.662-.35 2.231-.92a4.125 4.125 0 005.304-2.205c.12-.24.232-.487.335-.737m0-3.492c.24-.633.38-1.32.38-2.037 0-1.844-1.492-3.333-3.333-3.333S9.167 9.156 9.167 11c0 .717.14 1.404.38 2.037m0 0c.24.633.38 1.32.38 2.037 0 1.844-1.492-3.333-3.333-3.333S9.167 9.156 9.167 11c0 .717.14 1.404.38 2.037" /></svg>
+              {{ project().teamSize }} specjalistów
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 md:mt-0 md:text-right flex-shrink-0">
+        <span class="inline-flex items-center text-sm font-medium px-3 py-1 rounded-full" [ngClass]="statusInfo().class">
+          {{ statusInfo().text }}
+        </span>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-4">
+
+      <div class="flex flex-wrap gap-2">
+        @for (tech of project().technologies; track tech) {
+          <span class="bg-gray-100 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-md">{{ tech }}</span>
+        }
+      </div>
+
+      <span class="text-sm text-gray-500 mt-3 sm:mt-0 ml-auto sm:ml-4 flex-shrink-0">
+        {{ timeSinceStart() }}
+      </span>
+    </div>
+  </div>
+  }

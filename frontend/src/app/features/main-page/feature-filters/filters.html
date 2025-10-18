@@ -1,0 +1,106 @@
+<div class="p-3 bg-white rounded-lg shadow-sm border border-gray-200">
+  <h2 class="text-base font-bold text-gray-900 px-2 pb-2">Filtry</h2>
+
+  <div class="space-y-4 px-2">
+    <div>
+      <h3 class="text-sm font-semibold text-gray-800 mb-1">Sortowanie</h3>
+      <select
+        class="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500"
+        [(ngModel)]="currentSort"
+        (ngModelChange)="onSortChanged()"
+      >
+        <option value="startDate-desc">Data (od najnowszych)</option>
+        <option value="startDate-asc">Data (od najstarszych)</option>
+        <option value="name-asc">Nazwa (A-Z)</option>
+        <option value="name-desc">Nazwa (Z-A)</option>
+        <option value="priority-desc">Priorytet (malejąco)</option>
+        <option value="priority-asc">Priorytet (rosnąco)</option>
+      </select>
+    </div>
+
+    <div class="pb-3 border-b border-gray-200">
+      <h3 class="text-sm font-semibold text-gray-800 mb-1">Status</h3>
+      <div class="flex flex-wrap gap-1.5">
+        @for (option of statusOptions; track option.value) {
+        <button
+          (click)="selectStatus(option.value)"
+
+          [ngClass]="{
+            'bg-purple-100 text-purple-800 border-purple-300':
+              currentFilters().status === option.value,
+            'bg-white text-gray-700 border-gray-300 hover:border-gray-400':
+              currentFilters().status !== option.value
+          }"
+          class="px-2.5 py-1 text-xs font-medium border rounded-full transition-colors"
+        >
+          {{ option.label }}
+        </button>
+        }
+      </div>
+    </div>
+
+    <div class="pb-3 border-b border-gray-200">
+      <h3 class="text-sm font-semibold text-gray-800 mb-1">Typ usługi</h3>
+      <div class="flex flex-wrap gap-1.5">
+        @for (option of serviceTypeOptions; track option.value) {
+        <button
+          (click)="selectServiceType(option.value)"
+          [ngClass]="{
+            'bg-purple-100 text-purple-800 border-purple-300':
+              currentFilters().serviceType === option.value,
+            'bg-white text-gray-700 border-gray-300 hover:border-gray-400':
+              currentFilters().serviceType !== option.value
+          }"
+          class="px-2.5 py-1 text-xs font-medium border rounded-full transition-colors"
+        >
+          {{ option.label }}
+        </button>
+        }
+      </div>
+    </div>
+
+    <div class="pb-3 border-b border-gray-200">
+      <h3 class="text-sm font-semibold text-gray-800 mb-1">Priorytet</h3>
+      <div class="flex flex-wrap gap-1.5">
+        @for (option of priorityOptions; track option.value) {
+        <button
+          (click)="selectPriority(option.value)"
+          [ngClass]="{
+            'bg-red-100 text-red-800 border-red-300':
+              option.value === 'CRITICAL' && currentFilters().priority === option.value,
+            'bg-orange-100 text-orange-800 border-orange-300':
+              option.value === 'HIGH' && currentFilters().priority === option.value,
+            'bg-yellow-100 text-yellow-800 border-yellow-300':
+              option.value === 'MEDIUM' && currentFilters().priority === option.value,
+            'bg-green-100 text-green-800 border-green-300':
+              option.value === 'LOW' && currentFilters().priority === option.value,
+            'bg-white text-gray-700 border-gray-300 hover:border-gray-400':
+              currentFilters().priority !== option.value
+          }"
+          class="px-2.5 py-1 text-xs font-medium border rounded-full transition-colors"
+        >
+          {{ option.label }}
+        </button>
+        }
+      </div>
+    </div>
+
+    <div class="pb-3">
+      <h3 class="text-sm font-semibold text-gray-800 mb-1">Lokalizacja</h3>
+      <input
+        type="text"
+        [(ngModel)]="currentFilters().location"
+        (ngModelChange)="onLocationChanged()"
+        placeholder="Wpisz lokalizację..."
+        class="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500"
+      />
+    </div>
+
+    <button
+      (click)="resetFilters()"
+      class="w-full px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors"
+    >
+      Wyczyść filtry
+    </button>
+  </div>
+</div>

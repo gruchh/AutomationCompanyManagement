@@ -56,6 +56,7 @@ public class EmployeeCreateDTO {
     @NotNull
     private EmploymentType employmentType;
 
+    @Builder.Default
     private EmployeeStatus status = EmployeeStatus.ACTIVE;
 
     @Valid

@@ -30,7 +30,7 @@ public class MessageService {
     private final KafkaTemplate<String, MessageDTO> kafkaTemplate;
 
     public MessageDTO sendMessageAndReturnDto(Long senderId, Long recipientId, String subject, String content) {
-        log.info("Sending message from senderId: {} to recipientId: {}", senderId, recipientId);
+        log.info("Sending message from senderId={} to recipientId={}", senderId, recipientId);
 
         Employee sender = employeeRepository.findById(senderId)
                 .orElseThrow(() -> new EmployeeNotFoundException("Sender not found: " + senderId));
@@ -43,14 +43,19 @@ public class MessageService {
                 .recipient(recipient)
                 .subject(subject)
                 .content(content)
+                .isRead(false)
+                .isDeleted(false)
+                .sentAt(LocalDateTime.now())
                 .build();
 
         Message savedMessage = messageRepository.save(message);
 
         MessageDTO messageDTO = messageMapper.toDTO(savedMessage);
 
+        // Wysłanie powiadomienia do Kafka
         kafkaTemplate.send("employee-messages", recipient.getEmail(), messageDTO);
-        log.info("Message sent successfully with ID: {}", savedMessage.getId());
+        log.info("Message sent successfully with ID={}", savedMessage.getId());
+
         return messageDTO;
     }
 
@@ -62,24 +67,30 @@ public class MessageService {
     public List<MessageDTO> getMessagesForRecipient(Long recipientId) {
         log.info("Fetching messages for recipient: {}", recipientId);
 
-        List<Message> messages = messageRepository
-                .findByRecipientIdAndIsDeletedFalseOrderBySentAtDesc(recipientId);
-
-        return messages.stream()
+        return messageRepository.findByRecipientIdAndIsDeletedFalseOrderBySentAtDesc(recipientId)
+                .stream()
                 .map(messageMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<MessageDTO> getMessagesBySender(Long senderId) {
-        log.info("Fetching sent messages for sender: {}", senderId);
+        log.info("Fetching messages sent by sender: {}", senderId);
 
-        List<Message> messages = messageRepository
-                .findBySenderIdAndIsDeletedFalseOrderBySentAtDesc(senderId);
-
-        return messages.stream()
+        return messageRepository.findBySenderIdAndIsDeletedFalseOrderBySentAtDesc(senderId)
+                .stream()
                 .map(messageMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public MessageDTO getMessageById(Long messageId, Long userId) {
+        log.info("Fetching message {} for user {}", messageId, userId);
+
+        Message message = messageRepository.findByIdAndRecipientId(messageId, userId)
+                .orElseThrow(() -> new EmployeeNotFoundException("Message not found or access denied"));
+
+        return messageMapper.toDTO(message);
     }
 
     public void markAsRead(Long messageId, Long userId) {
@@ -88,8 +99,8 @@ public class MessageService {
         Message message = messageRepository.findByIdAndRecipientId(messageId, userId)
                 .orElseThrow(() -> new EmployeeNotFoundException("Message not found or access denied"));
 
-        if (message.getIsRead()) {
-            log.warn("Message {} is already read", messageId);
+        if (Boolean.TRUE.equals(message.getIsRead())) {
+            log.debug("Message {} is already marked as read", messageId);
             return;
         }
 
@@ -110,15 +121,5 @@ public class MessageService {
         messageRepository.save(message);
 
         log.info("Message {} soft-deleted", messageId);
-    }
-
-    @Transactional(readOnly = true)
-    public MessageDTO getMessageById(Long messageId, Long userId) {
-        log.info("Fetching message {} for user {}", messageId, userId);
-
-        Message message = messageRepository.findByIdAndRecipientId(messageId, userId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Message not found or access denied"));
-
-        return messageMapper.toDTO(message);
     }
 }

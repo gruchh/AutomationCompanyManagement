@@ -7,6 +7,13 @@ spring:
       server:
         webflux:
           routes:
+            - id: employee-service-openapi
+              uri: lb://employee-service
+              predicates:
+                - Path=/employee-service/v3/api-docs/**
+              filters:
+                - RewritePath=/employee-service/(?<segment>.*), /$\{segment}
+
             - id: employee-service
               uri: lb://employee-service
               predicates:
@@ -14,12 +21,26 @@ spring:
               filters:
                 - StripPrefix=1
 
+            - id: project-service-openapi
+              uri: lb://project-service
+              predicates:
+                - Path=/project-service/v3/api-docs/**
+              filters:
+                - RewritePath=/project-service/(?<segment>.*), /$\{segment}
+
             - id: project-service
               uri: lb://project-service
               predicates:
                 - Path=/project-service/**
               filters:
                 - StripPrefix=1
+
+            - id: notification-service-openapi
+              uri: lb://notification-service
+              predicates:
+                - Path=/notification-service/v3/api-docs/**
+              filters:
+                - RewritePath=/notification-service/(?<segment>.*), /$\{segment}
 
             - id: notification-service
               uri: lb://notification-service
@@ -64,6 +85,8 @@ eureka:
     fetch-registry: true
   instance:
     prefer-ip-address: true
+    hostname: ${HOSTNAME:employee-service}
+    instance-id: ${spring.application.name}:${HOSTNAME:employee-service}:${server.port}
 
 management:
   endpoints:

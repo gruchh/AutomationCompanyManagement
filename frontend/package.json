@@ -45,6 +45,7 @@
     "@angular/build": "^20.3.3",
     "@angular/cli": "^20.3.3",
     "@angular/compiler-cli": "^20.3.0",
+    "@openapitools/openapi-generator-cli": "^2.25.0",
     "@types/jasmine": "~5.1.0",
     "@types/leaflet": "^1.9.21",
     "jasmine-core": "~5.9.0",

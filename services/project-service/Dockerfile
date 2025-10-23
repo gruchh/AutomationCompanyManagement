@@ -1,19 +1,18 @@
-#STAGE 1:
+# STAGE 1: BUILDER
 FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
-COPY .mvn .mvn
+COPY .mvn .mvn/
 COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
-COPY src ./src
-RUN ./mvnw package -DskipTests
+COPY services/ services/
+COPY infrastructure/ infrastructure/
+RUN ./mvnw install -DskipTests -pl services/project-service -am
 
-# STAGE 2:
+# STAGE 2: RUNTIME
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 RUN addgroup --system spring && adduser --system --ingroup spring spring
 USER spring:spring
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /app/services/project-service/target/*.jar app.jar
 ENV SPRING_PROFILES_ACTIVE=prod
-EXPOSE 8888
 ENTRYPOINT ["java", "-jar", "app.jar"]

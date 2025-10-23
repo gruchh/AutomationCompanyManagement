@@ -59,6 +59,8 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+    volumes:
+      - kafka_data:/tmp/kraft-combined-logs
     networks:
       - app-network
 
@@ -70,7 +72,7 @@ services:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-automation_db}
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_POSTGRES_DB:-keycloak_db}
       KC_DB_USERNAME: ${POSTGRES_USER:-postgres}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       KC_HTTP_ENABLED: true
@@ -85,28 +87,28 @@ services:
       - app-network
 
   config-server:
-    build: 
-      context: ./infrastructure/config-server
-      dockerfile: Dockerfile
+    build:
+      context: .
+      dockerfile: ./infrastructure/config-server/Dockerfile
     container_name: config-server
     restart: unless-stopped
     ports:
       - "8888:8888"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
     networks:
       - app-network
 
   service-registry:
     build:
-      context: ./infrastructure/service-registry
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./infrastructure/service-registry/Dockerfile
     container_name: service-registry
     restart: unless-stopped
     ports:
       - "8761:8761"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       CONFIG_SERVER_URL: http://config-server:8888
     depends_on:
       - config-server
@@ -115,14 +117,14 @@ services:
 
   api-gateway:
     build:
-      context: ./infrastructure/api-gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: /infrastructure/api-gateway/Dockerfile
     container_name: api-gateway
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "${API_GATEWAY_PORT:-8080}:8080"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
       SPRING_CLOUD_CONFIG_ENABLED: false
     depends_on:
@@ -132,14 +134,14 @@ services:
 
   employee-service:
     build:
-      context: ./services/employee-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/employee-service/Dockerfile
     container_name: employee-service
     restart: unless-stopped
     ports:
       - "8081:8081"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${EMPLOYEE_POSTGRES_DB:-employee_db}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
@@ -150,19 +152,21 @@ services:
         condition: service_healthy
       service-registry:
         condition: service_started
+      kafka:
+        condition: service_started
     networks:
       - app-network
 
   project-service:
     build:
-      context: ./services/project-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/project-service/Dockerfile
     container_name: project-service
     restart: unless-stopped
     ports:
       - "8082:8082"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${PROJECT_POSTGRES_DB:-project_db}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
@@ -173,19 +177,21 @@ services:
         condition: service_healthy
       service-registry:
         condition: service_started
+      kafka:
+        condition: service_started
     networks:
       - app-network
 
   notification-service:
     build:
-      context: ./services/notification-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/notification-service/Dockerfile
     container_name: notification-service
     restart: unless-stopped
     ports:
       - "8083:8083"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/notifications
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -193,6 +199,8 @@ services:
       mongodb:
         condition: service_healthy
       service-registry:
+        condition: service_started
+      kafka:
         condition: service_started
     networks:
       - app-network
@@ -204,7 +212,7 @@ services:
     container_name: frontend
     restart: unless-stopped
     ports:
-      - "4200:80"
+      - "${FRONTEND_PORT:-4200}:80"
     depends_on:
       - api-gateway
     networks:
@@ -215,6 +223,7 @@ services:
 volumes:
   postgres_data:
   mongo_data:
+  kafka_data:
 
 networks:
   app-network:

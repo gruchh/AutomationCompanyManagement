@@ -13,12 +13,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Data required to send a message")
 public class SendMessageDTO {
 
-    @Schema(description = "Recipient employee ID", example = "34", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long recipientId;
-
-    @Schema(description = "Subject of the message", example = "Meeting Reminder", requiredMode = Schema.RequiredMode.REQUIRED)
     private String subject;
-
-    @Schema(description = "Content of the message", example = "Don't forget about the meeting at 10 AM.", requiredMode = Schema.RequiredMode.REQUIRED)
     private String content;
 }

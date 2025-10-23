@@ -1,7 +1,9 @@
-CREATE DATABASE IF automation_db;
-CREATE DATABASE IF employee_db;
-CREATE DATABASE IF project_db;
+CREATE DATABASE automation_db;
+CREATE DATABASE keycloak_db;
+CREATE DATABASE employee_db;
+CREATE DATABASE project_db;
 
 GRANT ALL PRIVILEGES ON DATABASE automation_db TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE keycloak_db TO postgres;
 GRANT ALL PRIVILEGES ON DATABASE employee_db TO postgres;
 GRANT ALL PRIVILEGES ON DATABASE project_db TO postgres;

@@ -14,5 +14,5 @@ WORKDIR /app
 RUN addgroup --system spring && adduser --system --ingroup spring spring
 USER spring:spring
 COPY --from=builder /app/infrastructure/config-server/target/*.jar app.jar
-ENV SPRING_PROFILES_ACTIVE=prod
+ENV SPRING_PROFILES_ACTIVE=native
 ENTRYPOINT ["java", "-jar", "app.jar"]

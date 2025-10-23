@@ -1,4 +1,3 @@
-CREATE DATABASE automation_db;
 CREATE DATABASE keycloak_db;
 CREATE DATABASE employee_db;
 CREATE DATABASE project_db;

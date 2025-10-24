@@ -6,7 +6,7 @@ spring:
     name: employee-service
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/${EMPLOYEES_POSTGRES_DB}
+    url: jdbc:postgresql://postgres:5432/${EMPLOYEE_POSTGRES_DB}
     driver-class-name: org.postgresql.Driver
     username: ${EMPLOYEES_POSTGRES_USER}
     password: ${EMPLOYEES_POSTGRES_PASSWORD}

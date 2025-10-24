@@ -6,7 +6,7 @@ spring:
     name: project-service
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/${PROJECTS_POSTGRES_DB}
+    url: jdbc:postgresql://postgres:5432/${PROJECT_POSTGRES_DB}
     driver-class-name: org.postgresql.Driver
     username: ${PROJECTS_POSTGRES_USER}
     password: ${PROJECTS_POSTGRES_PASSWORD}

@@ -6,15 +6,15 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${EMPLOYEES_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${EMPLOYEES_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${EMPLOYEES_POSTGRES_DB}
+      POSTGRES_USER: ${EMPLOYEES_POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${EMPLOYEES_POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${EMPLOYEES_POSTGRES_DB:-employees_db}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${EMPLOYEES_POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U ${EMPLOYEES_POSTGRES_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,7 +31,7 @@ services:
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -44,12 +44,12 @@ services:
     container_name: kafka
     restart: unless-stopped
     environment:
-      - KAFKA_ENABLE_KRAFT=${KAFKA_ENABLE_KRAFT}
+      - KAFKA_ENABLE_KRAFT=${KAFKA_ENABLE_KRAFT:-yes}
       - KAFKA_CFG_NODE_ID=1
       - KAFKA_CFG_PROCESS_ROLES=broker,controller
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=${KAFKA_ADVERTISED_LISTENERS}
+      - KAFKA_CFG_ADVERTISED_LISTENERS=${KAFKA_ADVERTISED_LISTENERS:-PLAINTEXT://kafka:9092}
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
@@ -62,6 +62,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - app-network
 
@@ -70,14 +71,14 @@ services:
     container_name: keycloak
     command: start
     environment:
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
       KC_HTTP_ENABLED: true
       KC_HEALTH_ENABLED: true
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/${EMPLOYEES_POSTGRES_DB}
-      KC_DB_USERNAME: ${EMPLOYEES_POSTGRES_USER}
-      KC_DB_PASSWORD: ${EMPLOYEES_POSTGRES_PASSWORD}
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${EMPLOYEES_POSTGRES_DB:-employees_db}
+      KC_DB_USERNAME: ${EMPLOYEES_POSTGRES_USER:-postgres}
+      KC_DB_PASSWORD: ${EMPLOYEES_POSTGRES_PASSWORD:-postgres}
       KC_HOSTNAME: keycloak
       KC_HOSTNAME_STRICT: false
     ports:
@@ -86,5 +87,19 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/realms/master"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/realms/master || exit 1"]
       interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+  mongo_data:
+  kafka_data:
+
+networks:
+  app-network:
+    driver: bridge

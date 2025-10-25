@@ -11,9 +11,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -63,5 +65,16 @@ public class EmployeeController {
             @PathVariable Long id) {
         employeeService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "Get current authenticated user", description = "Returns details of the currently authenticated user based on the Bearer token")
+    public ResponseEntity<Object> getCurrentUser(Authentication authentication) {
+        return ResponseEntity.ok(
+                Map.of(
+                        "username", authentication.getName(),
+                        "roles", authentication.getAuthorities()
+                )
+        );
     }
 }

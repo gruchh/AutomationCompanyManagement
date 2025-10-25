@@ -17,7 +17,7 @@ import java.util.Set;
 @Profile("dev")
 @RequiredArgsConstructor
 @Slf4j
-public class ProjectDataInitializer {
+public class DataInitializer {
 
     private final ProjectRepository projectRepository;
 

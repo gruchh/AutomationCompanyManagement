@@ -26,8 +26,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/automation-company
-          jwk-set-uri: http://keycloak:8080/realms/automation-company/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8180/realms/automation-company-management-system
+          jwk-set-uri: http://localhost:8180/realms/automation-company-management-system/protocol/openid-connect/certs
 
 notification:
   websocket:

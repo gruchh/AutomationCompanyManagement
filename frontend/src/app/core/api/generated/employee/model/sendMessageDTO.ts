@@ -13,17 +13,8 @@
  * Data required to send a message
  */
 export interface SendMessageDTODto { 
-    /**
-     * Recipient employee ID
-     */
-    recipientId: number;
-    /**
-     * Subject of the message
-     */
-    subject: string;
-    /**
-     * Content of the message
-     */
-    content: string;
+    recipientId?: number;
+    subject?: string;
+    content?: string;
 }
 

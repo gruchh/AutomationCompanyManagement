@@ -13,45 +13,15 @@
  * Message data transfer object
  */
 export interface MessageDTODto { 
-    /**
-     * Unique message identifier
-     */
     id?: number;
-    /**
-     * Sender employee ID
-     */
     senderId?: number;
-    /**
-     * Full name of the sender
-     */
     senderName?: string;
-    /**
-     * Recipient employee ID
-     */
     recipientId?: number;
-    /**
-     * Full name of the recipient
-     */
     recipientName?: string;
-    /**
-     * Subject of the message
-     */
     subject?: string;
-    /**
-     * Main content of the message
-     */
     content?: string;
-    /**
-     * Whether the message has been read
-     */
     isRead?: boolean;
-    /**
-     * Date and time when the message was sent
-     */
     sentAt?: string;
-    /**
-     * Date and time when the message was read
-     */
     readAt?: string;
 }
 

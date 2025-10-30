@@ -1,28 +1,34 @@
+import { AuthGuardData, createAuthGuard } from 'keycloak-angular';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { inject } from '@angular/core';
-import { Router, CanActivateFn } from '@angular/router';
-import Keycloak from 'keycloak-js';
 
-export const authGuard: CanActivateFn = async (route, state) => {
-  const keycloak = inject(Keycloak);
-  const router = inject(Router);
+/**
+ * The logic below is a simple example, please make it more robust when implementing in your application.
+ *
+ * Reason: isAccessGranted is not validating the resource, since it is merging all roles. Two resources might
+ * have the same role name and it makes sense to validate it more granular.
+ */
+const isAccessAllowed = async (
+  route: ActivatedRouteSnapshot,
+  __: RouterStateSnapshot,
+  authData: AuthGuardData
+): Promise<boolean | UrlTree> => {
+  const { authenticated, grantedRoles } = authData;
 
-  const isLoggedIn = keycloak.authenticated ?? false;
-
-  if (!isLoggedIn) {
-    await keycloak.login({
-      redirectUri: window.location.origin + state.url
-    });
+  const requiredRole = route.data['role'];
+  if (!requiredRole) {
     return false;
   }
 
-  const requiredRoles = route.data['roles'] as string[];
-  if (requiredRoles && requiredRoles.length > 0) {
-    const hasRole = requiredRoles.some(role => keycloak.hasRealmRole(role));
-    if (!hasRole) {
-      router.navigate(['/unauthorized']);
-      return false;
-    }
+  const hasRequiredRole = (role: string): boolean =>
+    Object.values(grantedRoles.resourceRoles).some((roles) => roles.includes(role));
+
+  if (authenticated && hasRequiredRole(requiredRole)) {
+    return true;
   }
 
-  return true;
+  const router = inject(Router);
+  return router.parseUrl('/forbidden');
 };
+
+export const canActivateAuthRole = createAuthGuard<CanActivateFn>(isAccessAllowed);

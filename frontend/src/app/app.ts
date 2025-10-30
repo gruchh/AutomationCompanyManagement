@@ -1,15 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
 import { Navbar } from './layout/navbar/navbar';
-import { SidebarIcons } from './layout/sidebar-icons/sidebar-icons';
-import { MainContent } from './layout/main-content/main-content';
 import { LoginModal } from './shared/login-modal/login-modal';
 import { LoginModalService } from './core/services/modal-service';
-import { KeycloakService } from 'keycloak-angular';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [Navbar, SidebarIcons, MainContent, LoginModal],
+  imports: [Navbar, LoginModal, RouterOutlet],
   templateUrl: './app.html',
 })
 export class App {
@@ -24,5 +22,4 @@ export class App {
   closeLoginModal() {
     this.loginModalService.close();
   }
-
 }

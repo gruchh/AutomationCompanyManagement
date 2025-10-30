@@ -1,28 +1,22 @@
-import { LoginModalService } from './../../core/services/modal-service';
 import { Component, inject } from '@angular/core';
-import { KEYCLOAK_EVENT_SIGNAL } from 'keycloak-angular';
-import Keycloak from 'keycloak-js';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
   imports: [],
   templateUrl: './navbar.html',
 })
 export class Navbar {
-  loginModalService = inject(LoginModalService);
-  keycloakStatus: string | undefined;
-  private readonly keycloak = inject(Keycloak);
-  private readonly keycloakSignal = inject(KEYCLOAK_EVENT_SIGNAL);
-
-  openLoginModal() {
-    this.loginModalService.open();
-  }
+  private auth = inject(AuthService);
+  isLoggedIn = this.auth.isLoggedIn;
+  user = this.auth.user;
 
   login() {
-    this.keycloak.login();
+    this.auth.login();
   }
 
   logout() {
-    this.keycloak.logout();
+    this.auth.logout();
   }
 }

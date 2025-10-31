@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-forbidden-page',
   standalone: true,
   imports: [],
-  templateUrl: './forbidden-page.html',
+  templateUrl: './forbidden.html',
 })
-export class ForbiddenPage {
+export class Forbidden {
 
 }

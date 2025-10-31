@@ -1,7 +1,7 @@
 import { Component, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ProjectFilters } from '../../../core/models/project-filters';
+import { ProjectFilters } from '../../models/project-filters';
 
 @Component({
   selector: 'app-filters',

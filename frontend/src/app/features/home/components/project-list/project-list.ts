@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectCard } from '../project-card/project-card';
-import { Project } from '../../../core/models/project.model';
+import { Project } from '../../models/project.model';
 
 @Component({
   selector: 'app-project-list',

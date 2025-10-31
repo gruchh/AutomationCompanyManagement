@@ -1,19 +1,31 @@
 import { Routes } from '@angular/router';
-import { Mainpage } from './features/main-page/main-page';
-import { ProfilePage } from './features/profile-page/profile-page';
+import { Home } from './features/home/home';
+import { Forbidden } from './features/forbidden/forbidden';
 import { canActivateAuthRole } from './core/guards/auth.guard';
-import { ForbiddenPage } from './features/forbidden-page/forbidden-page';
+import { HomeLayout } from './layout/home-layout/home-layout';
 
 export const routes: Routes = [
-  { path: '', component: Mainpage },
+  { path: '',
+    loadChildren: () => import('./features/home/home.routes').then((m) => m.HOME_ROUTES),
+    component: HomeLayout },
+
+  {
+    path: 'dashboard',
+    loadChildren: () =>
+      import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
+  },
+
   {
     path: 'profile',
-    component: ProfilePage,
+    loadChildren: () => import('./features/profile/profile.routes').then((m) => m.PROFILE_ROUTES),
     canActivate: [canActivateAuthRole],
     data: { role: 'user' },
   },
+
   {
     path: 'forbidden',
-    component: ForbiddenPage,
+    component: Forbidden,
   },
+
+  { path: '**', redirectTo: '' },
 ];

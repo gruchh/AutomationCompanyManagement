@@ -6,9 +6,9 @@ import { User } from '../../core/models/user';
   selector: 'app-profile-page',
   standalone: true,
   imports: [],
-  templateUrl: './profile-page.html',
+  templateUrl: './profile.html',
 })
-export class ProfilePage {
+export class Profile {
   private readonly keycloak = inject(Keycloak);
 
   user: User | undefined;

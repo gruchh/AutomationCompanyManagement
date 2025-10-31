@@ -1,5 +1,4 @@
 import { Component, computed, inject } from '@angular/core';
-import { Navbar } from './layout/navbar/navbar';
 import { LoginModal } from './shared/login-modal/login-modal';
 import { LoginModalService } from './core/services/modal-service';
 import { RouterOutlet } from '@angular/router';
@@ -7,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [Navbar, LoginModal, RouterOutlet],
+  imports: [LoginModal, RouterOutlet],
   templateUrl: './app.html',
 })
 export class App {

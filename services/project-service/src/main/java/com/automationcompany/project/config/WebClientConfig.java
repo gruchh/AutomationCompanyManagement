@@ -15,7 +15,7 @@ public class WebClientConfig {
     }
 
     @Bean
-    public WebClient employeeServiceWebClient(WebClient.Builder webClientBuilder) {  // ZMIENIONA NAZWA
+    public WebClient employeeServiceWebClient(WebClient.Builder webClientBuilder) {
         return webClientBuilder
                 .baseUrl("http://employee-service/api/employees")
                 .build();

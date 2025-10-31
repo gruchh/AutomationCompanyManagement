@@ -1,16 +1,26 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './navbar.html',
 })
 export class Navbar {
   private auth = inject(AuthService);
-  isLoggedIn = this.auth.isLoggedIn;
+
   user = this.auth.user;
+  isLoggedIn = this.auth.isLoggedIn;
+
+  constructor() {
+    effect(() => {
+      if (this.isLoggedIn()) {
+        this.auth.loadUserProfile();
+      }
+    });
+  }
 
   login() {
     this.auth.login();

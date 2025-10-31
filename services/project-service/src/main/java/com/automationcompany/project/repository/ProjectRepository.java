@@ -4,6 +4,7 @@ import com.automationcompany.project.model.Project;
 import com.automationcompany.project.model.ProjectPriority;
 import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
+import com.automationcompany.project.model.dto.CountByGroupDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -63,4 +64,33 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAllOrderByStartDateDesc();
 
     List<Project> findByPriority(ProjectPriority priority);
+
+    long countByStatus(ProjectStatus status);
+
+    @Query("SELECT COUNT(p) FROM Project p WHERE p.endDate < CURRENT_DATE AND p.status != 'COMPLETED'")
+    Long countProjectsPastDeadline();
+
+    @Query(value = "SELECT AVG(DATEDIFF('DAY', p.start_date, p.end_date)) " +
+                  "FROM projects p WHERE p.status = 'COMPLETED' " +
+                  "AND p.start_date IS NOT NULL AND p.end_date IS NOT NULL",
+          nativeQuery = true)
+    Double getAverageCompletedProjectDuration();
+
+    @Query("SELECT new com.automationcompany.project.model.dto.CountByGroupDto(p.status, COUNT(p)) " +
+            "FROM Project p GROUP BY p.status")
+    List<CountByGroupDto> countProjectsByStatus();
+
+    @Query("SELECT new com.automationcompany.project.model.dto.CountByGroupDto(p.serviceType, COUNT(p)) " +
+            "FROM Project p GROUP BY p.serviceType")
+    List<CountByGroupDto> countProjectsByServiceType();
+
+    @Query("SELECT new com.automationcompany.project.model.dto.CountByGroupDto(p.location, COUNT(p)) " +
+            "FROM Project p WHERE p.location IS NOT NULL AND p.location != '' GROUP BY p.location")
+    List<CountByGroupDto> countProjectsByLocation();
+
+    @Query("SELECT new com.automationcompany.project.model.dto.CountByGroupDto(CAST(p.projectManagerId as string), COUNT(p)) " +
+            "FROM Project p WHERE p.projectManagerId IS NOT NULL AND p.status = 'ACTIVE' GROUP BY p.projectManagerId")
+    List<CountByGroupDto> countActiveProjectsByManager();
+
+    List<Project> findByEndDateBetweenAndStatusIsNot(LocalDate start, LocalDate end, ProjectStatus projectStatus);
 }

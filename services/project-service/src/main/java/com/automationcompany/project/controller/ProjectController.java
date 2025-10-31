@@ -1,10 +1,7 @@
 package com.automationcompany.project.controller;
 
 import com.automationcompany.project.model.ProjectStatus;
-import com.automationcompany.project.model.dto.ProjectCreateDto;
-import com.automationcompany.project.model.dto.ProjectDto;
-import com.automationcompany.project.model.dto.ProjectUpdateDto;
-import com.automationcompany.project.model.dto.ProjectWithEmployeesDto;
+import com.automationcompany.project.model.dto.*;
 import com.automationcompany.project.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -128,5 +125,51 @@ public class ProjectController {
             @Parameter(description = "End date filter (YYYY-MM-DD)", required = true, example = "2024-12-31")
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return ResponseEntity.ok(projectService.getActiveProjects(startDate, endDate));
+    }
+
+    @GetMapping("/summary/overall")
+    @Operation(summary = "Overall project statistics", description = "Returns key metrics for the main dashboard view.")
+    public ResponseEntity<ProjectSummaryDto> getOverallProjectSummary() {
+        return ResponseEntity.ok(projectService.getOverallSummary());
+    }
+
+    @GetMapping("/summary/upcoming-deadlines")
+    @Operation(summary = "Projects with approaching deadlines", description = "Finds projects with an end date in the next N days (e.g., 30 days).")
+    public ResponseEntity<List<ProjectDto>> getUpcomingDeadlines(
+            @RequestParam(defaultValue = "30") int daysAhead) {
+        return ResponseEntity.ok(projectService.getProjectsEndingSoon(daysAhead));
+    }
+
+    @GetMapping("/analysis/status-breakdown")
+    @Operation(summary = "Project count by status", description = "Returns a map or list of counts for each ProjectStatus.")
+    public ResponseEntity<List<CountByGroupDto>> getProjectsCountByStatus() {
+        return ResponseEntity.ok(projectService.getProjectsCountByStatus());
+    }
+
+    @GetMapping("/analysis/service-type-breakdown")
+    @Operation(summary = "Project count by service type", description = "Returns a map or list of counts for each ProjectServiceType.")
+    public ResponseEntity<List<CountByGroupDto>> getProjectsCountByServiceType() {
+        return ResponseEntity.ok(projectService.getProjectsCountByServiceType());
+    }
+
+    @GetMapping("/analysis/location-breakdown")
+    @Operation(summary = "Project count by location", description = "Returns project counts grouped by location.")
+    public ResponseEntity<List<CountByGroupDto>> getProjectsCountByLocation() {
+        return ResponseEntity.ok(projectService.getProjectsCountByLocation());
+    }
+
+    @GetMapping("/resource/top-utilization")
+    @Operation(summary = "Top utilized employees", description = "Returns a list of employees assigned to the most ACTIVE projects.")
+    public ResponseEntity<List<EmployeeUtilizationDto>> getTopUtilizedEmployees(
+            @RequestParam(defaultValue = "5") int limit) {
+        // Musisz zaciągnąć dane pracownika z innego serwisu (EmployeeService)
+        return ResponseEntity.ok(projectService.getTopUtilizedEmployees(limit));
+    }
+
+    @GetMapping("/resource/manager-load")
+    @Operation(summary = "Project load by manager", description = "Returns the count of ACTIVE projects managed by each Project Manager.")
+    public ResponseEntity<List<CountByGroupDto>> getManagerProjectLoad() {
+        // groupName będzie managerId/ManagerName, count - liczba projektów
+        return ResponseEntity.ok(projectService.getManagerProjectLoad());
     }
 }

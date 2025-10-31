@@ -1,7 +1,7 @@
 import Keycloak from 'keycloak-js';
 import { effect, inject, Injectable, signal } from "@angular/core";
-import { User } from '../models/user';
 import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
+import { User } from '../models/user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

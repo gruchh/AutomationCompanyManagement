@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -185,5 +186,77 @@ public class ProjectService {
         if (employeeOpt.isEmpty()) {
             throw new InvalidEmployeeException("Employee not found with id: " + employeeId);
         }
+    }
+
+    public ProjectSummaryDto getOverallSummary() {
+        Long total = projectRepository.count();
+        Long active = projectRepository.countByStatus(ProjectStatus.IN_PROGRESS);
+        Long completed = projectRepository.countByStatus(ProjectStatus.COMPLETED);
+        Long pastDeadline = projectRepository.countProjectsPastDeadline();
+        Double avgDuration = projectRepository.getAverageCompletedProjectDuration();
+
+        return new ProjectSummaryDto(total, active, completed, pastDeadline, avgDuration);
+    }
+
+    public List<CountByGroupDto> getProjectsCountByStatus() {
+        return projectRepository.countProjectsByStatus();
+    }
+
+    public List<CountByGroupDto> getProjectsCountByServiceType() {
+        return projectRepository.countProjectsByServiceType();
+    }
+
+    public List<CountByGroupDto> getProjectsCountByLocation() {
+        return projectRepository.countProjectsByLocation();
+    }
+
+    public List<CountByGroupDto> getManagerProjectLoad() {
+        return projectRepository.countActiveProjectsByManager();
+    }
+
+    public List<EmployeeUtilizationDto> getTopUtilizedEmployees(int limit) {
+        List<Long> topEmployeeIds = projectRepository.findAll().stream()
+                .filter(p -> p.getStatus() == ProjectStatus.IN_PROGRESS)
+                .flatMap(p -> p.getEmployeeIds().stream())
+                .collect(Collectors.groupingBy(id -> id, Collectors.counting()))
+                .entrySet().stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .limit(limit)
+                .map(java.util.Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+
+        List<EmployeeDto> employees = employeeClient.getEmployeesByIds(topEmployeeIds);
+
+        return employees.stream()
+                .map(e -> {
+                    Long projectCount = projectRepository.findAll().stream()
+                            .filter(p -> p.getStatus() == ProjectStatus.IN_PROGRESS)
+                            .filter(p -> p.getEmployeeIds().contains(e.getId()))
+                            .count();
+
+                    return new EmployeeUtilizationDto(
+                            e.getId(),
+                            e.getFirstName(),
+                            e.getLastName(),
+                            e.getPositionLevel(),
+                            projectCount
+                    );
+                })
+                .sorted((e1, e2) -> e2.activeProjectCount().compareTo(e1.activeProjectCount()))
+                .toList();
+    }
+
+    public List<ProjectDto> getProjectsEndingSoon(int daysAhead) {
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.now().plusDays(daysAhead);
+
+        List<Project> projects = projectRepository.findByEndDateBetweenAndStatusIsNot(
+                start,
+                end,
+                ProjectStatus.COMPLETED
+        );
+
+        return projectMapper.toDtoList(projects);
     }
 }

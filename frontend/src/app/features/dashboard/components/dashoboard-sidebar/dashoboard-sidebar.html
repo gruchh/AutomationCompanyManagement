@@ -1,32 +1,80 @@
-<div class="md:hidden flex justify-between items-center p-4 bg-gray-100">
-  <div class="text-xl font-bold">Dashboard</div>
+<!-- Mobile Navbar -->
+<div class="md:hidden flex justify-between items-center p-4 bg-[#1e293b] text-white">
+  <div class="text-lg font-semibold">JobSeeker</div>
   <button (click)="toggleMobileMenu()">
-    <lucide-icon [img]="Menu" class="w-6 h-6"></lucide-icon>
+    <lucide-icon [img]="Menu" class="w-6 h-6 text-gray-300"></lucide-icon>
   </button>
 </div>
 
-<div class="hidden md:flex md:flex-col w-64 bg-white border-r h-screen p-4">
-  <div class="flex flex-col gap-4">
+<!-- Sidebar (Desktop) -->
+<div
+  class="hidden md:flex md:flex-col w-64 bg-[#0f172a] text-gray-300 h-screen p-5 border-r border-gray-800"
+>
+  <!-- Logo / Title -->
+  <div class="flex items-center justify-center mb-10">
+    <span class="text-2xl font-bold text-indigo-400 tracking-wide">JobSeeker</span>
+  </div>
+
+  <!-- Menu -->
+  <nav class="flex flex-col gap-2">
     @for (item of menuItems; track item.route) {
-      <a [routerLink]="item.route"
-         class="flex items-center gap-3 p-2 rounded hover:bg-gray-100 transition">
-        <lucide-icon [img]="item.icon" class="w-6 h-6"></lucide-icon>
-        <span class="hidden lg:inline">{{ item.label }}</span>
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="bg-[#1e293b] text-white"
+        class="flex items-center gap-3 px-3 py-2 rounded-lg transition hover:bg-[#1e293b] hover:text-white"
+      >
+        <lucide-icon [img]="item.icon" class="w-5 h-5"></lucide-icon>
+        <span>{{ item.label }}</span>
       </a>
     }
+  </nav>
+
+  <!-- User Info -->
+  <div class="mt-auto pt-6 border-t border-gray-700 flex items-center gap-3">
+    <img
+      src="https://i.pravatar.cc/40"
+      alt="User Avatar"
+      class="w-9 h-9 rounded-full border border-gray-600"
+    />
+    <div class="flex flex-col">
+      <span class="text-sm font-semibold text-white">Lisa</span>
+      <span class="text-xs text-gray-400">UI/UX Designer</span>
+    </div>
+  </div>
+
+  <!-- Logout -->
+  <div class="mt-4">
+    <a
+      [routerLink]="'/logout'"
+      class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#1e293b] hover:text-white transition"
+    >
+      <lucide-icon [img]="LogOut" class="w-5 h-5"></lucide-icon>
+      <span>Logout</span>
+    </a>
   </div>
 </div>
 
+<!-- Mobile Menu (Dropdown) -->
 @if (isMobileMenuOpen) {
-  <div class="md:hidden bg-white border-t shadow-lg">
+  <div class="md:hidden bg-[#1e293b] text-gray-200 shadow-lg border-t border-gray-700">
     <div class="flex flex-col gap-2 p-4">
       @for (item of menuItems; track item.route) {
-        <a [routerLink]="item.route"
-           class="flex items-center gap-3 p-2 rounded hover:bg-gray-100 transition">
-          <lucide-icon [img]="item.icon" class="w-6 h-6"></lucide-icon>
+        <a
+          [routerLink]="item.route"
+          class="flex items-center gap-3 p-2 rounded hover:bg-[#334155] hover:text-white transition"
+        >
+          <lucide-icon [img]="item.icon" class="w-5 h-5"></lucide-icon>
           <span>{{ item.label }}</span>
         </a>
       }
+
+      <a
+        [routerLink]="'/logout'"
+        class="flex items-center gap-3 p-2 rounded hover:bg-[#334155] hover:text-white transition"
+      >
+        <lucide-icon [img]="LogOut" class="w-5 h-5"></lucide-icon>
+        <span>Logout</span>
+      </a>
     </div>
   </div>
 }

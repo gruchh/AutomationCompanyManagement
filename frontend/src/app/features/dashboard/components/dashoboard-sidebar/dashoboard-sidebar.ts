@@ -1,12 +1,20 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { LucideAngularModule, LayoutDashboard, Calendar, Inbox, Settings, Menu } from 'lucide-angular';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  LucideAngularModule,
+  LayoutDashboard,
+  Calendar,
+  Inbox,
+  Settings,
+  Menu,
+  LogOut,
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-dashboard-sidebar',
   standalone: true,
-  imports: [RouterLink, LucideAngularModule],
-  templateUrl: './dashoboard-sidebar.html',
+  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
+  templateUrl: './dashoboard-sidebar.html'
 })
 export class DashboardSidebar {
   isMobileMenuOpen = false;
@@ -16,11 +24,12 @@ export class DashboardSidebar {
   }
 
   menuItems = [
-    { icon: LayoutDashboard, label: 'Home', route: '/dashboard' },
-    { icon: Inbox, label: 'Inbox', route: '/dashboard/inbox' },
-    { icon: Calendar, label: 'Calendar', route: '/dashboard/calendar' },
+    { icon: LayoutDashboard, label: 'Dashboard', route: '/dashboard' },
+    { icon: Inbox, label: 'Messages', route: '/dashboard/messages' },
+    { icon: Calendar, label: 'Schedule', route: '/dashboard/schedule' },
     { icon: Settings, label: 'Settings', route: '/dashboard/settings' },
   ];
 
   readonly Menu = Menu;
+  readonly LogOut = LogOut;
 }

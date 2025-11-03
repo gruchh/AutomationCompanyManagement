@@ -162,14 +162,12 @@ public class ProjectController {
     @Operation(summary = "Top utilized employees", description = "Returns a list of employees assigned to the most ACTIVE projects.")
     public ResponseEntity<List<EmployeeUtilizationDto>> getTopUtilizedEmployees(
             @RequestParam(defaultValue = "5") int limit) {
-        // Musisz zaciągnąć dane pracownika z innego serwisu (EmployeeService)
         return ResponseEntity.ok(projectService.getTopUtilizedEmployees(limit));
     }
 
     @GetMapping("/resource/manager-load")
     @Operation(summary = "Project load by manager", description = "Returns the count of ACTIVE projects managed by each Project Manager.")
     public ResponseEntity<List<CountByGroupDto>> getManagerProjectLoad() {
-        // groupName będzie managerId/ManagerName, count - liczba projektów
         return ResponseEntity.ok(projectService.getManagerProjectLoad());
     }
 }

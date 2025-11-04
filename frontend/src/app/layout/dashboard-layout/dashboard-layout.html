@@ -1,7 +1,35 @@
 <div class="flex bg-[#0f172a] text-white min-h-screen">
   <app-dashboard-sidebar></app-dashboard-sidebar>
   <div class="flex-1 p-4">
-    <app-dashboard-navbar></app-dashboard-navbar>
+    <app-dashboard-navbar [(isMenuOpen)]="isMobileMenuOpen"></app-dashboard-navbar>
+    @if (isMobileMenuOpen()) {
+    <div
+      class="absolute right-4 top-16 bg-[#1e293b] text-gray-200 shadow-lg border border-gray-700 rounded-lg w-48 z-50"
+    >
+      <div class="flex flex-col gap-2 p-3">
+        @for (item of menuItems; track item.route) {
+        <a
+          [routerLink]="item.route"
+          class="flex items-center gap-3 p-2 rounded hover:bg-[#334155] hover:text-white transition"
+          (click)="isMobileMenuOpen.set(false)"
+        >
+          <lucide-icon [img]="item.icon" class="w-5 h-5"></lucide-icon>
+          <span>{{ item.label }}</span>
+        </a>
+        }
+
+        <a
+          [routerLink]="'/logout'"
+          class="flex items-center gap-3 p-2 rounded hover:bg-[#334155] hover:text-white transition"
+          (click)="isMobileMenuOpen.set(false)"
+        >
+          <lucide-icon [img]="LogOut" class="w-5 h-5"></lucide-icon>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+    }
+
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, effect, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterLink } from '@angular/router';
-import { LucideAngularModule, LayoutDashboard } from 'lucide-angular';
+import { LucideAngularModule, LayoutDashboard, TowerControl, Search, ShieldCheck } from 'lucide-angular';
 
 @Component({
   selector: 'app-navbar',
@@ -41,4 +41,7 @@ export class Navbar {
   }
 
   readonly LayoutDashboard = LayoutDashboard;
+  readonly TowerControl = TowerControl;
+  readonly Search = Search;
+  readonly ShieldCheck = ShieldCheck;
 }

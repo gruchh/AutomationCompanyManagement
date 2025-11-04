@@ -2,13 +2,11 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   LucideAngularModule,
-  LayoutDashboard,
-  Calendar,
-  Inbox,
-  Settings,
+  Worm,
   Menu,
   LogOut,
 } from 'lucide-angular';
+import { MENU_ITEMS } from '../../../../shared/config/menu.config';
 
 @Component({
   selector: 'app-dashboard-sidebar',
@@ -23,13 +21,9 @@ export class DashboardSidebar {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
-  menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', route: '/dashboard' },
-    { icon: Inbox, label: 'Messages', route: '/dashboard/messages' },
-    { icon: Calendar, label: 'Schedule', route: '/dashboard/schedule' },
-    { icon: Settings, label: 'Settings', route: '/dashboard/settings' },
-  ];
+  menuItems = MENU_ITEMS;
 
   readonly Menu = Menu;
   readonly LogOut = LogOut;
+  readonly Worm = Worm;
 }

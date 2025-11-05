@@ -1,4 +1,4 @@
-import { type LucideIconData, LayoutDashboard, Inbox, Calendar } from 'lucide-angular';
+import { type LucideIconData, LayoutDashboard, Inbox, Calendar, MessageCircle } from 'lucide-angular';
 
 export interface MenuItem {
   icon: LucideIconData;
@@ -8,6 +8,7 @@ export interface MenuItem {
 
 export const MENU_ITEMS: MenuItem[] = [
   { icon: LayoutDashboard, label: 'Dashboard', route: '/dashboard' },
-  { icon: Inbox, label: 'Employees', route: '/dashboard/employees' },
-  { icon: Calendar, label: 'Projects', route: '/dashboard/projects' },
+  { icon: Inbox, label: 'Pracownicy', route: '/dashboard/employees' },
+  { icon: Calendar, label: 'Projekty', route: '/dashboard/projects' },
+  { icon: MessageCircle, label: 'Wiadomości', route: '/dashboard/messages' },
 ];

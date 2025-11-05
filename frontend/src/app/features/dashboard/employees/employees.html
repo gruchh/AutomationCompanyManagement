@@ -1,0 +1,205 @@
+<div class="p-6 bg-gray-50">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-semibold text-gray-900">Pracownicy</h1>
+    <div class="flex gap-3">
+      <button
+        (click)="addNewEmployee()"
+        class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 flex items-center gap-2"
+      >
+        <lucide-icon [img]="PlusIcon" class="w-4 h-4"></lucide-icon>
+        Dodaj nowego pracownika
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-4 gap-4 mb-6">
+    <div class="bg-white p-5 rounded-lg border border-gray-200">
+      <div class="flex items-center gap-2 mb-3">
+        <lucide-icon [img]="UsersIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
+        <span class="text-sm text-gray-600">Total Employees</span>
+      </div>
+      <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().totalEmployees }}</div>
+      <div class="text-sm text-green-600">
+        +{{ stats().changeFromLastMonth }} od ostatniego roku
+      </div>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg border border-gray-200">
+      <div class="flex items-center gap-2 mb-3">
+        <lucide-icon [img]="UserPlusIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
+        <span class="text-sm text-gray-600">New Hires This Month</span>
+      </div>
+      <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().newHires }}</div>
+      <div class="text-sm text-green-600">+{{ stats().newHiresChange }} od ostatniego roku</div>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg border border-gray-200">
+      <div class="flex items-center gap-2 mb-3">
+        <lucide-icon [img]="CalendarIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
+        <span class="text-sm text-gray-600">Średnio (Years)</span>
+      </div>
+      <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().averageTenure }}</div>
+      <div class="text-sm text-green-600">+{{ stats().tenureChange }}% from last year</div>
+    </div>
+
+    <div class="bg-white p-5 rounded-lg border border-gray-200">
+      <div class="flex items-center gap-2 mb-3">
+        <lucide-icon [img]="BuildingIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
+        <span class="text-sm text-gray-600">Active Departments</span>
+      </div>
+      <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().activeDepartments }}</div>
+      <div class="text-sm text-red-600">{{ stats().departmentsChange }} from last year</div>
+    </div>
+  </div>
+  <div class="bg-white rounded-lg border border-gray-200">
+    <div class="flex justify-between items-center p-4 border-b border-gray-200">
+      <div class="flex items-center gap-2 text-sm text-gray-700">
+        <lucide-icon [img]="UsersIcon" class="w-4 h-4"></lucide-icon>
+        <span
+          >Total Employees: <strong>{{ employees().length }} employees</strong></span
+        >
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="w-10 px-4 py-3"></th>
+            <th
+              class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            >
+              Name
+            </th>
+            <th
+              class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            >
+              Wydział
+            </th>
+            <th
+              class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            >
+              Posada
+            </th>
+            <th
+              class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            >
+              Typ
+            </th>
+            <th
+              class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            >
+              Status
+            </th>
+            <th
+              class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            >
+              Data zatrudnienia
+            </th>
+            <th
+              class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+            >
+              Akcje
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @for (employee of employees(); track employee.id) {
+          <tr [class.bg-blue-50]="employee.selected" class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3">
+              <input
+                type="checkbox"
+                [checked]="employee.selected"
+                (change)="toggleEmployee(employee)"
+                class="w-4 h-4 text-indigo-600 rounded cursor-pointer"
+              />
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-semibold"
+                >
+                  {{ getInitials(employee) }}
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-900"
+                    >{{ employee.firstName }} {{ employee.lastName }}</span
+                  >
+                  <span class="text-xs text-gray-500">{{ employee.email }}</span>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700">
+              {{ formatDepartment(employee.department) }}
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700">
+              {{ formatPositionLevel(employee.positionLevel) }}
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700">
+              {{ formatEmploymentType(employee.employmentType) }}
+            </td>
+            <td class="px-4 py-3">
+              <span
+                [ngClass]="{
+                  'bg-green-100 text-green-800': employee.status === 'ACTIVE',
+                  'bg-orange-100 text-orange-800': employee.status === 'ON_LEAVE',
+                  'bg-red-100 text-red-800':
+                    employee.status === 'SUSPENDED' || employee.status === 'TERMINATED'
+                }"
+                class="inline-block px-3 py-1 rounded-full text-xs font-medium"
+              >
+                {{ formatStatus(employee.status) }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700">{{ employee.hireDate }}</td>
+            <td class="px-4 py-3 relative">
+              <button
+                (click)="toggleMenu(employee.id, $event)"
+                class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded p-1 text-xl"
+              >
+                ⋮
+              </button>
+
+              @if (openMenuId() === employee.id) {
+              <div
+                (click)="$event.stopPropagation()"
+                class="absolute right-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+              >
+                <button
+                  (click)="viewProfile(employee)"
+                  class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
+                >
+                  <lucide-icon [img]="EyeIcon" class="w-4 h-4"></lucide-icon>
+                  <span>View Profile</span>
+                </button>
+                <button
+                  (click)="editDetails(employee)"
+                  class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
+                >
+                  <lucide-icon [img]="EditIcon" class="w-4 h-4"></lucide-icon>
+                  <span>Edit Details</span>
+                </button>
+                <button
+                  (click)="viewPerformance(employee)"
+                  class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
+                >
+                  <lucide-icon [img]="TrendingUpIcon" class="w-4 h-4"></lucide-icon>
+                  <span>View Performance</span>
+                </button>
+                <button
+                  (click)="deleteEmployee(employee)"
+                  class="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
+                >
+                  <lucide-icon [img]="Trash2Icon" class="w-4 h-4"></lucide-icon>
+                  <span>Delete Employee</span>
+                </button>
+              </div>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

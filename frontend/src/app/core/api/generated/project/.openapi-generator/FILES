@@ -10,11 +10,14 @@ git_push.sh
 index.ts
 model/addressDto.ts
 model/bankDetailsDto.ts
+model/countByGroupDto.ts
 model/emergencyContactDto.ts
 model/employeeDto.ts
+model/employeeUtilizationDto.ts
 model/models.ts
 model/projectCreateDto.ts
 model/projectDto.ts
+model/projectSummaryDto.ts
 model/projectUpdateDto.ts
 model/projectWithEmployeesDto.ts
 param.ts

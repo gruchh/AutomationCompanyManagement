@@ -13,8 +13,30 @@
  * Data required to send a message
  */
 export interface SendMessageDTODto { 
-    recipientId?: number;
-    subject?: string;
-    content?: string;
+    recipientId: number;
+    subject: string;
+    content: string;
+    category?: SendMessageDTODto.CategoryEnum;
+    priority?: SendMessageDTODto.PriorityEnum;
 }
+export namespace SendMessageDTODto {
+    export const CategoryEnum = {
+        Campaign: 'CAMPAIGN',
+        Analytics: 'ANALYTICS',
+        Alert: 'ALERT',
+        Budget: 'BUDGET',
+        Reminder: 'REMINDER',
+        Leads: 'LEADS',
+        Expiring: 'EXPIRING',
+        General: 'GENERAL'
+    } as const;
+    export type CategoryEnum = typeof CategoryEnum[keyof typeof CategoryEnum];
+    export const PriorityEnum = {
+        Low: 'LOW',
+        Medium: 'MEDIUM',
+        High: 'HIGH'
+    } as const;
+    export type PriorityEnum = typeof PriorityEnum[keyof typeof PriorityEnum];
+}
+
 

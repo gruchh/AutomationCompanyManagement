@@ -1,5 +1,8 @@
 package com.automationcompany.employee.model.dto;
 
+import com.automationcompany.employee.model.MessageCategory;
+import com.automationcompany.employee.model.MessagePriority;
+import com.automationcompany.employee.model.MessageType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,4 +28,7 @@ public class MessageDTO {
     private Boolean isRead;
     private LocalDateTime sentAt;
     private LocalDateTime readAt;
+    private MessageCategory category;
+    private MessagePriority priority;
+    private MessageType type;
 }

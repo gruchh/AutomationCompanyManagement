@@ -23,5 +23,33 @@ export interface MessageDTODto {
     isRead?: boolean;
     sentAt?: string;
     readAt?: string;
+    category?: MessageDTODto.CategoryEnum;
+    priority?: MessageDTODto.PriorityEnum;
+    type?: MessageDTODto.TypeEnum;
 }
+export namespace MessageDTODto {
+    export const CategoryEnum = {
+        Campaign: 'CAMPAIGN',
+        Analytics: 'ANALYTICS',
+        Alert: 'ALERT',
+        Budget: 'BUDGET',
+        Reminder: 'REMINDER',
+        Leads: 'LEADS',
+        Expiring: 'EXPIRING',
+        General: 'GENERAL'
+    } as const;
+    export type CategoryEnum = typeof CategoryEnum[keyof typeof CategoryEnum];
+    export const PriorityEnum = {
+        Low: 'LOW',
+        Medium: 'MEDIUM',
+        High: 'HIGH'
+    } as const;
+    export type PriorityEnum = typeof PriorityEnum[keyof typeof PriorityEnum];
+    export const TypeEnum = {
+        System: 'SYSTEM',
+        User: 'USER'
+    } as const;
+    export type TypeEnum = typeof TypeEnum[keyof typeof TypeEnum];
+}
+
 

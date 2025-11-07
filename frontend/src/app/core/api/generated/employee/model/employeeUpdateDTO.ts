@@ -7,15 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BankDetailsDto } from './bankDetails';
-import { AddressDto } from './address';
-import { EmergencyContactDto } from './emergencyContact';
+import { EmergencyContact } from './emergencyContact';
+import { Address } from './address';
+import { BankDetails } from './bankDetails';
 
 
 /**
  * Data transfer object for updating an existing employee. All fields are optional.
  */
-export interface EmployeeUpdateDtoDto { 
+export interface EmployeeUpdateDto { 
     /**
      * Updated first name of the employee
      */
@@ -43,33 +43,33 @@ export interface EmployeeUpdateDtoDto {
     /**
      * Updated position level (e.g., JUNIOR, MID, SENIOR)
      */
-    positionLevel?: EmployeeUpdateDtoDto.PositionLevelEnum;
+    positionLevel?: EmployeeUpdateDto.PositionLevelEnum;
     /**
      * Updated department assignment
      */
-    department?: EmployeeUpdateDtoDto.DepartmentEnum;
+    department?: EmployeeUpdateDto.DepartmentEnum;
     /**
      * Updated employment contract type
      */
-    employmentType?: EmployeeUpdateDtoDto.EmploymentTypeEnum;
+    employmentType?: EmployeeUpdateDto.EmploymentTypeEnum;
     /**
      * Updated employee status
      */
-    status?: EmployeeUpdateDtoDto.StatusEnum;
+    status?: EmployeeUpdateDto.StatusEnum;
     /**
      * Updated residential address (fully replaced if provided)
      */
-    address?: AddressDto;
+    address?: Address;
     /**
      * Updated bank account details (fully replaced if provided)
      */
-    bankDetails?: BankDetailsDto;
+    bankDetails?: BankDetails;
     /**
      * Updated emergency contact information (fully replaced if provided)
      */
-    emergencyContact?: EmergencyContactDto;
+    emergencyContact?: EmergencyContact;
 }
-export namespace EmployeeUpdateDtoDto {
+export namespace EmployeeUpdateDto {
     export const PositionLevelEnum = {
         Intern: 'INTERN',
         Junior: 'JUNIOR',

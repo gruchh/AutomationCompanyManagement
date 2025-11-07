@@ -12,7 +12,7 @@
 /**
  * Data transfer object representing an emergency contact person for an employee
  */
-export interface EmergencyContactDtoDto { 
+export interface EmergencyContactDto { 
     /**
      * Full name of the emergency contact person
      */

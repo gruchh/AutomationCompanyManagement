@@ -12,7 +12,7 @@
 /**
  * Bank account details for salary payments
  */
-export interface BankDetailsDto { 
+export interface BankDetails { 
     /**
      * IBAN or local bank account number
      */

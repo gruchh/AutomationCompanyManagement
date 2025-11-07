@@ -2,6 +2,30 @@
   "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.16.0"
+    "version": "7.16.0",
+    "generatorName": "typescript-angular",
+    "output": "./frontend/src/app/api",
+    "inputSpec": "./src/main/resources/openapi.yaml",
+    "additional-properties": {
+      "modelNamePrefix": "",
+      "modelNameSuffix": "",
+      "model-name-suffix": "",
+      "skipDtoSuffix": true,
+      "removeOperationIdPrefix": true,
+      "withInterfaces": true,
+      "supportsES6": true,
+      "npmName": "@automationcompany/employee-api",
+      "npmVersion": "1.0.0",
+      "modelPropertyNaming": "camelCase",
+      "enumPropertyNaming": "original",
+      "useSingleRequestParameter": false,
+      "removeEnumValuePrefix": true
+    },
+    "type-mappings": {
+      "BigDecimal": "number",
+      "LocalDate": "string",
+      "LocalDateTime": "string"
+    },
+    "import-mappings": {}
   }
 }

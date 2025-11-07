@@ -12,7 +12,7 @@
 /**
  * Data transfer object representing a physical address
  */
-export interface AddressDtoDto { 
+export interface AddressDto { 
     /**
      * Street name and number (e.g., Main St 123)
      */

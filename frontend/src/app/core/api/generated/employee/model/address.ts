@@ -12,7 +12,7 @@
 /**
  * Employee\'s residential address
  */
-export interface AddressDto { 
+export interface Address { 
     /**
      * Street name and number
      */

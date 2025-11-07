@@ -12,7 +12,7 @@
 /**
  * Message data transfer object
  */
-export interface MessageDtoDto { 
+export interface MessageDto { 
     id?: number;
     senderId?: number;
     senderName?: string;
@@ -26,17 +26,17 @@ export interface MessageDtoDto {
     /**
      * Message category
      */
-    category?: MessageDtoDto.CategoryEnum;
+    category?: MessageDto.CategoryEnum;
     /**
      * Message priority level
      */
-    priority?: MessageDtoDto.PriorityEnum;
+    priority?: MessageDto.PriorityEnum;
     /**
      * Typ wiadomości
      */
-    type?: MessageDtoDto.TypeEnum;
+    type?: MessageDto.TypeEnum;
 }
-export namespace MessageDtoDto {
+export namespace MessageDto {
     export const CategoryEnum = {
         Campaign: 'CAMPAIGN',
         Analytics: 'ANALYTICS',

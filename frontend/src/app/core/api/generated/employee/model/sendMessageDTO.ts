@@ -12,7 +12,7 @@
 /**
  * Data transfer object for sending a new message. Used in message creation endpoints.
  */
-export interface SendMessageDtoDto { 
+export interface SendMessageDto { 
     /**
      * ID of the user who will receive the message
      */
@@ -28,13 +28,13 @@ export interface SendMessageDtoDto {
     /**
      * Category of the message. Defaults to GENERAL if not provided.
      */
-    category?: SendMessageDtoDto.CategoryEnum;
+    category?: SendMessageDto.CategoryEnum;
     /**
      * Priority level of the message. Defaults to MEDIUM if not provided.
      */
-    priority?: SendMessageDtoDto.PriorityEnum;
+    priority?: SendMessageDto.PriorityEnum;
 }
-export namespace SendMessageDtoDto {
+export namespace SendMessageDto {
     export const CategoryEnum = {
         Campaign: 'CAMPAIGN',
         Analytics: 'ANALYTICS',

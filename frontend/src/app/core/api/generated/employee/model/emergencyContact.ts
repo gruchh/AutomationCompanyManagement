@@ -12,7 +12,7 @@
 /**
  * Emergency contact person for the employee
  */
-export interface EmergencyContactDto { 
+export interface EmergencyContact { 
     /**
      * Full name of the contact
      */

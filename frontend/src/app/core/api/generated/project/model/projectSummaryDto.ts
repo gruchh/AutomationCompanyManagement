@@ -12,7 +12,7 @@
 /**
  * Overall summary statistics for all projects in the system. Used in dashboard and reporting endpoints.
  */
-export interface ProjectSummaryDtoDto { 
+export interface ProjectSummaryDto { 
     /**
      * Total number of projects in the system (regardless of status).
      */

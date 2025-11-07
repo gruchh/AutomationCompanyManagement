@@ -7,15 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BankDetailsDto } from './bankDetails';
-import { AddressDto } from './address';
-import { EmergencyContactDto } from './emergencyContact';
+import { EmergencyContact } from './emergencyContact';
+import { Address } from './address';
+import { BankDetails } from './bankDetails';
 
 
 /**
  * Data transfer object representing a complete employee record (read-only)
  */
-export interface EmployeeReadDtoDto { 
+export interface EmployeeReadDto { 
     /**
      * Unique identifier of the employee
      */
@@ -59,31 +59,31 @@ export interface EmployeeReadDtoDto {
     /**
      * Position level (e.g., JUNIOR, MID, SENIOR)
      */
-    positionLevel?: EmployeeReadDtoDto.PositionLevelEnum;
+    positionLevel?: EmployeeReadDto.PositionLevelEnum;
     /**
      * Department the employee belongs to
      */
-    department?: EmployeeReadDtoDto.DepartmentEnum;
+    department?: EmployeeReadDto.DepartmentEnum;
     /**
      * Type of employment contract
      */
-    employmentType?: EmployeeReadDtoDto.EmploymentTypeEnum;
+    employmentType?: EmployeeReadDto.EmploymentTypeEnum;
     /**
      * Current status of the employee
      */
-    status?: EmployeeReadDtoDto.StatusEnum;
+    status?: EmployeeReadDto.StatusEnum;
     /**
      * Employee\'s residential address
      */
-    address?: AddressDto;
+    address?: Address;
     /**
      * Bank account details for salary payments
      */
-    bankDetails?: BankDetailsDto;
+    bankDetails?: BankDetails;
     /**
      * Emergency contact information
      */
-    emergencyContact?: EmergencyContactDto;
+    emergencyContact?: EmergencyContact;
     /**
      * Timestamp when the employee record was created
      */
@@ -93,7 +93,7 @@ export interface EmployeeReadDtoDto {
      */
     updatedAt?: string;
 }
-export namespace EmployeeReadDtoDto {
+export namespace EmployeeReadDto {
     export const PositionLevelEnum = {
         Intern: 'INTERN',
         Junior: 'JUNIOR',

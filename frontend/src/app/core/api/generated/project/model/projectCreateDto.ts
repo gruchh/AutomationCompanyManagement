@@ -12,7 +12,7 @@
 /**
  * Project creation request
  */
-export interface ProjectCreateDtoDto { 
+export interface ProjectCreateDto { 
     /**
      * Full name of the project
      */
@@ -36,15 +36,15 @@ export interface ProjectCreateDtoDto {
     /**
      * Current status of the project
      */
-    status: ProjectCreateDtoDto.StatusEnum;
+    status: ProjectCreateDto.StatusEnum;
     /**
      * Priority level of the project (optional, defaults to MEDIUM if not set)
      */
-    priority?: ProjectCreateDtoDto.PriorityEnum;
+    priority?: ProjectCreateDto.PriorityEnum;
     /**
      * Type of service provided in the project
      */
-    serviceType: ProjectCreateDtoDto.ServiceTypeEnum;
+    serviceType: ProjectCreateDto.ServiceTypeEnum;
     /**
      * Physical or logical location of the project (optional)
      */
@@ -58,7 +58,7 @@ export interface ProjectCreateDtoDto {
      */
     projectManagerId?: number;
 }
-export namespace ProjectCreateDtoDto {
+export namespace ProjectCreateDto {
     export const StatusEnum = {
         Planning: 'PLANNING',
         InProgress: 'IN_PROGRESS',

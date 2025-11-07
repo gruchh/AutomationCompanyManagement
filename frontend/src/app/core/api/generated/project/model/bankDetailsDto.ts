@@ -12,7 +12,7 @@
 /**
  * Data transfer object containing employee\'s bank account and tax identification details
  */
-export interface BankDetailsDtoDto { 
+export interface BankDetailsDto { 
     /**
      * Employee\'s bank account number (IBAN without spaces, 26 digits for Polish banks)
      */

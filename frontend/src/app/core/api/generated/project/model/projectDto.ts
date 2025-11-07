@@ -12,7 +12,7 @@
 /**
  * Complete data transfer object representing a project with all details and audit information (read-only response).
  */
-export interface ProjectDtoDto { 
+export interface ProjectDto { 
     /**
      * Unique identifier of the project
      */
@@ -40,15 +40,15 @@ export interface ProjectDtoDto {
     /**
      * Current status of the project
      */
-    status: ProjectDtoDto.StatusEnum;
+    status: ProjectDto.StatusEnum;
     /**
      * Priority level of the project
      */
-    priority?: ProjectDtoDto.PriorityEnum;
+    priority?: ProjectDto.PriorityEnum;
     /**
      * Type of service provided in the project
      */
-    serviceType: ProjectDtoDto.ServiceTypeEnum;
+    serviceType: ProjectDto.ServiceTypeEnum;
     /**
      * Physical or logical location of the project (optional)
      */
@@ -78,7 +78,7 @@ export interface ProjectDtoDto {
      */
     updatedBy?: string;
 }
-export namespace ProjectDtoDto {
+export namespace ProjectDto {
     export const StatusEnum = {
         Planning: 'PLANNING',
         InProgress: 'IN_PROGRESS',

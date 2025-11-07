@@ -7,15 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BankDetailsDto } from './bankDetails';
-import { AddressDto } from './address';
-import { EmergencyContactDto } from './emergencyContact';
+import { EmergencyContact } from './emergencyContact';
+import { Address } from './address';
+import { BankDetails } from './bankDetails';
 
 
 /**
  * Data transfer object for creating a new employee
  */
-export interface EmployeeCreateDtoDto { 
+export interface EmployeeCreateDto { 
     /**
      * Employee\'s first name
      */
@@ -51,33 +51,33 @@ export interface EmployeeCreateDtoDto {
     /**
      * Employee\'s position level (e.g., JUNIOR, MID, SENIOR)
      */
-    positionLevel: EmployeeCreateDtoDto.PositionLevelEnum;
+    positionLevel: EmployeeCreateDto.PositionLevelEnum;
     /**
      * Department the employee belongs to
      */
-    department: EmployeeCreateDtoDto.DepartmentEnum;
+    department: EmployeeCreateDto.DepartmentEnum;
     /**
      * Type of employment contract
      */
-    employmentType: EmployeeCreateDtoDto.EmploymentTypeEnum;
+    employmentType: EmployeeCreateDto.EmploymentTypeEnum;
     /**
      * Current status of the employee. Defaults to ACTIVE
      */
-    status?: EmployeeCreateDtoDto.StatusEnum;
+    status?: EmployeeCreateDto.StatusEnum;
     /**
      * Employee\'s residential address
      */
-    address?: AddressDto;
+    address?: Address;
     /**
      * Employee\'s bank account details for salary payments
      */
-    bankDetails?: BankDetailsDto;
+    bankDetails?: BankDetails;
     /**
      * Emergency contact information
      */
-    emergencyContact?: EmergencyContactDto;
+    emergencyContact?: EmergencyContact;
 }
-export namespace EmployeeCreateDtoDto {
+export namespace EmployeeCreateDto {
     export const PositionLevelEnum = {
         Intern: 'INTERN',
         Junior: 'JUNIOR',

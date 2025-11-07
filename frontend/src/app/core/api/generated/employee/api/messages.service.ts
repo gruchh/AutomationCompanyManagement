@@ -17,9 +17,9 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { MessageDtoDto } from '../model/messageDto';
+import { MessageDto } from '../model/messageDto';
 // @ts-ignore
-import { SendMessageDtoDto } from '../model/sendMessageDto';
+import { SendMessageDto } from '../model/sendMessageDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -46,9 +46,9 @@ export class MessagesApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public broadcastSystemMessage(subject: string, content: string, category?: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', priority?: 'LOW' | 'MEDIUM' | 'HIGH', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDtoDto>>;
-    public broadcastSystemMessage(subject: string, content: string, category?: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', priority?: 'LOW' | 'MEDIUM' | 'HIGH', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDtoDto>>>;
-    public broadcastSystemMessage(subject: string, content: string, category?: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', priority?: 'LOW' | 'MEDIUM' | 'HIGH', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDtoDto>>>;
+    public broadcastSystemMessage(subject: string, content: string, category?: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', priority?: 'LOW' | 'MEDIUM' | 'HIGH', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDto>>;
+    public broadcastSystemMessage(subject: string, content: string, category?: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', priority?: 'LOW' | 'MEDIUM' | 'HIGH', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDto>>>;
+    public broadcastSystemMessage(subject: string, content: string, category?: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', priority?: 'LOW' | 'MEDIUM' | 'HIGH', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDto>>>;
     public broadcastSystemMessage(subject: string, content: string, category?: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', priority?: 'LOW' | 'MEDIUM' | 'HIGH', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (subject === null || subject === undefined) {
             throw new Error('Required parameter subject was null or undefined when calling broadcastSystemMessage.');
@@ -94,7 +94,7 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages/system/broadcast`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<MessageDtoDto>>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<MessageDto>>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -166,9 +166,9 @@ export class MessagesApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllMessages(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDtoDto>>;
-    public getAllMessages(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDtoDto>>>;
-    public getAllMessages(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDtoDto>>>;
+    public getAllMessages(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDto>>;
+    public getAllMessages(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDto>>>;
+    public getAllMessages(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDto>>>;
     public getAllMessages(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -198,7 +198,7 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<MessageDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<MessageDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -217,9 +217,9 @@ export class MessagesApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMessage(messageId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageDtoDto>;
-    public getMessage(messageId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageDtoDto>>;
-    public getMessage(messageId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageDtoDto>>;
+    public getMessage(messageId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageDto>;
+    public getMessage(messageId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageDto>>;
+    public getMessage(messageId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageDto>>;
     public getMessage(messageId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (messageId === null || messageId === undefined) {
             throw new Error('Required parameter messageId was null or undefined when calling getMessage.');
@@ -252,7 +252,7 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages/${this.configuration.encodeParam({name: "messageId", value: messageId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MessageDtoDto>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<MessageDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -271,9 +271,9 @@ export class MessagesApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMessagesByCategory(category: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDtoDto>>;
-    public getMessagesByCategory(category: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDtoDto>>>;
-    public getMessagesByCategory(category: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDtoDto>>>;
+    public getMessagesByCategory(category: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDto>>;
+    public getMessagesByCategory(category: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDto>>>;
+    public getMessagesByCategory(category: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDto>>>;
     public getMessagesByCategory(category: 'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (category === null || category === undefined) {
             throw new Error('Required parameter category was null or undefined when calling getMessagesByCategory.');
@@ -306,7 +306,7 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages/category/${this.configuration.encodeParam({name: "category", value: category, in: "path", style: "simple", explode: false, dataType: "'CAMPAIGN' | 'ANALYTICS' | 'ALERT' | 'BUDGET' | 'REMINDER' | 'LEADS' | 'EXPIRING' | 'GENERAL'", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<MessageDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<MessageDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -324,9 +324,9 @@ export class MessagesApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getReceivedMessages(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDtoDto>>;
-    public getReceivedMessages(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDtoDto>>>;
-    public getReceivedMessages(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDtoDto>>>;
+    public getReceivedMessages(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDto>>;
+    public getReceivedMessages(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDto>>>;
+    public getReceivedMessages(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDto>>>;
     public getReceivedMessages(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -356,7 +356,7 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages/received`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<MessageDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<MessageDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -374,9 +374,9 @@ export class MessagesApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSentMessages(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDtoDto>>;
-    public getSentMessages(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDtoDto>>>;
-    public getSentMessages(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDtoDto>>>;
+    public getSentMessages(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDto>>;
+    public getSentMessages(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDto>>>;
+    public getSentMessages(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDto>>>;
     public getSentMessages(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -406,7 +406,7 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages/sent`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<MessageDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<MessageDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -474,9 +474,9 @@ export class MessagesApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUnreadMessages(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDtoDto>>;
-    public getUnreadMessages(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDtoDto>>>;
-    public getUnreadMessages(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDtoDto>>>;
+    public getUnreadMessages(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MessageDto>>;
+    public getUnreadMessages(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MessageDto>>>;
+    public getUnreadMessages(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MessageDto>>>;
     public getUnreadMessages(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -506,7 +506,7 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages/unread`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<MessageDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<MessageDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -623,16 +623,16 @@ export class MessagesApi extends BaseService {
 
     /**
      * Send a message to another employee
-     * @param sendMessageDtoDto 
+     * @param sendMessageDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public sendMessage(sendMessageDtoDto: SendMessageDtoDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageDtoDto>;
-    public sendMessage(sendMessageDtoDto: SendMessageDtoDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageDtoDto>>;
-    public sendMessage(sendMessageDtoDto: SendMessageDtoDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageDtoDto>>;
-    public sendMessage(sendMessageDtoDto: SendMessageDtoDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (sendMessageDtoDto === null || sendMessageDtoDto === undefined) {
-            throw new Error('Required parameter sendMessageDtoDto was null or undefined when calling sendMessage.');
+    public sendMessage(sendMessageDto: SendMessageDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageDto>;
+    public sendMessage(sendMessageDto: SendMessageDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageDto>>;
+    public sendMessage(sendMessageDto: SendMessageDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageDto>>;
+    public sendMessage(sendMessageDto: SendMessageDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (sendMessageDto === null || sendMessageDto === undefined) {
+            throw new Error('Required parameter sendMessageDto was null or undefined when calling sendMessage.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -671,10 +671,10 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MessageDtoDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<MessageDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: sendMessageDtoDto,
+                body: sendMessageDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -687,16 +687,16 @@ export class MessagesApi extends BaseService {
 
     /**
      * Send a system message (admin only)
-     * @param sendMessageDtoDto 
+     * @param sendMessageDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public sendSystemMessage(sendMessageDtoDto: SendMessageDtoDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageDtoDto>;
-    public sendSystemMessage(sendMessageDtoDto: SendMessageDtoDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageDtoDto>>;
-    public sendSystemMessage(sendMessageDtoDto: SendMessageDtoDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageDtoDto>>;
-    public sendSystemMessage(sendMessageDtoDto: SendMessageDtoDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (sendMessageDtoDto === null || sendMessageDtoDto === undefined) {
-            throw new Error('Required parameter sendMessageDtoDto was null or undefined when calling sendSystemMessage.');
+    public sendSystemMessage(sendMessageDto: SendMessageDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MessageDto>;
+    public sendSystemMessage(sendMessageDto: SendMessageDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MessageDto>>;
+    public sendSystemMessage(sendMessageDto: SendMessageDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MessageDto>>;
+    public sendSystemMessage(sendMessageDto: SendMessageDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (sendMessageDto === null || sendMessageDto === undefined) {
+            throw new Error('Required parameter sendMessageDto was null or undefined when calling sendSystemMessage.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -735,10 +735,10 @@ export class MessagesApi extends BaseService {
 
         let localVarPath = `/api/messages/system`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MessageDtoDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<MessageDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: sendMessageDtoDto,
+                body: sendMessageDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

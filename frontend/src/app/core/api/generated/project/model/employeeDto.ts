@@ -7,15 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AddressDtoDto } from './addressDto';
-import { BankDetailsDtoDto } from './bankDetailsDto';
-import { EmergencyContactDtoDto } from './emergencyContactDto';
+import { BankDetailsDto } from './bankDetailsDto';
+import { AddressDto } from './addressDto';
+import { EmergencyContactDto } from './emergencyContactDto';
 
 
 /**
  * Complete data transfer object representing an employee with all details (read-only response)
  */
-export interface EmployeeDtoDto { 
+export interface EmployeeDto { 
     /**
      * Unique identifier of the employee
      */
@@ -75,15 +75,15 @@ export interface EmployeeDtoDto {
     /**
      * Employee\'s residential address
      */
-    address?: AddressDtoDto;
+    address?: AddressDto;
     /**
      * Bank account details for salary payments
      */
-    bankDetails?: BankDetailsDtoDto;
+    bankDetails?: BankDetailsDto;
     /**
      * Emergency contact information
      */
-    emergencyContact?: EmergencyContactDtoDto;
+    emergencyContact?: EmergencyContactDto;
     /**
      * Timestamp when the employee record was created
      */

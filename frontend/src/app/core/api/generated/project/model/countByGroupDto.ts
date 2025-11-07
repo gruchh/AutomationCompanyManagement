@@ -12,7 +12,7 @@
 /**
  * Represents a count of projects grouped by a category (e.g., status, location).
  */
-export interface CountByGroupDtoDto { 
+export interface CountByGroupDto { 
     /**
      * The name of the group (e.g., \'ACTIVE\', \'Wdrożenie\', \'Warszawa\').
      */

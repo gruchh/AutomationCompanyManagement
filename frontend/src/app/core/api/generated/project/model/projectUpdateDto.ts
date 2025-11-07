@@ -12,7 +12,7 @@
 /**
  * Data transfer object for updating an existing project. All fields are optional – only provided values will be updated.
  */
-export interface ProjectUpdateDtoDto { 
+export interface ProjectUpdateDto { 
     /**
      * Updated project name (optional)
      */
@@ -36,15 +36,15 @@ export interface ProjectUpdateDtoDto {
     /**
      * Updated project status (optional)
      */
-    status?: ProjectUpdateDtoDto.StatusEnum;
+    status?: ProjectUpdateDto.StatusEnum;
     /**
      * Updated project priority (optional)
      */
-    priority?: ProjectUpdateDtoDto.PriorityEnum;
+    priority?: ProjectUpdateDto.PriorityEnum;
     /**
      * Updated service type (optional)
      */
-    serviceType?: ProjectUpdateDtoDto.ServiceTypeEnum;
+    serviceType?: ProjectUpdateDto.ServiceTypeEnum;
     /**
      * Updated project location (optional)
      */
@@ -58,7 +58,7 @@ export interface ProjectUpdateDtoDto {
      */
     projectManagerId?: number;
 }
-export namespace ProjectUpdateDtoDto {
+export namespace ProjectUpdateDto {
     export const StatusEnum = {
         Planning: 'PLANNING',
         InProgress: 'IN_PROGRESS',

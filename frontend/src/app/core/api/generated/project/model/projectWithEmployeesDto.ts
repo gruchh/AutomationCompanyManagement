@@ -7,13 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EmployeeDtoDto } from './employeeDto';
+import { EmployeeDto } from './employeeDto';
 
 
 /**
  * Complete project representation including full employee details (with personal and contact info) and project manager. Used in detailed project views, reports, and employee assignment management.
  */
-export interface ProjectWithEmployeesDtoDto { 
+export interface ProjectWithEmployeesDto { 
     /**
      * Unique identifier of the project
      */
@@ -41,15 +41,15 @@ export interface ProjectWithEmployeesDtoDto {
     /**
      * Current status of the project
      */
-    status?: ProjectWithEmployeesDtoDto.StatusEnum;
+    status?: ProjectWithEmployeesDto.StatusEnum;
     /**
      * Priority level of the project
      */
-    priority?: ProjectWithEmployeesDtoDto.PriorityEnum;
+    priority?: ProjectWithEmployeesDto.PriorityEnum;
     /**
      * Type of service provided in the project
      */
-    serviceType?: ProjectWithEmployeesDtoDto.ServiceTypeEnum;
+    serviceType?: ProjectWithEmployeesDto.ServiceTypeEnum;
     /**
      * Physical or logical location of the project (optional)
      */
@@ -57,11 +57,11 @@ export interface ProjectWithEmployeesDtoDto {
     /**
      * Set of employees currently assigned to the project (with full details: personal, contact, position, etc.)
      */
-    employees?: Set<EmployeeDtoDto>;
+    employees?: Set<EmployeeDto>;
     /**
      * Project manager with full employee details (personal, contact, position, etc.)
      */
-    projectManager?: EmployeeDtoDto;
+    projectManager?: EmployeeDto;
     /**
      * Timestamp when the project was created
      */
@@ -71,7 +71,7 @@ export interface ProjectWithEmployeesDtoDto {
      */
     updatedAt?: string;
 }
-export namespace ProjectWithEmployeesDtoDto {
+export namespace ProjectWithEmployeesDto {
     export const StatusEnum = {
         Planning: 'PLANNING',
         InProgress: 'IN_PROGRESS',

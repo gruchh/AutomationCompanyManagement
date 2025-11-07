@@ -17,19 +17,19 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { CountByGroupDtoDto } from '../model/countByGroupDto';
+import { CountByGroupDto } from '../model/countByGroupDto';
 // @ts-ignore
-import { EmployeeUtilizationDtoDto } from '../model/employeeUtilizationDto';
+import { EmployeeUtilizationDto } from '../model/employeeUtilizationDto';
 // @ts-ignore
-import { ProjectCreateDtoDto } from '../model/projectCreateDto';
+import { ProjectCreateDto } from '../model/projectCreateDto';
 // @ts-ignore
-import { ProjectDtoDto } from '../model/projectDto';
+import { ProjectDto } from '../model/projectDto';
 // @ts-ignore
-import { ProjectSummaryDtoDto } from '../model/projectSummaryDto';
+import { ProjectSummaryDto } from '../model/projectSummaryDto';
 // @ts-ignore
-import { ProjectUpdateDtoDto } from '../model/projectUpdateDto';
+import { ProjectUpdateDto } from '../model/projectUpdateDto';
 // @ts-ignore
-import { ProjectWithEmployeesDtoDto } from '../model/projectWithEmployeesDto';
+import { ProjectWithEmployeesDto } from '../model/projectWithEmployeesDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -55,9 +55,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public assignEmployees(id: number, requestBody: Set<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDtoDto>;
-    public assignEmployees(id: number, requestBody: Set<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDtoDto>>;
-    public assignEmployees(id: number, requestBody: Set<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDtoDto>>;
+    public assignEmployees(id: number, requestBody: Set<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDto>;
+    public assignEmployees(id: number, requestBody: Set<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDto>>;
+    public assignEmployees(id: number, requestBody: Set<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDto>>;
     public assignEmployees(id: number, requestBody: Set<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling assignEmployees.');
@@ -102,7 +102,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/employees`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProjectDtoDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ProjectDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: requestBody,
@@ -119,16 +119,16 @@ export class ProjectManagementApi extends BaseService {
     /**
      * Create project
      * Creates new project with initial configuration and team
-     * @param projectCreateDtoDto 
+     * @param projectCreateDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createProject(projectCreateDtoDto: ProjectCreateDtoDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDtoDto>;
-    public createProject(projectCreateDtoDto: ProjectCreateDtoDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDtoDto>>;
-    public createProject(projectCreateDtoDto: ProjectCreateDtoDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDtoDto>>;
-    public createProject(projectCreateDtoDto: ProjectCreateDtoDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (projectCreateDtoDto === null || projectCreateDtoDto === undefined) {
-            throw new Error('Required parameter projectCreateDtoDto was null or undefined when calling createProject.');
+    public createProject(projectCreateDto: ProjectCreateDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDto>;
+    public createProject(projectCreateDto: ProjectCreateDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDto>>;
+    public createProject(projectCreateDto: ProjectCreateDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDto>>;
+    public createProject(projectCreateDto: ProjectCreateDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (projectCreateDto === null || projectCreateDto === undefined) {
+            throw new Error('Required parameter projectCreateDto was null or undefined when calling createProject.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -167,10 +167,10 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProjectDtoDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ProjectDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: projectCreateDtoDto,
+                body: projectCreateDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -243,9 +243,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getActiveProjects(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDtoDto>>;
-    public getActiveProjects(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDtoDto>>>;
-    public getActiveProjects(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDtoDto>>>;
+    public getActiveProjects(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDto>>;
+    public getActiveProjects(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDto>>>;
+    public getActiveProjects(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDto>>>;
     public getActiveProjects(startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (startDate === null || startDate === undefined) {
             throw new Error('Required parameter startDate was null or undefined when calling getActiveProjects.');
@@ -287,7 +287,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/active`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ProjectDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ProjectDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -307,9 +307,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllProjects(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDtoDto>>;
-    public getAllProjects(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDtoDto>>>;
-    public getAllProjects(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDtoDto>>>;
+    public getAllProjects(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDto>>;
+    public getAllProjects(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDto>>>;
+    public getAllProjects(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDto>>>;
     public getAllProjects(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -339,7 +339,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ProjectDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ProjectDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -358,9 +358,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getManagerProjectLoad(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByGroupDtoDto>>;
-    public getManagerProjectLoad(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByGroupDtoDto>>>;
-    public getManagerProjectLoad(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByGroupDtoDto>>>;
+    public getManagerProjectLoad(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByGroupDto>>;
+    public getManagerProjectLoad(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByGroupDto>>>;
+    public getManagerProjectLoad(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByGroupDto>>>;
     public getManagerProjectLoad(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -390,7 +390,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/resource/manager-load`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<CountByGroupDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<CountByGroupDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -409,9 +409,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOverallProjectSummary(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectSummaryDtoDto>;
-    public getOverallProjectSummary(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectSummaryDtoDto>>;
-    public getOverallProjectSummary(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectSummaryDtoDto>>;
+    public getOverallProjectSummary(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectSummaryDto>;
+    public getOverallProjectSummary(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectSummaryDto>>;
+    public getOverallProjectSummary(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectSummaryDto>>;
     public getOverallProjectSummary(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -441,7 +441,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/summary/overall`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProjectSummaryDtoDto>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ProjectSummaryDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -461,9 +461,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectById(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDtoDto>;
-    public getProjectById(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDtoDto>>;
-    public getProjectById(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDtoDto>>;
+    public getProjectById(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDto>;
+    public getProjectById(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDto>>;
+    public getProjectById(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDto>>;
     public getProjectById(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getProjectById.');
@@ -496,7 +496,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProjectDtoDto>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ProjectDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -516,9 +516,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectWithEmployees(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectWithEmployeesDtoDto>;
-    public getProjectWithEmployees(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectWithEmployeesDtoDto>>;
-    public getProjectWithEmployees(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectWithEmployeesDtoDto>>;
+    public getProjectWithEmployees(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectWithEmployeesDto>;
+    public getProjectWithEmployees(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectWithEmployeesDto>>;
+    public getProjectWithEmployees(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectWithEmployeesDto>>;
     public getProjectWithEmployees(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getProjectWithEmployees.');
@@ -551,7 +551,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/with-employees`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProjectWithEmployeesDtoDto>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ProjectWithEmployeesDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -571,9 +571,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsByEmployee(employeeId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDtoDto>>;
-    public getProjectsByEmployee(employeeId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDtoDto>>>;
-    public getProjectsByEmployee(employeeId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDtoDto>>>;
+    public getProjectsByEmployee(employeeId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDto>>;
+    public getProjectsByEmployee(employeeId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDto>>>;
+    public getProjectsByEmployee(employeeId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDto>>>;
     public getProjectsByEmployee(employeeId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (employeeId === null || employeeId === undefined) {
             throw new Error('Required parameter employeeId was null or undefined when calling getProjectsByEmployee.');
@@ -606,7 +606,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/employee/${this.configuration.encodeParam({name: "employeeId", value: employeeId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ProjectDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ProjectDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -626,9 +626,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsByManager(managerId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDtoDto>>;
-    public getProjectsByManager(managerId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDtoDto>>>;
-    public getProjectsByManager(managerId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDtoDto>>>;
+    public getProjectsByManager(managerId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDto>>;
+    public getProjectsByManager(managerId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDto>>>;
+    public getProjectsByManager(managerId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDto>>>;
     public getProjectsByManager(managerId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (managerId === null || managerId === undefined) {
             throw new Error('Required parameter managerId was null or undefined when calling getProjectsByManager.');
@@ -661,7 +661,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/manager/${this.configuration.encodeParam({name: "managerId", value: managerId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ProjectDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ProjectDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -681,9 +681,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsByStatus(status: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDtoDto>>;
-    public getProjectsByStatus(status: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDtoDto>>>;
-    public getProjectsByStatus(status: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDtoDto>>>;
+    public getProjectsByStatus(status: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDto>>;
+    public getProjectsByStatus(status: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDto>>>;
+    public getProjectsByStatus(status: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDto>>>;
     public getProjectsByStatus(status: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (status === null || status === undefined) {
             throw new Error('Required parameter status was null or undefined when calling getProjectsByStatus.');
@@ -716,7 +716,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/status/${this.configuration.encodeParam({name: "status", value: status, in: "path", style: "simple", explode: false, dataType: "'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ProjectDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ProjectDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -735,9 +735,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsCountByLocation(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByGroupDtoDto>>;
-    public getProjectsCountByLocation(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByGroupDtoDto>>>;
-    public getProjectsCountByLocation(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByGroupDtoDto>>>;
+    public getProjectsCountByLocation(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByGroupDto>>;
+    public getProjectsCountByLocation(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByGroupDto>>>;
+    public getProjectsCountByLocation(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByGroupDto>>>;
     public getProjectsCountByLocation(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -767,7 +767,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/analysis/location-breakdown`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<CountByGroupDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<CountByGroupDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -786,9 +786,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsCountByServiceType(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByGroupDtoDto>>;
-    public getProjectsCountByServiceType(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByGroupDtoDto>>>;
-    public getProjectsCountByServiceType(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByGroupDtoDto>>>;
+    public getProjectsCountByServiceType(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByGroupDto>>;
+    public getProjectsCountByServiceType(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByGroupDto>>>;
+    public getProjectsCountByServiceType(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByGroupDto>>>;
     public getProjectsCountByServiceType(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -818,7 +818,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/analysis/service-type-breakdown`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<CountByGroupDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<CountByGroupDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -837,9 +837,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectsCountByStatus(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByGroupDtoDto>>;
-    public getProjectsCountByStatus(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByGroupDtoDto>>>;
-    public getProjectsCountByStatus(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByGroupDtoDto>>>;
+    public getProjectsCountByStatus(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByGroupDto>>;
+    public getProjectsCountByStatus(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByGroupDto>>>;
+    public getProjectsCountByStatus(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByGroupDto>>>;
     public getProjectsCountByStatus(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -869,7 +869,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/analysis/status-breakdown`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<CountByGroupDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<CountByGroupDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -889,9 +889,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTopUtilizedEmployees(limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EmployeeUtilizationDtoDto>>;
-    public getTopUtilizedEmployees(limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EmployeeUtilizationDtoDto>>>;
-    public getTopUtilizedEmployees(limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EmployeeUtilizationDtoDto>>>;
+    public getTopUtilizedEmployees(limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EmployeeUtilizationDto>>;
+    public getTopUtilizedEmployees(limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EmployeeUtilizationDto>>>;
+    public getTopUtilizedEmployees(limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EmployeeUtilizationDto>>>;
     public getTopUtilizedEmployees(limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -925,7 +925,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/resource/top-utilization`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<EmployeeUtilizationDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<EmployeeUtilizationDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -946,9 +946,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUpcomingDeadlines(daysAhead?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDtoDto>>;
-    public getUpcomingDeadlines(daysAhead?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDtoDto>>>;
-    public getUpcomingDeadlines(daysAhead?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDtoDto>>>;
+    public getUpcomingDeadlines(daysAhead?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDto>>;
+    public getUpcomingDeadlines(daysAhead?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDto>>>;
+    public getUpcomingDeadlines(daysAhead?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDto>>>;
     public getUpcomingDeadlines(daysAhead?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -982,7 +982,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/summary/upcoming-deadlines`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ProjectDtoDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ProjectDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -1004,9 +1004,9 @@ export class ProjectManagementApi extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public removeEmployees(id: number, requestBody: Set<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDtoDto>;
-    public removeEmployees(id: number, requestBody: Set<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDtoDto>>;
-    public removeEmployees(id: number, requestBody: Set<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDtoDto>>;
+    public removeEmployees(id: number, requestBody: Set<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDto>;
+    public removeEmployees(id: number, requestBody: Set<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDto>>;
+    public removeEmployees(id: number, requestBody: Set<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDto>>;
     public removeEmployees(id: number, requestBody: Set<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling removeEmployees.');
@@ -1051,7 +1051,7 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}/employees`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProjectDtoDto>('delete', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ProjectDto>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: requestBody,
@@ -1069,19 +1069,19 @@ export class ProjectManagementApi extends BaseService {
      * Update project
      * Updates project details, status, dates or team assignments
      * @param id 
-     * @param projectUpdateDtoDto 
+     * @param projectUpdateDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateProject(id: number, projectUpdateDtoDto: ProjectUpdateDtoDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDtoDto>;
-    public updateProject(id: number, projectUpdateDtoDto: ProjectUpdateDtoDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDtoDto>>;
-    public updateProject(id: number, projectUpdateDtoDto: ProjectUpdateDtoDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDtoDto>>;
-    public updateProject(id: number, projectUpdateDtoDto: ProjectUpdateDtoDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateProject(id: number, projectUpdateDto: ProjectUpdateDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDto>;
+    public updateProject(id: number, projectUpdateDto: ProjectUpdateDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDto>>;
+    public updateProject(id: number, projectUpdateDto: ProjectUpdateDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDto>>;
+    public updateProject(id: number, projectUpdateDto: ProjectUpdateDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateProject.');
         }
-        if (projectUpdateDtoDto === null || projectUpdateDtoDto === undefined) {
-            throw new Error('Required parameter projectUpdateDtoDto was null or undefined when calling updateProject.');
+        if (projectUpdateDto === null || projectUpdateDto === undefined) {
+            throw new Error('Required parameter projectUpdateDto was null or undefined when calling updateProject.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1120,10 +1120,10 @@ export class ProjectManagementApi extends BaseService {
 
         let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ProjectDtoDto>('put', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ProjectDto>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: projectUpdateDtoDto,
+                body: projectUpdateDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -12,7 +12,7 @@
 /**
  * Represents an employee and the number of active projects they are assigned to. Used in utilization reports and project allocation views.
  */
-export interface EmployeeUtilizationDtoDto { 
+export interface EmployeeUtilizationDto { 
     /**
      * Unique employee identifier from Employee Service.
      */

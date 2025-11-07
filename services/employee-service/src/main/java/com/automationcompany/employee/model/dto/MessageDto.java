@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "Message data transfer object")
-public class MessageDTO {
+@Schema(description = "Message data transfer object", name="MessageDto")
+public class MessageDto {
 
     private Long id;
     private Long senderId;

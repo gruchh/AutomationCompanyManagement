@@ -10,27 +10,27 @@
 
 
 /**
- * Overall summary statistics for all projects.
+ * Overall summary statistics for all projects in the system. Used in dashboard and reporting endpoints.
  */
 export interface ProjectSummaryDtoDto { 
     /**
-     * Total number of projects in the system.
+     * Total number of projects in the system (regardless of status).
      */
-    totalProjects?: number;
+    totalProjects: number;
     /**
-     * Total number of projects with \'ACTIVE\' status.
+     * Total number of projects with \'ACTIVE\' or \'IN_PROGRESS\' status.
      */
-    activeProjects?: number;
+    activeProjects: number;
     /**
      * Total number of projects with \'COMPLETED\' status.
      */
-    completedProjects?: number;
+    completedProjects: number;
     /**
-     * Number of active projects whose end date is in the past (potential delays).
+     * Number of active projects whose planned end date is in the past (potential delays).
      */
-    projectsPastDeadline?: number;
+    projectsPastDeadline: number;
     /**
-     * Average duration of completed projects in days.
+     * Average duration of completed projects in days (calculated as endDate - startDate). Returns null if no projects are completed.
      */
     averageProjectDurationDays?: number;
 }

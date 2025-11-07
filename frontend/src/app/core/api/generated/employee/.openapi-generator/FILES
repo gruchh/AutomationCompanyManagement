@@ -12,12 +12,12 @@ index.ts
 model/address.ts
 model/bankDetails.ts
 model/emergencyContact.ts
-model/employeeCreateDTO.ts
-model/employeeReadDTO.ts
-model/employeeUpdateDTO.ts
-model/messageDTO.ts
+model/employeeCreateDto.ts
+model/employeeReadDto.ts
+model/employeeUpdateDto.ts
+model/messageDto.ts
 model/models.ts
-model/sendMessageDTO.ts
+model/sendMessageDto.ts
 param.ts
 provide-api.ts
 variables.ts

@@ -12,27 +12,93 @@ import { BankDetailsDtoDto } from './bankDetailsDto';
 import { EmergencyContactDtoDto } from './emergencyContactDto';
 
 
+/**
+ * Complete data transfer object representing an employee with all details (read-only response)
+ */
 export interface EmployeeDtoDto { 
-    id?: number;
+    /**
+     * Unique identifier of the employee
+     */
+    id: number;
+    /**
+     * Employee\'s first name
+     */
     firstName?: string;
+    /**
+     * Employee\'s last name
+     */
     lastName?: string;
+    /**
+     * Polish PESEL number (11 digits)
+     */
     pesel?: string;
+    /**
+     * Employee\'s email address
+     */
     email?: string;
+    /**
+     * Employee\'s phone number
+     */
     phoneNumber?: string;
+    /**
+     * Date of birth of the employee
+     */
     dateOfBirth?: string;
+    /**
+     * Date when the employee was hired
+     */
     hireDate?: string;
+    /**
+     * Termination date (null if still employed)
+     */
     terminationDate?: string;
+    /**
+     * Monthly gross salary in PLN
+     */
     salary?: number;
+    /**
+     * Position level (e.g., JUNIOR, MID, SENIOR)
+     */
     positionLevel?: string;
+    /**
+     * Department the employee belongs to
+     */
     department?: string;
+    /**
+     * Type of employment contract
+     */
     employmentType?: string;
+    /**
+     * Current status of the employee
+     */
     status?: string;
+    /**
+     * Employee\'s residential address
+     */
     address?: AddressDtoDto;
+    /**
+     * Bank account details for salary payments
+     */
     bankDetails?: BankDetailsDtoDto;
+    /**
+     * Emergency contact information
+     */
     emergencyContact?: EmergencyContactDtoDto;
+    /**
+     * Timestamp when the employee record was created
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the employee record was last updated
+     */
     updatedAt?: string;
+    /**
+     * Username or ID of the user who created the record
+     */
     createdBy?: string;
+    /**
+     * Username or ID of the user who last updated the record
+     */
     updatedBy?: string;
 }
 

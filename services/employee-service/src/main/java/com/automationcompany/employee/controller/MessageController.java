@@ -2,8 +2,8 @@ package com.automationcompany.employee.controller;
 
 import com.automationcompany.employee.model.MessageCategory;
 import com.automationcompany.employee.model.MessagePriority;
-import com.automationcompany.employee.model.dto.MessageDTO;
-import com.automationcompany.employee.model.dto.SendMessageDTO;
+import com.automationcompany.employee.model.dto.MessageDto;
+import com.automationcompany.employee.model.dto.SendMessageDto;
 import com.automationcompany.employee.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,22 +28,22 @@ public class MessageController {
 
     @PostMapping
     @Operation(summary = "Send a message to another employee")
-    public ResponseEntity<MessageDTO> sendMessage(
-            @Valid @RequestBody SendMessageDTO dto,
+    public ResponseEntity<MessageDto> sendMessage(
+            @Valid @RequestBody SendMessageDto dto,
             Authentication authentication) {
 
         Long senderId = getCurrentUserId(authentication);
-        MessageDTO messageDTO = messageService.sendMessage(senderId, dto);
+        MessageDto messageDTO = messageService.sendMessage(senderId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(messageDTO);
     }
 
     @PostMapping("/system")
     @Operation(summary = "Send a system message (admin only)")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MessageDTO> sendSystemMessage(
-            @Valid @RequestBody SendMessageDTO dto) {
+    public ResponseEntity<MessageDto> sendSystemMessage(
+            @Valid @RequestBody SendMessageDto dto) {
 
-        MessageDTO messageDTO = messageService.sendSystemMessage(
+        MessageDto messageDTO = messageService.sendSystemMessage(
                 dto.getRecipientId(),
                 dto.getSubject(),
                 dto.getContent(),
@@ -56,27 +56,27 @@ public class MessageController {
     @PostMapping("/system/broadcast")
     @Operation(summary = "Broadcast system message to all employees (admin only)")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<MessageDTO>> broadcastSystemMessage(
+    public ResponseEntity<List<MessageDto>> broadcastSystemMessage(
             @RequestParam String subject,
             @RequestParam String content,
             @RequestParam(defaultValue = "GENERAL") MessageCategory category,
             @RequestParam(defaultValue = "MEDIUM") MessagePriority priority) {
 
-        List<MessageDTO> messages = messageService.broadcastSystemMessage(
+        List<MessageDto> messages = messageService.broadcastSystemMessage(
                 subject, content, category, priority);
         return ResponseEntity.status(HttpStatus.CREATED).body(messages);
     }
 
     @GetMapping
     @Operation(summary = "Get all messages for the authenticated user")
-    public ResponseEntity<List<MessageDTO>> getAllMessages(Authentication authentication) {
+    public ResponseEntity<List<MessageDto>> getAllMessages(Authentication authentication) {
         Long userId = getCurrentUserId(authentication);
         return ResponseEntity.ok(messageService.getMessagesForRecipient(userId));
     }
 
     @GetMapping("/unread")
     @Operation(summary = "Get unread messages")
-    public ResponseEntity<List<MessageDTO>> getUnreadMessages(Authentication authentication) {
+    public ResponseEntity<List<MessageDto>> getUnreadMessages(Authentication authentication) {
         Long userId = getCurrentUserId(authentication);
         return ResponseEntity.ok(messageService.getUnreadMessages(userId));
     }
@@ -90,7 +90,7 @@ public class MessageController {
 
     @GetMapping("/category/{category}")
     @Operation(summary = "Get messages by category")
-    public ResponseEntity<List<MessageDTO>> getMessagesByCategory(
+    public ResponseEntity<List<MessageDto>> getMessagesByCategory(
             @PathVariable MessageCategory category,
             Authentication authentication) {
         Long userId = getCurrentUserId(authentication);
@@ -99,21 +99,21 @@ public class MessageController {
 
     @GetMapping("/received")
     @Operation(summary = "Get messages received by the authenticated user")
-    public ResponseEntity<List<MessageDTO>> getReceivedMessages(Authentication authentication) {
+    public ResponseEntity<List<MessageDto>> getReceivedMessages(Authentication authentication) {
         Long userId = getCurrentUserId(authentication);
         return ResponseEntity.ok(messageService.getMessagesForRecipient(userId));
     }
 
     @GetMapping("/sent")
     @Operation(summary = "Get messages sent by the authenticated user")
-    public ResponseEntity<List<MessageDTO>> getSentMessages(Authentication authentication) {
+    public ResponseEntity<List<MessageDto>> getSentMessages(Authentication authentication) {
         Long userId = getCurrentUserId(authentication);
         return ResponseEntity.ok(messageService.getMessagesBySender(userId));
     }
 
     @GetMapping("/{messageId}")
     @Operation(summary = "Get a single message by its ID")
-    public ResponseEntity<MessageDTO> getMessage(
+    public ResponseEntity<MessageDto> getMessage(
             @PathVariable Long messageId,
             Authentication authentication) {
 

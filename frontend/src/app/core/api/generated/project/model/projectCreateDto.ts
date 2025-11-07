@@ -13,16 +13,49 @@
  * Project creation request
  */
 export interface ProjectCreateDtoDto { 
+    /**
+     * Full name of the project
+     */
     name: string;
+    /**
+     * Unique project code (optional, e.g., ERP-2025-01)
+     */
     code?: string;
+    /**
+     * Detailed project description (optional)
+     */
     description?: string;
+    /**
+     * Project start date
+     */
     startDate: string;
+    /**
+     * Planned project end date (optional)
+     */
     endDate?: string;
+    /**
+     * Current status of the project
+     */
     status: ProjectCreateDtoDto.StatusEnum;
+    /**
+     * Priority level of the project (optional, defaults to MEDIUM if not set)
+     */
     priority?: ProjectCreateDtoDto.PriorityEnum;
+    /**
+     * Type of service provided in the project
+     */
     serviceType: ProjectCreateDtoDto.ServiceTypeEnum;
+    /**
+     * Physical or logical location of the project (optional)
+     */
     location?: string;
+    /**
+     * Set of employee IDs assigned to the project (optional)
+     */
     employeeIds?: Set<number>;
+    /**
+     * ID of the employee assigned as project manager (optional)
+     */
     projectManagerId?: number;
 }
 export namespace ProjectCreateDtoDto {

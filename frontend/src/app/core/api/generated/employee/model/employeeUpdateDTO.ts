@@ -12,22 +12,64 @@ import { AddressDto } from './address';
 import { EmergencyContactDto } from './emergencyContact';
 
 
-export interface EmployeeUpdateDTODto { 
+/**
+ * Data transfer object for updating an existing employee. All fields are optional.
+ */
+export interface EmployeeUpdateDtoDto { 
+    /**
+     * Updated first name of the employee
+     */
     firstName?: string;
+    /**
+     * Updated last name of the employee
+     */
     lastName?: string;
+    /**
+     * Updated email address
+     */
     email?: string;
+    /**
+     * Updated phone number
+     */
     phoneNumber?: string;
+    /**
+     * Termination date (null to clear, or set to mark as terminated)
+     */
     terminationDate?: string;
+    /**
+     * Updated monthly gross salary in PLN
+     */
     salary?: number;
-    positionLevel?: EmployeeUpdateDTODto.PositionLevelEnum;
-    department?: EmployeeUpdateDTODto.DepartmentEnum;
-    employmentType?: EmployeeUpdateDTODto.EmploymentTypeEnum;
-    status?: EmployeeUpdateDTODto.StatusEnum;
+    /**
+     * Updated position level (e.g., JUNIOR, MID, SENIOR)
+     */
+    positionLevel?: EmployeeUpdateDtoDto.PositionLevelEnum;
+    /**
+     * Updated department assignment
+     */
+    department?: EmployeeUpdateDtoDto.DepartmentEnum;
+    /**
+     * Updated employment contract type
+     */
+    employmentType?: EmployeeUpdateDtoDto.EmploymentTypeEnum;
+    /**
+     * Updated employee status
+     */
+    status?: EmployeeUpdateDtoDto.StatusEnum;
+    /**
+     * Updated residential address (fully replaced if provided)
+     */
     address?: AddressDto;
+    /**
+     * Updated bank account details (fully replaced if provided)
+     */
     bankDetails?: BankDetailsDto;
+    /**
+     * Updated emergency contact information (fully replaced if provided)
+     */
     emergencyContact?: EmergencyContactDto;
 }
-export namespace EmployeeUpdateDTODto {
+export namespace EmployeeUpdateDtoDto {
     export const PositionLevelEnum = {
         Intern: 'INTERN',
         Junior: 'JUNIOR',

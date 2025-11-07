@@ -2,8 +2,8 @@ package com.automationcompany.employee.mapper;
 
 import com.automationcompany.employee.model.Employee;
 import com.automationcompany.employee.model.Message;
-import com.automationcompany.employee.model.dto.MessageDTO;
-import com.automationcompany.employee.model.dto.SendMessageDTO;
+import com.automationcompany.employee.model.dto.MessageDto;
+import com.automationcompany.employee.model.dto.SendMessageDto;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,7 +24,7 @@ public interface MessageMapper {
     @Mapping(target = "type", source = "type")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "priority", source = "priority")
-    MessageDTO toDTO(Message message);
+    MessageDto toDTO(Message message);
 
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "subject", source = "subject")
@@ -39,7 +39,7 @@ public interface MessageMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "sentAt", ignore = true) // Auto-generated
     @Mapping(target = "readAt", ignore = true)
-    Message toEntity(SendMessageDTO dto);
+    Message toEntity(SendMessageDto dto);
 
     default String getSenderName(Message message) {
         if (message == null) {

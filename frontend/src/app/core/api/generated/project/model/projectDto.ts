@@ -9,22 +9,73 @@
  */
 
 
+/**
+ * Complete data transfer object representing a project with all details and audit information (read-only response).
+ */
 export interface ProjectDtoDto { 
-    id?: number;
+    /**
+     * Unique identifier of the project
+     */
+    id: number;
+    /**
+     * Full name of the project
+     */
     name: string;
+    /**
+     * Unique project code (optional)
+     */
     code?: string;
+    /**
+     * Detailed project description (optional)
+     */
     description?: string;
+    /**
+     * Project start date
+     */
     startDate: string;
+    /**
+     * Planned or actual project end date (null if not finished)
+     */
     endDate?: string;
+    /**
+     * Current status of the project
+     */
     status: ProjectDtoDto.StatusEnum;
+    /**
+     * Priority level of the project
+     */
     priority?: ProjectDtoDto.PriorityEnum;
+    /**
+     * Type of service provided in the project
+     */
     serviceType: ProjectDtoDto.ServiceTypeEnum;
+    /**
+     * Physical or logical location of the project (optional)
+     */
     location?: string;
+    /**
+     * Set of employee IDs currently assigned to the project
+     */
     employeeIds?: Set<number>;
+    /**
+     * ID of the employee assigned as project manager
+     */
     projectManagerId?: number;
+    /**
+     * Timestamp when the project was created
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the project was last updated
+     */
     updatedAt?: string;
+    /**
+     * Username or ID of the user who created the project
+     */
     createdBy?: string;
+    /**
+     * Username or ID of the user who last updated the project
+     */
     updatedBy?: string;
 }
 export namespace ProjectDtoDto {

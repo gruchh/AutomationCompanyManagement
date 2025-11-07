@@ -3,8 +3,8 @@ package com.automationcompany.employee.service;
 import com.automationcompany.employee.exception.EmployeeNotFoundException;
 import com.automationcompany.employee.mapper.MessageMapper;
 import com.automationcompany.employee.model.*;
-import com.automationcompany.employee.model.dto.MessageDTO;
-import com.automationcompany.employee.model.dto.SendMessageDTO;
+import com.automationcompany.employee.model.dto.MessageDto;
+import com.automationcompany.employee.model.dto.SendMessageDto;
 import com.automationcompany.employee.repository.EmployeeRepository;
 import com.automationcompany.employee.repository.MessageRepository;
 import jakarta.transaction.Transactional;
@@ -26,10 +26,10 @@ public class MessageService {
     private final EmployeeRepository employeeRepository;
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
-    private final KafkaTemplate<String, MessageDTO> kafkaTemplate;
+    private final KafkaTemplate<String, MessageDto> kafkaTemplate;
     private static final String KAFKA_TOPIC = "employee-messages";
 
-    public MessageDTO sendMessage(Long senderId, SendMessageDTO dto) {
+    public MessageDto sendMessage(Long senderId, SendMessageDto dto) {
         log.info("Sending message from senderId={} to recipientId={}", senderId, dto.getRecipientId());
 
         Employee sender = employeeRepository.findById(senderId)
@@ -51,7 +51,7 @@ public class MessageService {
                 .build();
 
         Message savedMessage = messageRepository.save(message);
-        MessageDTO messageDTO = messageMapper.toDTO(savedMessage);
+        MessageDto messageDTO = messageMapper.toDTO(savedMessage);
 
         sendToKafka(messageDTO);
 
@@ -59,7 +59,7 @@ public class MessageService {
         return messageDTO;
     }
 
-    public MessageDTO sendSystemMessage(Long recipientId, String subject, String content,
+    public MessageDto sendSystemMessage(Long recipientId, String subject, String content,
                                         MessageCategory category, MessagePriority priority) {
         log.info("Sending system message to recipientId={}", recipientId);
 
@@ -79,7 +79,7 @@ public class MessageService {
                 .build();
 
         Message savedMessage = messageRepository.save(message);
-        MessageDTO messageDTO = messageMapper.toDTO(savedMessage);
+        MessageDto messageDTO = messageMapper.toDTO(savedMessage);
 
         sendToKafka(messageDTO);
 
@@ -87,7 +87,7 @@ public class MessageService {
         return messageDTO;
     }
 
-    public List<MessageDTO> broadcastSystemMessage(String subject, String content,
+    public List<MessageDto> broadcastSystemMessage(String subject, String content,
                                                    MessageCategory category, MessagePriority priority) {
         log.info("Broadcasting system message to all employees");
 
@@ -99,7 +99,7 @@ public class MessageService {
     }
 
     @Transactional()
-    public List<MessageDTO> getMessagesForRecipient(Long recipientId) {
+    public List<MessageDto> getMessagesForRecipient(Long recipientId) {
         log.info("Fetching messages for recipient: {}", recipientId);
         return messageRepository.findByRecipientIdAndIsDeletedFalseOrderBySentAtDesc(recipientId)
                 .stream()
@@ -108,7 +108,7 @@ public class MessageService {
     }
 
     @Transactional()
-    public List<MessageDTO> getUnreadMessages(Long recipientId) {
+    public List<MessageDto> getUnreadMessages(Long recipientId) {
         log.info("Fetching unread messages for recipient: {}", recipientId);
         return messageRepository.findByRecipientIdAndIsReadFalseAndIsDeletedFalseOrderBySentAtDesc(recipientId)
                 .stream()
@@ -122,7 +122,7 @@ public class MessageService {
     }
 
     @Transactional()
-    public List<MessageDTO> getMessagesByCategory(Long recipientId, MessageCategory category) {
+    public List<MessageDto> getMessagesByCategory(Long recipientId, MessageCategory category) {
         log.info("Fetching messages for recipient: {} with category: {}", recipientId, category);
         return messageRepository.findByRecipientIdAndCategoryAndIsDeletedFalseOrderBySentAtDesc(recipientId, category)
                 .stream()
@@ -131,7 +131,7 @@ public class MessageService {
     }
 
     @Transactional()
-    public List<MessageDTO> getMessagesBySender(Long senderId) {
+    public List<MessageDto> getMessagesBySender(Long senderId) {
         log.info("Fetching messages sent by sender: {}", senderId);
         return messageRepository.findBySenderIdAndIsDeletedFalseOrderBySentAtDesc(senderId)
                 .stream()
@@ -140,7 +140,7 @@ public class MessageService {
     }
 
     @Transactional()
-    public MessageDTO getMessageById(Long messageId, Long userId) {
+    public MessageDto getMessageById(Long messageId, Long userId) {
         log.info("Fetching message {} for user {}", messageId, userId);
         Message message = messageRepository.findByIdAndRecipientId(messageId, userId)
                 .orElseThrow(() -> new EmployeeNotFoundException("Message not found or access denied"));
@@ -190,7 +190,7 @@ public class MessageService {
         log.info("Message {} soft-deleted", messageId);
     }
 
-    private void sendToKafka(MessageDTO messageDTO) {
+    private void sendToKafka(MessageDto messageDTO) {
         try {
             kafkaTemplate.send(KAFKA_TOPIC,
                     String.valueOf(messageDTO.getRecipientId()),

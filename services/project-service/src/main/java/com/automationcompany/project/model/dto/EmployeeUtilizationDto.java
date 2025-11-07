@@ -2,22 +2,49 @@ package com.automationcompany.project.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "Represents an employee and the number of active projects they are assigned to.")
+@Schema(
+        description = "Represents an employee and the number of active projects they are assigned to. " +
+                "Used in utilization reports and project allocation views.",
+        name = "EmployeeUtilizationDto"
+)
 public record EmployeeUtilizationDto(
-        @Schema(description = "Unique employee identifier.")
+
+        @Schema(
+                description = "Unique employee identifier from Employee Service.",
+                example = "101",
+                required = true
+        )
         Long employeeId,
 
-        @Schema(description = "Employee's first name, retrieved from Employee Service.")
+        @Schema(
+                description = "Employee's first name, retrieved from Employee Service.",
+                example = "Jan",
+                nullable = true
+        )
         String firstName,
 
-        @Schema(description = "Employee's last name, retrieved from Employee Service.")
+        @Schema(
+                description = "Employee's last name, retrieved from Employee Service.",
+                example = "Kowalski",
+                nullable = true
+        )
         String lastName,
 
-        @Schema(description = "Employee's position, retrieved from Employee Service.")
+        @Schema(
+                description = "Employee's position level (e.g., JUNIOR, MID, SENIOR), retrieved from Employee Service.",
+                example = "MID",
+                nullable = true
+        )
         String positionLevel,
 
-        @Schema(description = "The number of active projects the employee is currently assigned to.")
+        @Schema(
+                description = "The number of active projects the employee is currently assigned to.",
+                example = "3",
+                minimum = "0",
+                required = true
+        )
         Long activeProjectCount
+
 ) {
 
     public EmployeeUtilizationDto(Long employeeId, Long activeProjectCount) {

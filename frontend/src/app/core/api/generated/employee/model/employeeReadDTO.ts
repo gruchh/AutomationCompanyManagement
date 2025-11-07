@@ -12,28 +12,88 @@ import { AddressDto } from './address';
 import { EmergencyContactDto } from './emergencyContact';
 
 
-export interface EmployeeReadDTODto { 
-    id?: number;
+/**
+ * Data transfer object representing a complete employee record (read-only)
+ */
+export interface EmployeeReadDtoDto { 
+    /**
+     * Unique identifier of the employee
+     */
+    id: number;
+    /**
+     * Employee\'s first name
+     */
     firstName?: string;
+    /**
+     * Employee\'s last name
+     */
     lastName?: string;
+    /**
+     * Employee\'s email address
+     */
     email?: string;
+    /**
+     * Employee\'s phone number
+     */
     phoneNumber?: string;
+    /**
+     * Polish PESEL number (11 digits)
+     */
     pesel?: string;
+    /**
+     * Date of birth of the employee
+     */
     dateOfBirth?: string;
+    /**
+     * Date when the employee was hired
+     */
     hireDate?: string;
+    /**
+     * Termination date (null if still employed)
+     */
     terminationDate?: string;
+    /**
+     * Monthly gross salary in PLN
+     */
     salary?: number;
-    positionLevel?: EmployeeReadDTODto.PositionLevelEnum;
-    department?: EmployeeReadDTODto.DepartmentEnum;
-    employmentType?: EmployeeReadDTODto.EmploymentTypeEnum;
-    status?: EmployeeReadDTODto.StatusEnum;
+    /**
+     * Position level (e.g., JUNIOR, MID, SENIOR)
+     */
+    positionLevel?: EmployeeReadDtoDto.PositionLevelEnum;
+    /**
+     * Department the employee belongs to
+     */
+    department?: EmployeeReadDtoDto.DepartmentEnum;
+    /**
+     * Type of employment contract
+     */
+    employmentType?: EmployeeReadDtoDto.EmploymentTypeEnum;
+    /**
+     * Current status of the employee
+     */
+    status?: EmployeeReadDtoDto.StatusEnum;
+    /**
+     * Employee\'s residential address
+     */
     address?: AddressDto;
+    /**
+     * Bank account details for salary payments
+     */
     bankDetails?: BankDetailsDto;
+    /**
+     * Emergency contact information
+     */
     emergencyContact?: EmergencyContactDto;
+    /**
+     * Timestamp when the employee record was created
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the employee record was last updated
+     */
     updatedAt?: string;
 }
-export namespace EmployeeReadDTODto {
+export namespace EmployeeReadDtoDto {
     export const PositionLevelEnum = {
         Intern: 'INTERN',
         Junior: 'JUNIOR',

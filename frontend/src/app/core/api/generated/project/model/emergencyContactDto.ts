@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Data transfer object representing an emergency contact person for an employee
+ */
 export interface EmergencyContactDtoDto { 
-    name?: string;
-    phone?: string;
-    relation?: string;
+    /**
+     * Full name of the emergency contact person
+     */
+    name: string;
+    /**
+     * Emergency contact phone number (e.g., +48123456789 or 123456789)
+     */
+    phone: string;
+    /**
+     * Relationship to the employee (e.g., spouse, parent, friend)
+     */
+    relation: string;
 }
 

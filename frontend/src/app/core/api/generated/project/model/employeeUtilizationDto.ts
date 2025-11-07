@@ -10,13 +10,13 @@
 
 
 /**
- * Represents an employee and the number of active projects they are assigned to.
+ * Represents an employee and the number of active projects they are assigned to. Used in utilization reports and project allocation views.
  */
 export interface EmployeeUtilizationDtoDto { 
     /**
-     * Unique employee identifier.
+     * Unique employee identifier from Employee Service.
      */
-    employeeId?: number;
+    employeeId: number;
     /**
      * Employee\'s first name, retrieved from Employee Service.
      */
@@ -26,12 +26,12 @@ export interface EmployeeUtilizationDtoDto {
      */
     lastName?: string;
     /**
-     * Employee\'s position, retrieved from Employee Service.
+     * Employee\'s position level (e.g., JUNIOR, MID, SENIOR), retrieved from Employee Service.
      */
     positionLevel?: string;
     /**
      * The number of active projects the employee is currently assigned to.
      */
-    activeProjectCount?: number;
+    activeProjectCount: number;
 }
 

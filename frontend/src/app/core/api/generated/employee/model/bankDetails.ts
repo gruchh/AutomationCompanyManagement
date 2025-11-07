@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Bank account details for salary payments
+ */
 export interface BankDetailsDto { 
+    /**
+     * IBAN or local bank account number
+     */
     bankAccountNumber?: string;
+    /**
+     * Name of the bank
+     */
     bankName?: string;
+    /**
+     * Tax identification number (NIP)
+     */
     taxId?: string;
 }
 

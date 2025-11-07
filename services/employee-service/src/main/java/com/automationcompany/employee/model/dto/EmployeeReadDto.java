@@ -1,5 +1,6 @@
-package com.automationcompany.project.model.dto;
+package com.automationcompany.employee.model.dto;
 
+import com.automationcompany.employee.model.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,10 +16,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Schema(
-        description = "Complete data transfer object representing an employee with all details (read-only response)",
-        name = "EmployeeDto"
+        description = "Data transfer object representing a complete employee record (read-only)",
+        name = "EmployeeReadDto"
 )
-public class EmployeeDto {
+public class EmployeeReadDto {
 
     @Schema(
             description = "Unique identifier of the employee",
@@ -40,12 +41,6 @@ public class EmployeeDto {
     private String lastName;
 
     @Schema(
-            description = "Polish PESEL number (11 digits)",
-            example = "90010112345"
-    )
-    private String pesel;
-
-    @Schema(
             description = "Employee's email address",
             example = "jan.kowalski@company.com"
     )
@@ -56,6 +51,12 @@ public class EmployeeDto {
             example = "+48 500 123 456"
     )
     private String phoneNumber;
+
+    @Schema(
+            description = "Polish PESEL number (11 digits)",
+            example = "90010112345"
+    )
+    private String pesel;
 
     @Schema(
             description = "Date of birth of the employee",
@@ -92,34 +93,34 @@ public class EmployeeDto {
             description = "Position level (e.g., JUNIOR, MID, SENIOR)",
             example = "MID"
     )
-    private String positionLevel;
+    private PositionLevel positionLevel;
 
     @Schema(
             description = "Department the employee belongs to",
             example = "IT"
     )
-    private String department;
+    private DepartmentType department;
 
     @Schema(
             description = "Type of employment contract",
             example = "FULL_TIME"
     )
-    private String employmentType;
+    private EmploymentType employmentType;
 
     @Schema(
             description = "Current status of the employee",
             example = "ACTIVE"
     )
-    private String status;
+    private EmployeeStatus status;
 
     @Schema(description = "Employee's residential address")
-    private AddressDto address;
+    private Address address;
 
     @Schema(description = "Bank account details for salary payments")
-    private BankDetailsDto bankDetails;
+    private BankDetails bankDetails;
 
     @Schema(description = "Emergency contact information")
-    private EmergencyContactDto emergencyContact;
+    private EmergencyContact emergencyContact;
 
     @Schema(
             description = "Timestamp when the employee record was created",
@@ -136,16 +137,4 @@ public class EmployeeDto {
             format = "date-time"
     )
     private LocalDateTime updatedAt;
-
-    @Schema(
-            description = "Username or ID of the user who created the record",
-            example = "admin"
-    )
-    private String createdBy;
-
-    @Schema(
-            description = "Username or ID of the user who last updated the record",
-            example = "hr-manager"
-    )
-    private String updatedBy;
 }

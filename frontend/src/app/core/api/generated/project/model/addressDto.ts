@@ -9,10 +9,25 @@
  */
 
 
+/**
+ * Data transfer object representing a physical address
+ */
 export interface AddressDtoDto { 
-    street?: string;
-    city?: string;
-    postalCode?: string;
-    country?: string;
+    /**
+     * Street name and number (e.g., Main St 123)
+     */
+    street: string;
+    /**
+     * City or town name
+     */
+    city: string;
+    /**
+     * Postal code in format XX-XXX
+     */
+    postalCode: string;
+    /**
+     * Country name
+     */
+    country: string;
 }
 

@@ -10,16 +10,31 @@
 
 
 /**
- * Data required to send a message
+ * Data transfer object for sending a new message. Used in message creation endpoints.
  */
-export interface SendMessageDTODto { 
+export interface SendMessageDtoDto { 
+    /**
+     * ID of the user who will receive the message
+     */
     recipientId: number;
+    /**
+     * Subject line of the message
+     */
     subject: string;
+    /**
+     * Body content of the message
+     */
     content: string;
-    category?: SendMessageDTODto.CategoryEnum;
-    priority?: SendMessageDTODto.PriorityEnum;
+    /**
+     * Category of the message. Defaults to GENERAL if not provided.
+     */
+    category?: SendMessageDtoDto.CategoryEnum;
+    /**
+     * Priority level of the message. Defaults to MEDIUM if not provided.
+     */
+    priority?: SendMessageDtoDto.PriorityEnum;
 }
-export namespace SendMessageDTODto {
+export namespace SendMessageDtoDto {
     export const CategoryEnum = {
         Campaign: 'CAMPAIGN',
         Analytics: 'ANALYTICS',

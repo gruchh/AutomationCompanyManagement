@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Data transfer object containing employee\'s bank account and tax identification details
+ */
 export interface BankDetailsDtoDto { 
-    bankAccountNumber?: string;
-    bankName?: string;
-    taxId?: string;
+    /**
+     * Employee\'s bank account number (IBAN without spaces, 26 digits for Polish banks)
+     */
+    bankAccountNumber: string;
+    /**
+     * Name of the bank
+     */
+    bankName: string;
+    /**
+     * Tax Identification Number (NIP) – Polish format: XXX-XXX-XX-XX or 10 digits
+     */
+    taxId: string;
 }
 

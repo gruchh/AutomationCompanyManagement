@@ -9,17 +9,53 @@
  */
 
 
+/**
+ * Data transfer object for updating an existing project. All fields are optional – only provided values will be updated.
+ */
 export interface ProjectUpdateDtoDto { 
+    /**
+     * Updated project name (optional)
+     */
     name?: string;
+    /**
+     * Updated project code (optional)
+     */
     code?: string;
+    /**
+     * Updated project description (optional)
+     */
     description?: string;
+    /**
+     * Updated project start date (optional)
+     */
     startDate?: string;
+    /**
+     * Updated planned end date (optional, null to clear)
+     */
     endDate?: string;
+    /**
+     * Updated project status (optional)
+     */
     status?: ProjectUpdateDtoDto.StatusEnum;
+    /**
+     * Updated project priority (optional)
+     */
     priority?: ProjectUpdateDtoDto.PriorityEnum;
+    /**
+     * Updated service type (optional)
+     */
     serviceType?: ProjectUpdateDtoDto.ServiceTypeEnum;
+    /**
+     * Updated project location (optional)
+     */
     location?: string;
+    /**
+     * Updated set of employee IDs assigned to the project (optional, replaces current assignment)
+     */
     employeeIds?: Set<number>;
+    /**
+     * Updated project manager ID (optional, null to remove)
+     */
     projectManagerId?: number;
 }
 export namespace ProjectUpdateDtoDto {

@@ -10,20 +10,65 @@
 import { EmployeeDtoDto } from './employeeDto';
 
 
+/**
+ * Complete project representation including full employee details (with personal and contact info) and project manager. Used in detailed project views, reports, and employee assignment management.
+ */
 export interface ProjectWithEmployeesDtoDto { 
-    id?: number;
+    /**
+     * Unique identifier of the project
+     */
+    id: number;
+    /**
+     * Full name of the project
+     */
     name?: string;
+    /**
+     * Unique project code (optional)
+     */
     code?: string;
+    /**
+     * Detailed project description (optional)
+     */
     description?: string;
+    /**
+     * Project start date
+     */
     startDate?: string;
+    /**
+     * Planned or actual project end date (null if not finished)
+     */
     endDate?: string;
+    /**
+     * Current status of the project
+     */
     status?: ProjectWithEmployeesDtoDto.StatusEnum;
+    /**
+     * Priority level of the project
+     */
     priority?: ProjectWithEmployeesDtoDto.PriorityEnum;
+    /**
+     * Type of service provided in the project
+     */
     serviceType?: ProjectWithEmployeesDtoDto.ServiceTypeEnum;
+    /**
+     * Physical or logical location of the project (optional)
+     */
     location?: string;
+    /**
+     * Set of employees currently assigned to the project (with full details: personal, contact, position, etc.)
+     */
     employees?: Set<EmployeeDtoDto>;
+    /**
+     * Project manager with full employee details (personal, contact, position, etc.)
+     */
     projectManager?: EmployeeDtoDto;
+    /**
+     * Timestamp when the project was created
+     */
     createdAt?: string;
+    /**
+     * Timestamp when the project was last updated
+     */
     updatedAt?: string;
 }
 export namespace ProjectWithEmployeesDtoDto {

@@ -12,24 +12,72 @@ import { AddressDto } from './address';
 import { EmergencyContactDto } from './emergencyContact';
 
 
-export interface EmployeeCreateDTODto { 
+/**
+ * Data transfer object for creating a new employee
+ */
+export interface EmployeeCreateDtoDto { 
+    /**
+     * Employee\'s first name
+     */
     firstName: string;
+    /**
+     * Employee\'s last name
+     */
     lastName: string;
+    /**
+     * Polish PESEL number (11 digits)
+     */
     pesel: string;
+    /**
+     * Employee\'s email address
+     */
     email: string;
+    /**
+     * Employee\'s phone number (optional)
+     */
     phoneNumber?: string;
+    /**
+     * Employee\'s date of birth
+     */
     dateOfBirth: string;
+    /**
+     * Date when the employee was hired
+     */
     hireDate: string;
+    /**
+     * Monthly gross salary in PLN
+     */
     salary: number;
-    positionLevel: EmployeeCreateDTODto.PositionLevelEnum;
-    department: EmployeeCreateDTODto.DepartmentEnum;
-    employmentType: EmployeeCreateDTODto.EmploymentTypeEnum;
-    status?: EmployeeCreateDTODto.StatusEnum;
+    /**
+     * Employee\'s position level (e.g., JUNIOR, MID, SENIOR)
+     */
+    positionLevel: EmployeeCreateDtoDto.PositionLevelEnum;
+    /**
+     * Department the employee belongs to
+     */
+    department: EmployeeCreateDtoDto.DepartmentEnum;
+    /**
+     * Type of employment contract
+     */
+    employmentType: EmployeeCreateDtoDto.EmploymentTypeEnum;
+    /**
+     * Current status of the employee. Defaults to ACTIVE
+     */
+    status?: EmployeeCreateDtoDto.StatusEnum;
+    /**
+     * Employee\'s residential address
+     */
     address?: AddressDto;
+    /**
+     * Employee\'s bank account details for salary payments
+     */
     bankDetails?: BankDetailsDto;
+    /**
+     * Emergency contact information
+     */
     emergencyContact?: EmergencyContactDto;
 }
-export namespace EmployeeCreateDTODto {
+export namespace EmployeeCreateDtoDto {
     export const PositionLevelEnum = {
         Intern: 'INTERN',
         Junior: 'JUNIOR',

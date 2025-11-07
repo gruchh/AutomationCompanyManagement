@@ -4,9 +4,9 @@ import com.automationcompany.employee.exception.EmployeeAlreadyExistsException;
 import com.automationcompany.employee.exception.EmployeeNotFoundException;
 import com.automationcompany.employee.mapper.EmployeeMapper;
 import com.automationcompany.employee.model.Employee;
-import com.automationcompany.employee.model.dto.EmployeeCreateDTO;
-import com.automationcompany.employee.model.dto.EmployeeReadDTO;
-import com.automationcompany.employee.model.dto.EmployeeUpdateDTO;
+import com.automationcompany.employee.model.dto.EmployeeCreateDto;
+import com.automationcompany.employee.model.dto.EmployeeReadDto;
+import com.automationcompany.employee.model.dto.EmployeeUpdateDto;
 import com.automationcompany.employee.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class EmployeeService {
     private final EmployeeMapper employeeMapper;
 
     @Transactional
-    public EmployeeReadDTO create(EmployeeCreateDTO dto) {
+    public EmployeeReadDto create(EmployeeCreateDto dto) {
         log.info("Creating new employee with email: {}", dto.getEmail());
 
         if (employeeRepository.existsByEmail(dto.getEmail())) {
@@ -44,7 +44,7 @@ public class EmployeeService {
     }
 
     @Transactional
-    public EmployeeReadDTO update(Long id, EmployeeUpdateDTO dto) {
+    public EmployeeReadDto update(Long id, EmployeeUpdateDto dto) {
         log.info("Updating employee with id: {}", id);
 
         Employee employee = employeeRepository.findById(id)
@@ -58,7 +58,7 @@ public class EmployeeService {
     }
 
     @Transactional(readOnly = true)
-    public List<EmployeeReadDTO> findAll() {
+    public List<EmployeeReadDto> findAll() {
         log.info("Fetching all employees");
 
         return employeeRepository.findAll()
@@ -68,7 +68,7 @@ public class EmployeeService {
     }
 
     @Transactional(readOnly = true)
-    public EmployeeReadDTO findById(Long id) {
+    public EmployeeReadDto findById(Long id) {
         log.info("Fetching employee with id: {}", id);
 
         Employee employee = employeeRepository.findById(id)

@@ -1,0 +1,9 @@
+package com.automationcompany.commondomain;
+
+public enum EmployeeStatus {
+
+    ACTIVE,
+    ON_LEAVE,
+    SUSPENDED,
+    TERMINATED
+}

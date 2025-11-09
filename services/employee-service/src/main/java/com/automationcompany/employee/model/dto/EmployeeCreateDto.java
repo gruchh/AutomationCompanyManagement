@@ -1,6 +1,10 @@
 package com.automationcompany.employee.model.dto;
 
 import com.automationcompany.employee.model.*;
+import com.automationcompany.commondomain.DepartmentType;
+import com.automationcompany.commondomain.EmployeeStatus;
+import com.automationcompany.commondomain.EmploymentType;
+import com.automationcompany.commondomain.PositionLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -90,28 +94,32 @@ public class EmployeeCreateDto {
     @NotNull(message = "Position level is required")
     @Schema(
             description = "Employee's position level (e.g., JUNIOR, MID, SENIOR)",
-            example = "MID"
+            example = "MID",
+            implementation = PositionLevel.class
     )
     private PositionLevel positionLevel;
 
     @NotNull(message = "Department is required")
     @Schema(
             description = "Department the employee belongs to",
-            example = "IT"
+            example = "IT",
+            implementation = DepartmentType.class
     )
     private DepartmentType department;
 
     @NotNull(message = "Employment type is required")
     @Schema(
             description = "Type of employment contract",
-            example = "FULL_TIME"
+            example = "FULL_TIME",
+            implementation = EmploymentType.class
     )
     private EmploymentType employmentType;
 
     @Builder.Default
     @Schema(
             description = "Current status of the employee. Defaults to ACTIVE",
-            example = "ACTIVE"
+            example = "ACTIVE",
+            implementation = EmployeeStatus.class
     )
     private EmployeeStatus status = EmployeeStatus.ACTIVE;
 

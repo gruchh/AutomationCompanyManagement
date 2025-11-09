@@ -1,6 +1,9 @@
 package com.automationcompany.project.config;
 
-import com.automationcompany.project.model.*;
+import com.automationcompany.project.model.Project;
+import com.automationcompany.project.model.ProjectPriority;
+import com.automationcompany.project.model.ProjectServiceType;
+import com.automationcompany.project.model.ProjectStatus;
 import com.automationcompany.project.repository.ProjectRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

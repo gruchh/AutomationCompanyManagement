@@ -4,7 +4,10 @@ import com.automationcompany.project.model.ProjectPriority;
 import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,8 +31,7 @@ public class ProjectCreateDto {
     @Schema(
             description = "Full name of the project",
             example = "Modernizacja systemu ERP",
-            maxLength = 200,
-            required = true
+            maxLength = 200
     )
     private String name;
 
@@ -54,18 +56,13 @@ public class ProjectCreateDto {
     @NotNull(message = "Start date is required")
     @Schema(
             description = "Project start date",
-            example = "2025-03-01",
-            type = "string",
-            format = "date",
-            required = true
+            example = "2025-03-01"
     )
     private LocalDate startDate;
 
     @Schema(
             description = "Planned project end date (optional)",
             example = "2025-12-31",
-            type = "string",
-            format = "date",
             nullable = true
     )
     private LocalDate endDate;
@@ -73,23 +70,24 @@ public class ProjectCreateDto {
     @NotNull(message = "Status is required")
     @Schema(
             description = "Current status of the project",
-            example = "PLANNED",
-            required = true
+            example = "PLANNING",
+            implementation = ProjectStatus.class
     )
     private ProjectStatus status;
 
     @Schema(
             description = "Priority level of the project (optional, defaults to MEDIUM if not set)",
             example = "HIGH",
-            nullable = true
+            nullable = true,
+            implementation = ProjectPriority.class
     )
     private ProjectPriority priority;
 
     @NotNull(message = "Service type is required")
     @Schema(
             description = "Type of service provided in the project",
-            example = "IMPLEMENTATION",
-            required = true
+            example = "MACHINE_DESIGN",
+            implementation = ProjectServiceType.class
     )
     private ProjectServiceType serviceType;
 
@@ -102,7 +100,6 @@ public class ProjectCreateDto {
     )
     private String location;
 
-    @Size(min = 1, message = "At least one employee must be assigned")
     @Schema(
             description = "Set of employee IDs assigned to the project (optional)",
             example = "[101, 102, 103]",

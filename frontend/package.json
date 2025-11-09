@@ -8,8 +8,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "api:generate:employee": "openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/employee-service/v3/api-docs -o src/app/core/api/generated/employee --additional-properties=ngVersion=20.3.0,serviceSuffix=Api,withSeparateModelsAndApi=true",
-    "api:generate:project": "openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/project-service/v3/api-docs -o src/app/core/api/generated/project --additional-properties=ngVersion=20.3.0,serviceSuffix=Api,withSeparateModelsAndApi=true",
+    "api:generate:employee": "openapi-generator-cli generate -c ./path/to/your/config.json --generator-key employee-api",
+    "api:generate:project": "openapi-generator-cli generate -c ./path/to/your/config.json --generator-key project-api",
     "api:generate:notification": "openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/notification-service/v3/api-docs -o src/app/core/api/generated/notification --additional-properties=ngVersion=20.3.0,serviceSuffix=Api,withSeparateModelsAndApi=true",
     "api:generate:all": "npm run api:generate:employee && npm run api:generate:project && npm run api:generate:notification"
   },

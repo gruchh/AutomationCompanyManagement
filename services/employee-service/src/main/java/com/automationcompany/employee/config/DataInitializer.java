@@ -2,6 +2,10 @@ package com.automationcompany.employee.config;
 
 import com.automationcompany.employee.model.*;
 import com.automationcompany.employee.repository.EmployeeRepository;
+import com.automationcompany.commondomain.DepartmentType;
+import com.automationcompany.commondomain.EmployeeStatus;
+import com.automationcompany.commondomain.EmploymentType;
+import com.automationcompany.commondomain.PositionLevel;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

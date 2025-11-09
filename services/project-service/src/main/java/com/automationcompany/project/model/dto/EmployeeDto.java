@@ -1,5 +1,9 @@
 package com.automationcompany.project.model.dto;
 
+import com.automationcompany.commondomain.DepartmentType;
+import com.automationcompany.commondomain.EmployeeStatus;
+import com.automationcompany.commondomain.EmploymentType;
+import com.automationcompany.commondomain.PositionLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,20 +26,19 @@ public class EmployeeDto {
 
     @Schema(
             description = "Unique identifier of the employee",
-            example = "101",
-            required = true
+            example = "101"
     )
     private Long id;
 
     @Schema(
             description = "Employee's first name",
-            example = "Jan"
+            example = "John"
     )
     private String firstName;
 
     @Schema(
             description = "Employee's last name",
-            example = "Kowalski"
+            example = "Smith"
     )
     private String lastName;
 
@@ -47,7 +50,7 @@ public class EmployeeDto {
 
     @Schema(
             description = "Employee's email address",
-            example = "jan.kowalski@company.com"
+            example = "john.smith@company.com"
     )
     private String email;
 
@@ -59,25 +62,18 @@ public class EmployeeDto {
 
     @Schema(
             description = "Date of birth of the employee",
-            example = "1990-01-01",
-            type = "string",
-            format = "date"
+            example = "1990-01-01"
     )
     private LocalDate dateOfBirth;
 
     @Schema(
             description = "Date when the employee was hired",
-            example = "2023-06-15",
-            type = "string",
-            format = "date"
+            example = "2023-06-15"
     )
     private LocalDate hireDate;
 
     @Schema(
             description = "Termination date (null if still employed)",
-            example = "null",
-            type = "string",
-            format = "date",
             nullable = true
     )
     private LocalDate terminationDate;
@@ -90,27 +86,31 @@ public class EmployeeDto {
 
     @Schema(
             description = "Position level (e.g., JUNIOR, MID, SENIOR)",
-            example = "MID"
+            example = "MID",
+            implementation = PositionLevel.class
     )
-    private String positionLevel;
+    private PositionLevel positionLevel;
 
     @Schema(
             description = "Department the employee belongs to",
-            example = "IT"
+            example = "IT",
+            implementation = DepartmentType.class
     )
-    private String department;
+    private DepartmentType department;
 
     @Schema(
             description = "Type of employment contract",
-            example = "FULL_TIME"
+            example = "FULL_TIME",
+            implementation = EmploymentType.class
     )
-    private String employmentType;
+    private EmploymentType employmentType;
 
     @Schema(
             description = "Current status of the employee",
-            example = "ACTIVE"
+            example = "ACTIVE",
+            implementation = EmployeeStatus.class
     )
-    private String status;
+    private EmployeeStatus status;
 
     @Schema(description = "Employee's residential address")
     private AddressDto address;
@@ -123,17 +123,13 @@ public class EmployeeDto {
 
     @Schema(
             description = "Timestamp when the employee record was created",
-            example = "2025-11-07T08:30:00",
-            type = "string",
-            format = "date-time"
+            example = "2025-11-07T08:30:00"
     )
     private LocalDateTime createdAt;
 
     @Schema(
             description = "Timestamp when the employee record was last updated",
-            example = "2025-11-07T14:22:10",
-            type = "string",
-            format = "date-time"
+            example = "2025-11-07T14:22:10"
     )
     private LocalDateTime updatedAt;
 

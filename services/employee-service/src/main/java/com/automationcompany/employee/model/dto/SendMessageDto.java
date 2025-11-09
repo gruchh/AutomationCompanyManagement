@@ -26,8 +26,7 @@ public class SendMessageDto {
     @Positive(message = "Recipient ID must be a positive number")
     @Schema(
             description = "ID of the user who will receive the message",
-            example = "102",
-            required = true
+            example = "102"
     )
     private Long recipientId;
 
@@ -35,8 +34,7 @@ public class SendMessageDto {
     @Size(max = 100, message = "Subject cannot exceed 100 characters")
     @Schema(
             description = "Subject line of the message",
-            example = "Spotkanie zespołowe",
-            maxLength = 100
+            example = "Spotkanie zespołowe"
     )
     private String subject;
 
@@ -44,22 +42,23 @@ public class SendMessageDto {
     @Size(max = 5000, message = "Content cannot exceed 5000 characters")
     @Schema(
             description = "Body content of the message",
-            example = "Cześć, zapraszam na spotkanie w piątek o 14:00 w sali B2.",
-            maxLength = 5000
+            example = "Cześć, zapraszam na spotkanie w piątek o 14:00 w sali B2."
     )
     private String content;
 
     @Builder.Default
     @Schema(
             description = "Category of the message. Defaults to GENERAL if not provided.",
-            example = "GENERAL"
+            example = "GENERAL",
+            implementation = MessageCategory.class
     )
     private MessageCategory category = MessageCategory.GENERAL;
 
     @Builder.Default
     @Schema(
             description = "Priority level of the message. Defaults to MEDIUM if not provided.",
-            example = "MEDIUM"
+            example = "MEDIUM",
+            implementation = MessagePriority.class
     )
     private MessagePriority priority = MessagePriority.MEDIUM;
 }

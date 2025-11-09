@@ -1,7 +1,7 @@
 package com.automationcompany.employee.controller;
 
 import com.automationcompany.employee.model.dto.EmployeeCreateDto;
-import com.automationcompany.employee.model.dto.EmployeeReadDto;
+import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.model.dto.EmployeeUpdateDto;
 import com.automationcompany.employee.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;

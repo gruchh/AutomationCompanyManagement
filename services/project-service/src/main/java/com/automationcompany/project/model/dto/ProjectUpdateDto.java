@@ -26,7 +26,7 @@ public class ProjectUpdateDto {
     @Size(max = 200, message = "Project name must not exceed 200 characters")
     @Schema(
             description = "Updated project name (optional)",
-            example = "Modernizacja systemu ERP – Faza 2",
+            example = "ERP System Modernization – Phase 2",
             maxLength = 200,
             nullable = true
     )
@@ -44,7 +44,7 @@ public class ProjectUpdateDto {
     @Size(max = 1000, message = "Description must not exceed 1000 characters")
     @Schema(
             description = "Updated project description (optional)",
-            example = "Druga faza modernizacji systemu ERP – wdrożenie modułu finansowego.",
+            example = "Phase two of the ERP system modernization – implementation of the financial module.",
             maxLength = 1000,
             nullable = true
     )
@@ -53,8 +53,6 @@ public class ProjectUpdateDto {
     @Schema(
             description = "Updated project start date (optional)",
             example = "2025-06-01",
-            type = "string",
-            format = "date",
             nullable = true
     )
     private LocalDate startDate;
@@ -62,8 +60,6 @@ public class ProjectUpdateDto {
     @Schema(
             description = "Updated planned end date (optional, null to clear)",
             example = "2026-03-31",
-            type = "string",
-            format = "date",
             nullable = true
     )
     private LocalDate endDate;
@@ -71,28 +67,31 @@ public class ProjectUpdateDto {
     @Schema(
             description = "Updated project status (optional)",
             example = "IN_PROGRESS",
-            nullable = true
+            nullable = true,
+            implementation = ProjectStatus.class
     )
     private ProjectStatus status;
 
     @Schema(
             description = "Updated project priority (optional)",
             example = "MEDIUM",
-            nullable = true
+            nullable = true,
+            implementation = ProjectPriority.class
     )
     private ProjectPriority priority;
 
     @Schema(
             description = "Updated service type (optional)",
-            example = "IMPLEMENTATION",
-            nullable = true
+            example = "PRODUCTION_SUPPORT",
+            nullable = true,
+            implementation = ProjectServiceType.class
     )
     private ProjectServiceType serviceType;
 
     @Size(max = 150, message = "Location must not exceed 150 characters")
     @Schema(
             description = "Updated project location (optional)",
-            example = "Kraków, Biuro Regionalne",
+            example = "Krakow, Regional Office",
             maxLength = 150,
             nullable = true
     )

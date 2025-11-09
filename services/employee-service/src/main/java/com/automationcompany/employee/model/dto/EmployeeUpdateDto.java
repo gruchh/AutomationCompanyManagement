@@ -1,9 +1,16 @@
 package com.automationcompany.employee.model.dto;
 
 import com.automationcompany.employee.model.*;
+import com.automationcompany.commondomain.DepartmentType;
+import com.automationcompany.commondomain.EmployeeStatus;
+import com.automationcompany.commondomain.EmploymentType;
+import com.automationcompany.commondomain.PositionLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -53,8 +60,6 @@ public class EmployeeUpdateDto {
     @Schema(
             description = "Termination date (null to clear, or set to mark as terminated)",
             example = "2025-12-31",
-            type = "string",
-            format = "date",
             nullable = true
     )
     private LocalDate terminationDate;
@@ -69,25 +74,29 @@ public class EmployeeUpdateDto {
 
     @Schema(
             description = "Updated position level (e.g., JUNIOR, MID, SENIOR)",
-            example = "SENIOR"
+            example = "SENIOR",
+            implementation = PositionLevel.class
     )
     private PositionLevel positionLevel;
 
     @Schema(
             description = "Updated department assignment",
-            example = "HR"
+            example = "HR",
+            implementation = DepartmentType.class
     )
     private DepartmentType department;
 
     @Schema(
             description = "Updated employment contract type",
-            example = "PART_TIME"
+            example = "PART_TIME",
+            implementation = EmploymentType.class
     )
     private EmploymentType employmentType;
 
     @Schema(
             description = "Updated employee status",
-            example = "INACTIVE"
+            example = "ACTIVE",
+            implementation = EmployeeStatus.class
     )
     private EmployeeStatus status;
 

@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.base.service.ts
 api.module.ts
@@ -10,11 +9,8 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
-model/address-dto.ts
-model/bank-details-dto.ts
 model/count-by-group-dto.ts
-model/emergency-contact-dto.ts
-model/employee-dto.ts
+model/employee-read-dto.ts
 model/employee-utilization-dto.ts
 model/models.ts
 model/project-create-dto.ts

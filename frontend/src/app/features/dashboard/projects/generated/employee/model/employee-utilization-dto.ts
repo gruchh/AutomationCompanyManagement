@@ -28,10 +28,22 @@ export interface EmployeeUtilizationDto {
     /**
      * Employee\'s position level (e.g., JUNIOR, MID, SENIOR), retrieved from Employee Service.
      */
-    positionLevel?: string;
+    positionLevel?: EmployeeUtilizationDtoPositionLevelEnum;
     /**
      * The number of active projects the employee is currently assigned to.
      */
     activeProjectCount: number;
 }
+export enum EmployeeUtilizationDtoPositionLevelEnum {
+    INTERN = 'INTERN',
+    JUNIOR = 'JUNIOR',
+    MID = 'MID',
+    SENIOR = 'SENIOR',
+    LEAD = 'LEAD',
+    MANAGER = 'MANAGER',
+    DIRECTOR = 'DIRECTOR',
+    CEO = 'CEO'
+};
+
+
 

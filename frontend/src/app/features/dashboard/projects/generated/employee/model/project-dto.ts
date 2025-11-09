@@ -16,11 +16,11 @@ export interface ProjectDto {
     /**
      * Unique identifier of the project
      */
-    id: number;
+    id?: number;
     /**
      * Full name of the project
      */
-    name: string;
+    name?: string;
     /**
      * Unique project code (optional)
      */
@@ -32,7 +32,7 @@ export interface ProjectDto {
     /**
      * Project start date
      */
-    startDate: string;
+    startDate?: string;
     /**
      * Planned or actual project end date (null if not finished)
      */
@@ -40,7 +40,7 @@ export interface ProjectDto {
     /**
      * Current status of the project
      */
-    status: ProjectDtoStatusEnum;
+    status?: ProjectDtoStatusEnum;
     /**
      * Priority level of the project
      */
@@ -48,7 +48,7 @@ export interface ProjectDto {
     /**
      * Type of service provided in the project
      */
-    serviceType: ProjectDtoServiceTypeEnum;
+    serviceType?: ProjectDtoServiceTypeEnum;
     /**
      * Physical or logical location of the project (optional)
      */

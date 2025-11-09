@@ -1,5 +1,6 @@
 package com.automationcompany.project.model.dto;
 
+import com.automationcompany.commondomain.PositionLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(
@@ -35,7 +36,7 @@ public record EmployeeUtilizationDto(
                 example = "MID",
                 nullable = true
         )
-        String positionLevel,
+        PositionLevel positionLevel,
 
         @Schema(
                 description = "The number of active projects the employee is currently assigned to.",

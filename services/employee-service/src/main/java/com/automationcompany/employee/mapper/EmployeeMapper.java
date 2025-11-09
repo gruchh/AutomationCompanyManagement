@@ -1,20 +1,16 @@
 package com.automationcompany.employee.mapper;
 
+import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.model.Employee;
 import com.automationcompany.employee.model.dto.EmployeeCreateDto;
 import com.automationcompany.employee.model.dto.EmployeeUpdateDto;
-import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(
         componentModel = "spring",
         uses = {AddressMapper.class, BankDetailsMapper.class, EmergencyContactMapper.class}
 )
 public interface EmployeeMapper {
-
-    EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "terminationDate", ignore = true)
     @Mapping(target = "createdAt", ignore = true)

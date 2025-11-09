@@ -2,13 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MessageDto, MessageDtoCategoryEnum, MessageDtoPriorityEnum } from '../../employees/service/generated/employee/model/message-dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
   private apiUrl = '/api/messages';
-  private messageSubject = new Subject<Message>();
+  private messageSubject = new Subject<MessageDto>();
   private webSocket?: WebSocket;
 
   http = inject(HttpClient);
@@ -23,13 +24,13 @@ export class MessageService {
     };
   }
 
-  getMessages(): Observable<Message[]> {
+  getMessages(): Observable<MessageDto[]> {
     return this.http.get<any[]>(this.apiUrl).pipe(
       map(dtos => dtos.map(dto => this.mapDTOToMessage(dto)))
     );
   }
 
-  getMessageStream(): Observable<Message> {
+  getMessageStream(): Observable<MessageDto> {
     return this.messageSubject.asObservable();
   }
 
@@ -45,7 +46,7 @@ export class MessageService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  sendMessage(recipientId: number, subject: string, content: string, category: MessageCategory, priority: MessagePriority): Observable<Message> {
+  sendMessage(recipientId: number, subject: string, content: string, category: MessageDtoCategoryEnum, priority: MessageDtoCategoryEnum): Observable<Message> {
     return this.http.post<any>(this.apiUrl, {
       recipientId,
       subject,
@@ -57,7 +58,7 @@ export class MessageService {
     );
   }
 
-  private mapDTOToMessage(dto: any): Message {
+  private mapDTOToMessage(dto: any): MessageDto {
     return {
       id: dto.id,
       type: dto.senderId ? 'user' : 'system',
@@ -75,7 +76,7 @@ export class MessageService {
     };
   }
 
-  private determineCategory(subject: string): MessageCategory {
+  private determineCategory(subject: string): MessageDtoCategoryEnum {
     const lower = subject.toLowerCase();
     if (lower.includes('campaign') || lower.includes('email')) return 'campaign';
     if (lower.includes('analytics') || lower.includes('rate')) return 'analytics';
@@ -87,7 +88,7 @@ export class MessageService {
     return 'general';
   }
 
-  private determinePriority(subject: string): MessagePriority {
+  private determinePriority(subject: string): MessageDtoPriorityEnum {
     const lower = subject.toLowerCase();
     if (lower.includes('urgent') || lower.includes('critical') || lower.includes('alert')) return 'high';
     if (lower.includes('important') || lower.includes('reminder')) return 'medium';

@@ -1,5 +1,6 @@
 package com.automationcompany.project.service;
 
+import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.project.client.EmployeeWebClient;
 import com.automationcompany.project.exception.DuplicateProjectCodeException;
 import com.automationcompany.project.exception.InvalidEmployeeException;
@@ -45,15 +46,15 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found with id: " + id));
 
-        List<EmployeeDto> employees = Collections.emptyList();
+        List<EmployeeReadDto> employees = Collections.emptyList();
         if (project.getEmployeeIds() != null && !project.getEmployeeIds().isEmpty()) {
             employees = employeeClient.getEmployeesByIds(new ArrayList<>(project.getEmployeeIds()));
             employees = employees != null ? employees : Collections.emptyList();
         }
 
-        EmployeeDto projectManager = null;
+        EmployeeReadDto projectManager = null;
         if (project.getProjectManagerId() != null) {
-            Optional<EmployeeDto> managerOpt = employeeClient.getEmployeeById(project.getProjectManagerId());
+            Optional<EmployeeReadDto> managerOpt = employeeClient.getEmployeeById(project.getProjectManagerId());
             projectManager = managerOpt.orElse(null);
         }
 
@@ -174,7 +175,7 @@ public class ProjectService {
         }
 
         if (employeeIds != null && !employeeIds.isEmpty()) {
-            List<EmployeeDto> employees = employeeClient.getEmployeesByIds(new ArrayList<>(employeeIds));
+            List<EmployeeReadDto> employees = employeeClient.getEmployeesByIds(new ArrayList<>(employeeIds));
             if (employees == null || employees.size() != employeeIds.size()) {
                 throw new InvalidEmployeeException("Some employee IDs are invalid");
             }
@@ -182,7 +183,7 @@ public class ProjectService {
     }
 
     private void validateEmployee(Long employeeId) {
-        Optional<EmployeeDto> employeeOpt = employeeClient.getEmployeeById(employeeId);
+        Optional<EmployeeReadDto> employeeOpt = employeeClient.getEmployeeById(employeeId);
         if (employeeOpt.isEmpty()) {
             throw new InvalidEmployeeException("Employee not found with id: " + employeeId);
         }
@@ -226,7 +227,7 @@ public class ProjectService {
                 .collect(Collectors.toList());
 
 
-        List<EmployeeDto> employees = employeeClient.getEmployeesByIds(topEmployeeIds);
+        List<EmployeeReadDto> employees = employeeClient.getEmployeesByIds(topEmployeeIds);
 
         return employees.stream()
                 .map(e -> {

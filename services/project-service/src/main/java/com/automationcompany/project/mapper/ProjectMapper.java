@@ -1,7 +1,11 @@
 package com.automationcompany.project.mapper;
 
+import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.project.model.Project;
-import com.automationcompany.project.model.dto.*;
+import com.automationcompany.project.model.dto.ProjectCreateDto;
+import com.automationcompany.project.model.dto.ProjectDto;
+import com.automationcompany.project.model.dto.ProjectUpdateDto;
+import com.automationcompany.project.model.dto.ProjectWithEmployeesDto;
 import org.mapstruct.*;
 
 import java.util.HashSet;
@@ -38,7 +42,7 @@ public interface ProjectMapper {
     @Mapping(target = "projectManager", ignore = true)
     ProjectWithEmployeesDto toWithEmployeesDto(Project project);
 
-    default ProjectWithEmployeesDto toWithEmployeesDto(Project project, List<EmployeeDto> employees, EmployeeDto projectManager) {
+    default ProjectWithEmployeesDto toWithEmployeesDto(Project project, List<EmployeeReadDto> employees, EmployeeReadDto projectManager) {
         ProjectWithEmployeesDto dto = toWithEmployeesDto(project);
 
         Optional.ofNullable(employees)

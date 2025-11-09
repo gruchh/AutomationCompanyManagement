@@ -1,5 +1,6 @@
 package com.automationcompany.project.model.dto;
 
+import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.project.model.ProjectPriority;
 import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
@@ -96,13 +97,13 @@ public class ProjectWithEmployeesDto {
             description = "Set of employees currently assigned to the project (with full details: personal, contact, position, etc.)",
             nullable = true
     )
-    private Set<EmployeeDto> employees;
+    private Set<EmployeeReadDto> employees;
 
     @Schema(
             description = "Project manager with full employee details (personal, contact, position, etc.)",
             nullable = true
     )
-    private EmployeeDto projectManager;
+    private EmployeeReadDto projectManager;
 
     @Schema(
             description = "Timestamp when the project was created",

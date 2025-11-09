@@ -9,25 +9,10 @@
  */
 
 
-/**
- * Employee\'s residential address
- */
 export interface Address { 
-    /**
-     * Street name and number
-     */
     street?: string;
-    /**
-     * City
-     */
     city?: string;
-    /**
-     * Postal code
-     */
     postalCode?: string;
-    /**
-     * Country
-     */
     country?: string;
 }
 

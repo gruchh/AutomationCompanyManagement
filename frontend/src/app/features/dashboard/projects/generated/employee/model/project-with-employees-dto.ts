@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EmployeeDto } from './employee-dto';
+import { EmployeeReadDto } from './employee-read-dto';
 
 
 /**
@@ -17,7 +17,7 @@ export interface ProjectWithEmployeesDto {
     /**
      * Unique identifier of the project
      */
-    id: number;
+    id?: number;
     /**
      * Full name of the project
      */
@@ -57,11 +57,11 @@ export interface ProjectWithEmployeesDto {
     /**
      * Set of employees currently assigned to the project (with full details: personal, contact, position, etc.)
      */
-    employees?: Set<EmployeeDto>;
+    employees?: Set<EmployeeReadDto>;
     /**
      * Project manager with full employee details (personal, contact, position, etc.)
      */
-    projectManager?: EmployeeDto;
+    projectManager?: EmployeeReadDto;
     /**
      * Timestamp when the project was created
      */

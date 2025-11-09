@@ -1,10 +1,12 @@
 package com.automationcompany.employee.model.dto;
 
-import com.automationcompany.employee.model.*;
 import com.automationcompany.commondomain.DepartmentType;
 import com.automationcompany.commondomain.EmployeeStatus;
 import com.automationcompany.commondomain.EmploymentType;
 import com.automationcompany.commondomain.PositionLevel;
+import com.automationcompany.employee.model.Address;
+import com.automationcompany.employee.model.BankDetails;
+import com.automationcompany.employee.model.EmergencyContact;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;

@@ -10,29 +10,59 @@
 
 
 /**
- * Message data transfer object
+ * Data transfer object representing a message
  */
 export interface MessageDto { 
+    /**
+     * Unique identifier of the message
+     */
     id?: number;
+    /**
+     * ID of the employee who sent the message
+     */
     senderId?: number;
+    /**
+     * Full name of the sender
+     */
     senderName?: string;
+    /**
+     * ID of the employee who received the message
+     */
     recipientId?: number;
+    /**
+     * Full name of the recipient
+     */
     recipientName?: string;
+    /**
+     * Subject line of the message
+     */
     subject?: string;
+    /**
+     * Body content of the message
+     */
     content?: string;
+    /**
+     * Flag indicating if the message has been read by the recipient
+     */
     isRead?: boolean;
+    /**
+     * Timestamp when the message was sent
+     */
     sentAt?: string;
+    /**
+     * Timestamp when the message was read (null if unread)
+     */
     readAt?: string;
     /**
-     * Message category
+     * Category of the message
      */
     category?: MessageDtoCategoryEnum;
     /**
-     * Message priority level
+     * Priority level of the message
      */
     priority?: MessageDtoPriorityEnum;
     /**
-     * Typ wiadomości
+     * Type of the message (sent by user or system)
      */
     type?: MessageDtoTypeEnum;
 }

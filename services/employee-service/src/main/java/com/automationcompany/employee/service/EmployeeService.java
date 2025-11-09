@@ -1,11 +1,11 @@
 package com.automationcompany.employee.service;
 
+import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.exception.EmployeeAlreadyExistsException;
 import com.automationcompany.employee.exception.EmployeeNotFoundException;
 import com.automationcompany.employee.mapper.EmployeeMapper;
 import com.automationcompany.employee.model.Employee;
 import com.automationcompany.employee.model.dto.EmployeeCreateDto;
-import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.model.dto.EmployeeUpdateDto;
 import com.automationcompany.employee.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;

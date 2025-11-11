@@ -16,7 +16,13 @@ import {
   Calendar,
   Building,
 } from 'lucide-angular';
-import { EmployeeReadDTODto } from '../../../core/api/generated/employee/model/employeeReadDTO';
+import {
+  EmployeeReadDto,
+  EmployeeReadDtoPositionLevelEnum,
+  EmployeeReadDtoDepartmentEnum,
+  EmployeeReadDtoEmploymentTypeEnum,
+  EmployeeReadDtoStatusEnum
+} from './service/generated/employee';
 
 @Component({
   selector: 'app-employees',
@@ -52,17 +58,17 @@ export class Employees {
     departmentsChange: -1,
   });
 
-  employees = signal<(EmployeeReadDTODto & { selected?: boolean })[]>([
+  employees = signal<(EmployeeReadDto & { selected?: boolean })[]>([
     {
       id: 1,
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@company.com',
       phoneNumber: '+48 123 456 789',
-      department: 'MECHANICAL' as const,
-      positionLevel: 'MANAGER' as const,
-      employmentType: 'FULL_TIME' as const,
-      status: 'ACTIVE' as const,
+      department: EmployeeReadDtoDepartmentEnum.MECHANICAL,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.MANAGER,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
+      status: EmployeeReadDtoStatusEnum.ACTIVE,
       hireDate: '2021-03-15',
       salary: 8500,
     },
@@ -72,10 +78,10 @@ export class Employees {
       lastName: 'Tan',
       email: 'maria.tan@company.com',
       phoneNumber: '+48 234 567 890',
-      department: 'FINANCE' as const,
-      positionLevel: 'SENIOR' as const,
-      employmentType: 'FULL_TIME' as const,
-      status: 'ON_LEAVE' as const,
+      department: EmployeeReadDtoDepartmentEnum.FINANCE,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.SENIOR,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
+      status: EmployeeReadDtoStatusEnum.ON_LEAVE,
       hireDate: '2020-07-22',
       salary: 7200,
       selected: true,
@@ -86,10 +92,10 @@ export class Employees {
       lastName: 'Brown',
       email: 'charlie.brown@company.com',
       phoneNumber: '+48 345 678 901',
-      department: 'SOFTWARE' as const,
-      positionLevel: 'MID' as const,
-      employmentType: 'FULL_TIME' as const,
-      status: 'ACTIVE' as const,
+      department: EmployeeReadDtoDepartmentEnum.SOFTWARE,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.MID,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
+      status: EmployeeReadDtoStatusEnum.ACTIVE,
       hireDate: '2022-01-10',
       salary: 6500,
     },
@@ -99,10 +105,10 @@ export class Employees {
       lastName: 'White',
       email: 'dana.white@company.com',
       phoneNumber: '+48 456 789 012',
-      department: 'HR' as const,
-      positionLevel: 'MID' as const,
-      employmentType: 'FULL_TIME' as const,
-      status: 'ACTIVE' as const,
+      department: EmployeeReadDtoDepartmentEnum.HR,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.MID,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
+      status: EmployeeReadDtoStatusEnum.ACTIVE,
       hireDate: '2021-11-05',
       salary: 5800,
     },
@@ -112,10 +118,10 @@ export class Employees {
       lastName: 'Hunt',
       email: 'ethan.hunt@company.com',
       phoneNumber: '+48 567 890 123',
-      department: 'ELECTRICAL' as const,
-      positionLevel: 'SENIOR' as const,
-      employmentType: 'FULL_TIME' as const,
-      status: 'ACTIVE' as const,
+      department: EmployeeReadDtoDepartmentEnum.ELECTRICAL,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.SENIOR,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
+      status: EmployeeReadDtoStatusEnum.ACTIVE,
       hireDate: '2021-06-20',
       salary: 7500,
       selected: true,
@@ -126,10 +132,10 @@ export class Employees {
       lastName: 'Glenanne',
       email: 'fiona.g@company.com',
       phoneNumber: '+48 678 901 234',
-      department: 'FINANCE' as const,
-      positionLevel: 'JUNIOR' as const,
-      employmentType: 'FULL_TIME' as const,
-      status: 'TERMINATED' as const,
+      department: EmployeeReadDtoDepartmentEnum.FINANCE,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.JUNIOR,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
+      status: EmployeeReadDtoStatusEnum.TERMINATED,
       hireDate: '2018-05-10',
       terminationDate: '2024-03-15',
       salary: 4500,
@@ -140,10 +146,10 @@ export class Employees {
       lastName: 'Lucas',
       email: 'george.lucas@company.com',
       phoneNumber: '+48 789 012 345',
-      department: 'SOFTWARE' as const,
-      positionLevel: 'LEAD' as const,
-      employmentType: 'CONTRACT' as const,
-      status: 'ON_LEAVE' as const,
+      department: EmployeeReadDtoDepartmentEnum.SOFTWARE,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.LEAD,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.CONTRACT,
+      status: EmployeeReadDtoStatusEnum.ON_LEAVE,
       hireDate: '2021-02-22',
       salary: 9200,
     },
@@ -153,10 +159,10 @@ export class Employees {
       lastName: 'Montana',
       email: 'hannah.montana@company.com',
       phoneNumber: '+48 890 123 456',
-      department: 'AUTOMATION' as const,
-      positionLevel: 'MID' as const,
-      employmentType: 'FULL_TIME' as const,
-      status: 'ACTIVE' as const,
+      department: EmployeeReadDtoDepartmentEnum.AUTOMATION,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.MID,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
+      status: EmployeeReadDtoStatusEnum.ACTIVE,
       hireDate: '2020-09-18',
       salary: 6800,
       selected: true,
@@ -167,10 +173,10 @@ export class Employees {
       lastName: 'Montana',
       email: 'hannah.montana@company.com',
       phoneNumber: '+48 890 123 456',
-      department: 'AUTOMATION' as const,
-      positionLevel: 'MID' as const,
-      employmentType: 'FULL_TIME' as const,
-      status: 'ACTIVE' as const,
+      department: EmployeeReadDtoDepartmentEnum.AUTOMATION,
+      positionLevel: EmployeeReadDtoPositionLevelEnum.MID,
+      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
+      status: EmployeeReadDtoStatusEnum.ACTIVE,
       hireDate: '2020-09-18',
       salary: 6800,
       selected: true,
@@ -188,7 +194,7 @@ export class Employees {
     this.closeMenu();
   }
 
-  getInitials(employee: EmployeeReadDTODto): string {
+  getInitials(employee: EmployeeReadDto): string {
     const first = employee.firstName?.charAt(0) ?? '';
     const last = employee.lastName?.charAt(0) ?? '';
     return (first + last).toUpperCase();
@@ -216,29 +222,29 @@ export class Employees {
     this.openMenuId.set(null);
   }
 
-  viewProfile(employee: EmployeeReadDTODto): void {
+  viewProfile(employee: EmployeeReadDto): void {
     console.log('View profile:', employee);
     this.closeMenu();
   }
 
-  editDetails(employee: EmployeeReadDTODto): void {
+  editDetails(employee: EmployeeReadDto): void {
     console.log('Edit details:', employee);
     this.closeMenu();
   }
 
-  viewPerformance(employee: EmployeeReadDTODto): void {
+  viewPerformance(employee: EmployeeReadDto): void {
     console.log('View performance:', employee);
     this.closeMenu();
   }
 
-  deleteEmployee(employee: EmployeeReadDTODto): void {
+  deleteEmployee(employee: EmployeeReadDto): void {
     if (confirm(`Are you sure you want to delete ${employee.firstName} ${employee.lastName}?`)) {
       console.log('Delete employee:', employee);
       this.closeMenu();
     }
   }
 
-  toggleEmployee(employee: EmployeeReadDTODto & { selected?: boolean }): void {
+  toggleEmployee(employee: EmployeeReadDto & { selected?: boolean }): void {
     employee.selected = !employee.selected;
     this.employees.update((list) =>
       list.map((e) => (e.id === employee.id ? { ...e, selected: employee.selected } : e))

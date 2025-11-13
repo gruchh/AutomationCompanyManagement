@@ -1,3 +1,4 @@
+// DTO
 package com.automationcompany.project.model.dto;
 
 import com.automationcompany.project.model.ProjectStatus;
@@ -11,36 +12,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "Dane projektu do wyświetlenia na mapie")
+@Schema(description = "Project data for map display")
 public class ProjectMapPointDto {
 
-    @Schema(description = "ID projektu", example = "1001")
+    @Schema(description = "Project ID", example = "1001")
     private Long id;
 
-    @Schema(description = "Nazwa projektu", example = "Modernizacja Linii Produkcyjnej")
+    @Schema(description = "Project name", example = "Production Line Modernization")
     private String name;
 
-    @Schema(description = "Kod projektu", example = "AC")
+    @Schema(description = "Project code", example = "AC")
     private String code;
 
-    @Schema(description = "Lokalizacja tekstowa", example = "Poznań, Polska")
+    @Schema(description = "Textual location", example = "Poznań, Poland")
     private String location;
 
-    @Schema(description = "Szerokość geograficzna", example = "52.406376")
+    @Schema(description = "Latitude", example = "52.406376")
     private Double latitude;
 
-    @Schema(description = "Długość geograficzna", example = "16.925167")
+    @Schema(description = "Longitude", example = "16.925167")
     private Double longitude;
 
-    @Schema(description = "Status projektu")
+    @Schema(description = "Project status")
     private ProjectStatus status;
 
-    @Schema(description = "Etykieta statusu", example = "W toku")
-    private String statusLabel;
-
-    @Schema(description = "Liczba specjalistów", example = "6")
+    @Schema(description = "Team size", example = "6")
     private Integer teamSize;
-
-    @Schema(description = "Kolor pinezki na mapie", example = "#6366f1")
-    private String markerColor;
 }

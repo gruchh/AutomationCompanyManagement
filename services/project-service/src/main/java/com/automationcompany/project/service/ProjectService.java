@@ -6,6 +6,7 @@ import com.automationcompany.project.exception.DuplicateProjectCodeException;
 import com.automationcompany.project.exception.InvalidEmployeeException;
 import com.automationcompany.project.exception.ProjectNotFoundException;
 import com.automationcompany.project.mapper.ProjectCardMapper;
+import com.automationcompany.project.mapper.ProjectMapPointMapper;
 import com.automationcompany.project.mapper.ProjectMapper;
 import com.automationcompany.project.model.Project;
 import com.automationcompany.project.model.ProjectServiceType;
@@ -34,6 +35,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final ProjectCardMapper projectCardMapper;
+    private final ProjectMapPointMapper projectMapPointMapper;
     private final EmployeeWebClient employeeClient;
 
     public List<ProjectDto> getAllProjects() {
@@ -430,5 +432,20 @@ public class ProjectService {
                 .locationCounts(locationCounts)
                 .totalProjects(allProjects.size())
                 .build();
+    }
+
+
+    public List<ProjectMapPointDto> getProjectsForMap(List<ProjectStatus> statuses) {
+        List<Project> projects;
+
+        if (statuses == null || statuses.isEmpty()) {
+            projects = projectRepository.findAll();
+        } else {
+            projects = projectRepository.findByStatusIn(statuses);
+        }
+
+        return projects.stream()
+                .map( p -> projectMapPointMapper.toDto(p))
+                .collect(Collectors.toList());
     }
 }

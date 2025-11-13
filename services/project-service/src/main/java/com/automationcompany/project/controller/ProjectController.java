@@ -1,5 +1,7 @@
 package com.automationcompany.project.controller;
 
+import com.automationcompany.project.model.ProjectPriority;
+import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
 import com.automationcompany.project.model.dto.*;
 import com.automationcompany.project.service.ProjectService;
@@ -170,5 +172,131 @@ public class ProjectController {
     @Operation(summary = "Project load by manager", description = "Returns the count of ACTIVE projects managed by each Project Manager.")
     public ResponseEntity<List<CountByGroupDto>> getManagerProjectLoad() {
         return ResponseEntity.ok(projectService.getManagerProjectLoad());
+    }
+
+    @PostMapping("/public/cards/filter")
+    @Operation(
+            summary = "Filtruj publiczne karty projektów",
+            description = "Zaawansowane filtrowanie projektów według wielu kryteriów"
+    )
+    public ResponseEntity<List<ProjectCardDto>> filterPublicProjectCards(
+            @RequestBody ProjectFilterDto filter) {
+        return ResponseEntity.ok(projectService.filterPublicProjectCards(filter));
+    }
+
+    @GetMapping("/public/cards/filter")
+    @Operation(
+            summary = "Filtruj karty projektów (GET)",
+            description = "Filtrowanie za pomocą query parameters - alternatywa dla POST"
+    )
+    public ResponseEntity<List<ProjectCardDto>> filterPublicProjectCardsGet(
+            @Parameter(description = "Statusy (oddzielone przecinkami)", example = "ACTIVE,PLANNED")
+            @RequestParam(required = false) List<ProjectStatus> statuses,
+
+            @Parameter(description = "Typy usług (oddzielone przecinkami)")
+            @RequestParam(required = false) List<ProjectServiceType> serviceTypes,
+
+            @Parameter(description = "Priorytety (oddzielone przecinkami)")
+            @RequestParam(required = false) List<ProjectPriority> priorities,
+
+            @Parameter(description = "Technologie (oddzielone przecinkami)", example = "Siemens,Allen Bradley")
+            @RequestParam(required = false) List<String> technologies,
+
+            @Parameter(description = "Lokalizacja", example = "Poznań")
+            @RequestParam(required = false) String location,
+
+            @Parameter(description = "Data rozpoczęcia od", example = "2024-01-01")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDateFrom,
+
+            @Parameter(description = "Data rozpoczęcia do", example = "2024-12-31")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDateTo,
+
+            @Parameter(description = "Fraza wyszukiwania")
+            @RequestParam(required = false) String searchQuery,
+
+            @Parameter(description = "Minimalny rozmiar zespołu")
+            @RequestParam(required = false) Integer minTeamSize,
+
+            @Parameter(description = "Maksymalny rozmiar zespołu")
+            @RequestParam(required = false) Integer maxTeamSize,
+
+            @Parameter(description = "Sortowanie według", example = "startDate")
+            @RequestParam(required = false, defaultValue = "startDate") String sortBy,
+
+            @Parameter(description = "Kierunek sortowania", example = "desc")
+            @RequestParam(required = false, defaultValue = "desc") String sortDirection) {
+
+        ProjectFilterDto filter = ProjectFilterDto.builder()
+                .statuses(statuses)
+                .serviceTypes(serviceTypes)
+                .priorities(priorities)
+                .technologies(technologies)
+                .location(location)
+                .startDateFrom(startDateFrom)
+                .startDateTo(startDateTo)
+                .searchQuery(searchQuery)
+                .minTeamSize(minTeamSize)
+                .maxTeamSize(maxTeamSize)
+                .sortBy(sortBy)
+                .sortDirection(sortDirection)
+                .build();
+
+        return ResponseEntity.ok(projectService.filterPublicProjectCards(filter));
+    }
+
+    @GetMapping("/public/technologies")
+    @Operation(
+            summary = "Pobierz dostępne technologie",
+            description = "Lista wszystkich technologii używanych w projektach (do autocomplete/filtrów)"
+    )
+    public ResponseEntity<List<String>> getAvailableTechnologies() {
+        return ResponseEntity.ok(projectService.getAvailableTechnologies());
+    }
+
+    @GetMapping("/public/locations")
+    @Operation(
+            summary = "Pobierz dostępne lokalizacje",
+            description = "Lista wszystkich lokalizacji projektów (do autocomplete/mapy)"
+    )
+    public ResponseEntity<List<String>> getAvailableLocations() {
+        return ResponseEntity.ok(projectService.getAvailableLocations());
+    }
+
+    @GetMapping("/public/filter-stats")
+    @Operation(
+            summary = "Statystyki dla filtrów",
+            description = "Zwraca liczby projektów dla poszczególnych opcji filtrowania"
+    )
+    public ResponseEntity<FilterStatsDto> getFilterStatistics() {
+        return ResponseEntity.ok(projectService.getFilterStatistics());
+    }
+
+    @GetMapping("/public/cards/by-technology")
+    @Operation(
+            summary = "Projekty według technologii",
+            description = "Szybkie filtrowanie po jednej technologii (dla przycisków górnych)"
+    )
+    public ResponseEntity<List<ProjectCardDto>> getProjectsByTechnology(
+            @Parameter(description = "Nazwa technologii", example = "Siemens S7-1500")
+            @RequestParam String technology) {
+
+        ProjectFilterDto filter = ProjectFilterDto.builder()
+                .technologies(List.of(technology))
+                .sortBy("startDate")
+                .sortDirection("desc")
+                .build();
+
+        return ResponseEntity.ok(projectService.filterPublicProjectCards(filter));
+    }
+
+    @GetMapping("/public/cards/map-data")
+    @Operation(
+            summary = "Dane projektów dla mapy",
+            description = "Zwraca projekty z koordynatami dla wyświetlenia na mapie"
+    )
+    public ResponseEntity<List<ProjectMapPointDto>> getProjectsMapData(
+            @Parameter(description = "Opcjonalne filtrowanie")
+            @RequestParam(required = false) List<ProjectStatus> statuses) {
+        return ResponseEntity.ok(projectService.getProjectsForMap(statuses));
     }
 }

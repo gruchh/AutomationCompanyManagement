@@ -66,6 +66,16 @@ public class Project {
     @Column(name = "project_manager_id")
     private Long projectManagerId;
 
+    @ElementCollection(targetClass = ProjectTechnology.class)
+    @CollectionTable(
+            name = "project_technologies",
+            joinColumns = @JoinColumn(name = "project_id")
+    )
+    @Enumerated(EnumType.STRING)
+    @Column(name = "technology")
+    @Builder.Default
+    private Set<ProjectTechnology> technologies = new HashSet<>();
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

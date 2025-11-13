@@ -6,6 +6,7 @@ import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
 import com.automationcompany.project.model.dto.CountByGroupDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProjectRepository extends JpaRepository<Project, Long> {
+public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpecificationExecutor<Project> {
 
     Optional<Project> findByCode(String code);
 
@@ -93,4 +94,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<CountByGroupDto> countActiveProjectsByManager();
 
     List<Project> findByEndDateBetweenAndStatusIsNot(LocalDate start, LocalDate end, ProjectStatus projectStatus);
+
+    List<Project> findByLocationContainingIgnoreCase(String location);
+
+    @Query("SELECT p FROM Project p WHERE p.status IN ('ACTIVE', 'PLANNED') ORDER BY p.startDate DESC")
+    List<Project> findActiveProjectsForCards();
 }

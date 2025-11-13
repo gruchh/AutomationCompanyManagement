@@ -5,19 +5,25 @@ import com.automationcompany.project.client.EmployeeWebClient;
 import com.automationcompany.project.exception.DuplicateProjectCodeException;
 import com.automationcompany.project.exception.InvalidEmployeeException;
 import com.automationcompany.project.exception.ProjectNotFoundException;
+import com.automationcompany.project.mapper.ProjectCardMapper;
 import com.automationcompany.project.mapper.ProjectMapper;
 import com.automationcompany.project.model.Project;
+import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
+import com.automationcompany.project.model.ProjectTechnology;
 import com.automationcompany.project.model.dto.*;
 import com.automationcompany.project.repository.ProjectRepository;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +33,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
+    private final ProjectCardMapper projectCardMapper;
     private final EmployeeWebClient employeeClient;
 
     public List<ProjectDto> getAllProjects() {
@@ -259,5 +266,169 @@ public class ProjectService {
         );
 
         return projectMapper.toDtoList(projects);
+    }
+
+    public List<ProjectCardDto> filterPublicProjectCards(ProjectFilterDto filter) {
+        Specification<Project> spec = buildProjectSpecification(filter);
+        List<Project> projects = projectRepository.findAll(spec);
+
+        List<ProjectCardDto> cards = projects.stream()
+                .map(projectCardMapper::toDto)
+                .collect(Collectors.toList());
+
+        if (filter.getTechnologies() != null && !filter.getTechnologies().isEmpty()) {
+            Set<String> filterTechs = filter.getTechnologies().stream()
+                    .map(ProjectTechnology::name)
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toSet());
+
+            cards = cards.stream()
+                    .filter(card -> card.getTechnologies().stream()
+                            .map(ProjectTechnology::name)
+                            .map(String::toLowerCase)
+                            .anyMatch(filterTechs::contains))
+                    .collect(Collectors.toList());
+        }
+
+        if (filter.getMinTeamSize() != null) {
+            cards = cards.stream()
+                    .filter(card -> card.getTeamSize() >= filter.getMinTeamSize())
+                    .collect(Collectors.toList());
+        }
+        if (filter.getMaxTeamSize() != null) {
+            cards = cards.stream()
+                    .filter(card -> card.getTeamSize() <= filter.getMaxTeamSize())
+                    .collect(Collectors.toList());
+        }
+
+        cards = applySorting(cards.stream(), filter)
+                .collect(Collectors.toList());
+
+        return cards;
+    }
+
+
+    private Specification<Project> buildProjectSpecification(ProjectFilterDto filter) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) {
+                predicates.add(root.get("status").in(filter.getStatuses()));
+            }
+
+            if (filter.getServiceTypes() != null && !filter.getServiceTypes().isEmpty()) {
+                predicates.add(root.get("serviceType").in(filter.getServiceTypes()));
+            }
+
+            if (filter.getPriorities() != null && !filter.getPriorities().isEmpty()) {
+                predicates.add(root.get("priority").in(filter.getPriorities()));
+            }
+
+            if (filter.getLocation() != null && !filter.getLocation().trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("location")),
+                        "%" + filter.getLocation().toLowerCase() + "%"
+                ));
+            }
+
+            if (filter.getStartDateFrom() != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                        root.get("startDate"), filter.getStartDateFrom()
+                ));
+            }
+            if (filter.getStartDateTo() != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                        root.get("startDate"), filter.getStartDateTo()
+                ));
+            }
+
+            if (filter.getEndDateFrom() != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                        root.get("endDate"), filter.getEndDateFrom()
+                ));
+            }
+            if (filter.getEndDateTo() != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                        root.get("endDate"), filter.getEndDateTo()
+                ));
+            }
+
+            if (filter.getSearchQuery() != null && !filter.getSearchQuery().trim().isEmpty()) {
+                String searchPattern = "%" + filter.getSearchQuery().toLowerCase() + "%";
+                Predicate namePredicate = criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")), searchPattern
+                );
+                Predicate descriptionPredicate = criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("description")), searchPattern
+                );
+                predicates.add(criteriaBuilder.or(namePredicate, descriptionPredicate));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    private Stream<ProjectCardDto> applySorting(Stream<ProjectCardDto> stream, ProjectFilterDto filter) {
+        String sortBy = filter.getSortBy() != null ? filter.getSortBy() : "startDate";
+        boolean ascending = "asc".equalsIgnoreCase(filter.getSortDirection());
+
+        Comparator<ProjectCardDto> comparator = switch (sortBy.toLowerCase()) {
+            case "name" -> Comparator.comparing(ProjectCardDto::getName);
+            case "teamsize" -> Comparator.comparing(ProjectCardDto::getTeamSize);
+            case "status" -> Comparator.comparing(card -> card.getStatus().toString());
+            case "location" -> Comparator.comparing(
+                    ProjectCardDto::getLocation,
+                    Comparator.nullsLast(String::compareTo)
+            );
+            default -> Comparator.comparing(
+                    ProjectCardDto::getStartDate,
+                    Comparator.nullsLast(LocalDate::compareTo)
+            );
+        };
+
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+
+        return stream.sorted(comparator);
+    }
+
+    public List<String> getAvailableTechnologies() {
+        return projectRepository.findAll().stream()
+                .flatMap(project -> project.getTechnologies().stream()
+                        .map(Enum::name))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getAvailableLocations() {
+        return projectRepository.findAll().stream()
+                .map(Project::getLocation   )
+                .filter(location -> location != null && !location.trim().isEmpty())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public FilterStatsDto getFilterStatistics() {
+        List<Project> allProjects = projectRepository.findAll();
+
+        Map<ProjectStatus, Long> statusCounts = allProjects.stream()
+                .collect(Collectors.groupingBy(Project::getStatus, Collectors.counting()));
+
+        Map<ProjectServiceType, Long> serviceTypeCounts = allProjects.stream()
+                .collect(Collectors.groupingBy(Project::getServiceType, Collectors.counting()));
+
+        Map<String, Long> locationCounts = allProjects.stream()
+                .filter(p -> p.getLocation() != null)
+                .collect(Collectors.groupingBy(Project::getLocation, Collectors.counting()));
+
+        return FilterStatsDto.builder()
+                .statusCounts(statusCounts)
+                .serviceTypeCounts(serviceTypeCounts)
+                .locationCounts(locationCounts)
+                .totalProjects(allProjects.size())
+                .build();
     }
 }

@@ -13,8 +13,12 @@ import { Observable }                                        from 'rxjs';
 
 import { CountByGroupDto } from '../model/models';
 import { EmployeeUtilizationDto } from '../model/models';
+import { FilterStatsDto } from '../model/models';
+import { ProjectCardDto } from '../model/models';
 import { ProjectCreateDto } from '../model/models';
 import { ProjectDto } from '../model/models';
+import { ProjectFilterDto } from '../model/models';
+import { ProjectMapPointDto } from '../model/models';
 import { ProjectSummaryDto } from '../model/models';
 import { ProjectUpdateDto } from '../model/models';
 import { ProjectWithEmployeesDto } from '../model/models';
@@ -30,7 +34,7 @@ export interface ProjectManagementApiInterface {
 
     /**
      * Assign team members
-     * Adds employees to project team
+     * Adds employees to a project team
      * @param id Unique project identifier
      * @param requestBody 
      */
@@ -38,21 +42,46 @@ export interface ProjectManagementApiInterface {
 
     /**
      * Create project
-     * Creates new project with initial configuration and team
+     * Creates a new project with initial configuration and team
      * @param projectCreateDto 
      */
     createProject(projectCreateDto: ProjectCreateDto, extraHttpRequestParams?: any): Observable<ProjectDto>;
 
     /**
      * Delete project
-     * Permanently removes project and all its assignments
+     * Permanently removes a project and all its assignments
      * @param id Unique project identifier
      */
     deleteProject(id: number, extraHttpRequestParams?: any): Observable<{}>;
 
     /**
+     * Filter public project cards
+     * Advanced filtering of projects by multiple criteria
+     * @param projectFilterDto 
+     */
+    filterPublicProjectCards(projectFilterDto: ProjectFilterDto, extraHttpRequestParams?: any): Observable<Array<ProjectCardDto>>;
+
+    /**
+     * Filter project cards (GET)
+     * Filtering using query parameters as an alternative to POST
+     * @param statuses Statuses (comma-separated)
+     * @param serviceTypes Service types (comma-separated)
+     * @param priorities Priorities (comma-separated)
+     * @param technologies Technologies (comma-separated)
+     * @param location Location
+     * @param startDateFrom Start date from
+     * @param startDateTo Start date to
+     * @param searchQuery Search phrase
+     * @param minTeamSize Minimum team size
+     * @param maxTeamSize Maximum team size
+     * @param sortBy Sort by field
+     * @param sortDirection Sort direction
+     */
+    filterPublicProjectCardsGet(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, serviceTypes?: Array<'PRODUCTION_SUPPORT' | 'MACHINE_DESIGN' | 'MACHINE_REALIZATION' | 'ELECTRICAL_DESIGN' | 'ELECTRICAL_WORKS' | 'HYDRAULICS'>, priorities?: Array<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'>, technologies?: Array<'SIEMENS_S7' | 'ALLEN_BRADLEY' | 'MITSUBISHI_PLC' | 'OMRON_PLC' | 'BECKHOFF_TWINCAT' | 'SCHNEIDER_PLC' | 'FANUC_ROBOT' | 'KUKA_ROBOT' | 'ABB_ROBOT' | 'YASKAWA_ROBOT' | 'MITSUBISHI_ROBOT' | 'UNIVERSAL_ROBOTS' | 'WINCC' | 'IGNITION' | 'FACTORY_TALK_VIEW' | 'INTOUCH' | 'CITECT_SCADA' | 'AVEVA_EDGE' | 'WONDERWARE' | 'IFIX' | 'HISTORIAN' | 'PI_SYSTEM' | 'JAVA' | 'PYTHON' | 'C_SHARP' | 'C_PLUS_PLUS' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'SQL' | 'HTML' | 'CSS' | 'OPC_UA' | 'MQTT' | 'MODBUS' | 'PROFINET' | 'ETHERNET_IP' | 'DEVICENET' | 'CCLINK' | 'LINUX' | 'WINDOWS' | 'DOCKER' | 'KUBERNETES' | 'GIT' | 'JIRA' | 'OTHER_TECH'>, location?: string, startDateFrom?: string, startDateTo?: string, searchQuery?: string, minTeamSize?: number, maxTeamSize?: number, sortBy?: string, sortDirection?: string, extraHttpRequestParams?: any): Observable<Array<ProjectCardDto>>;
+
+    /**
      * Active projects
-     * Finds projects active within specified date range
+     * Finds projects active within a specified date range
      * @param startDate Start date filter (YYYY-MM-DD)
      * @param endDate End date filter (YYYY-MM-DD)
      */
@@ -60,25 +89,43 @@ export interface ProjectManagementApiInterface {
 
     /**
      * Get all projects
-     * Retrieves complete list of all projects
+     * Retrieves a complete list of all projects
      */
     getAllProjects(extraHttpRequestParams?: any): Observable<Array<ProjectDto>>;
 
     /**
+     * Get available locations
+     * Returns a list of all project locations (for autocomplete/map)
+     */
+    getAvailableLocations(extraHttpRequestParams?: any): Observable<Array<string>>;
+
+    /**
+     * Get available technologies
+     * Returns a list of all technologies used in projects (for autocomplete/filters)
+     */
+    getAvailableTechnologies(extraHttpRequestParams?: any): Observable<Array<string>>;
+
+    /**
+     * Filter statistics
+     * Returns project counts for each filter option
+     */
+    getFilterStatistics(extraHttpRequestParams?: any): Observable<FilterStatsDto>;
+
+    /**
      * Project load by manager
-     * Returns the count of ACTIVE projects managed by each Project Manager.
+     * Returns the count of ACTIVE projects managed by each Project Manager
      */
     getManagerProjectLoad(extraHttpRequestParams?: any): Observable<Array<CountByGroupDto>>;
 
     /**
      * Overall project statistics
-     * Returns key metrics for the main dashboard view.
+     * Returns key metrics for the main dashboard view
      */
     getOverallProjectSummary(extraHttpRequestParams?: any): Observable<ProjectSummaryDto>;
 
     /**
      * Get project details
-     * Retrieves detailed information about specific project
+     * Retrieves detailed information about a specific project
      * @param id 
      */
     getProjectById(id: number, extraHttpRequestParams?: any): Observable<ProjectDto>;
@@ -92,60 +139,74 @@ export interface ProjectManagementApiInterface {
 
     /**
      * Employee projects
-     * Finds all projects assigned to specific employee
+     * Finds all projects assigned to a specific employee
      * @param employeeId Employee identifier
      */
     getProjectsByEmployee(employeeId: number, extraHttpRequestParams?: any): Observable<Array<ProjectDto>>;
 
     /**
      * Manager projects
-     * Finds all projects managed by specific employee
+     * Finds all projects managed by a specific employee
      * @param managerId Manager employee identifier
      */
     getProjectsByManager(managerId: number, extraHttpRequestParams?: any): Observable<Array<ProjectDto>>;
 
     /**
      * Filter projects by status
-     * Retrieves projects with specific status
+     * Retrieves projects with a specific status
      * @param status Project status filter
      */
     getProjectsByStatus(status: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED', extraHttpRequestParams?: any): Observable<Array<ProjectDto>>;
 
     /**
+     * Projects by technology
+     * Quick filter by a single technology (for top buttons)
+     * @param technology Technology name
+     */
+    getProjectsByTechnology(technology: string, extraHttpRequestParams?: any): Observable<Array<ProjectCardDto>>;
+
+    /**
      * Project count by location
-     * Returns project counts grouped by location.
+     * Returns project counts grouped by location
      */
     getProjectsCountByLocation(extraHttpRequestParams?: any): Observable<Array<CountByGroupDto>>;
 
     /**
      * Project count by service type
-     * Returns a map or list of counts for each ProjectServiceType.
+     * Returns a list of counts for each ProjectServiceType
      */
     getProjectsCountByServiceType(extraHttpRequestParams?: any): Observable<Array<CountByGroupDto>>;
 
     /**
      * Project count by status
-     * Returns a map or list of counts for each ProjectStatus.
+     * Returns a list of counts for each ProjectStatus
      */
     getProjectsCountByStatus(extraHttpRequestParams?: any): Observable<Array<CountByGroupDto>>;
 
     /**
+     * Map project data
+     * Returns projects with coordinates for map display
+     * @param statuses Optional status filter
+     */
+    getProjectsMapData(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, extraHttpRequestParams?: any): Observable<Array<ProjectMapPointDto>>;
+
+    /**
      * Top utilized employees
-     * Returns a list of employees assigned to the most ACTIVE projects.
+     * Returns a list of employees assigned to the most ACTIVE projects
      * @param limit 
      */
     getTopUtilizedEmployees(limit?: number, extraHttpRequestParams?: any): Observable<Array<EmployeeUtilizationDto>>;
 
     /**
      * Projects with approaching deadlines
-     * Finds projects with an end date in the next N days (e.g., 30 days).
+     * Finds projects with an end date in the next N days (e.g., 30 days)
      * @param daysAhead 
      */
     getUpcomingDeadlines(daysAhead?: number, extraHttpRequestParams?: any): Observable<Array<ProjectDto>>;
 
     /**
      * Remove team members
-     * Removes employees from project team
+     * Removes employees from a project team
      * @param id Unique project identifier
      * @param requestBody 
      */

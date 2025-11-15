@@ -21,9 +21,17 @@ import { CountByGroupDto } from '../model/count-by-group-dto';
 // @ts-ignore
 import { EmployeeUtilizationDto } from '../model/employee-utilization-dto';
 // @ts-ignore
+import { FilterStatsDto } from '../model/filter-stats-dto';
+// @ts-ignore
+import { ProjectCardDto } from '../model/project-card-dto';
+// @ts-ignore
 import { ProjectCreateDto } from '../model/project-create-dto';
 // @ts-ignore
 import { ProjectDto } from '../model/project-dto';
+// @ts-ignore
+import { ProjectFilterDto } from '../model/project-filter-dto';
+// @ts-ignore
+import { ProjectMapPointDto } from '../model/project-map-point-dto';
 // @ts-ignore
 import { ProjectSummaryDto } from '../model/project-summary-dto';
 // @ts-ignore
@@ -52,7 +60,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Assign team members
-     * Adds employees to project team
+     * Adds employees to a project team
      * @param id Unique project identifier
      * @param requestBody 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -121,7 +129,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Create project
-     * Creates new project with initial configuration and team
+     * Creates a new project with initial configuration and team
      * @param projectCreateDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -186,7 +194,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Delete project
-     * Permanently removes project and all its assignments
+     * Permanently removes a project and all its assignments
      * @param id Unique project identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -239,8 +247,179 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
     }
 
     /**
+     * Filter public project cards
+     * Advanced filtering of projects by multiple criteria
+     * @param projectFilterDto 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public filterPublicProjectCards(projectFilterDto: ProjectFilterDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectCardDto>>;
+    public filterPublicProjectCards(projectFilterDto: ProjectFilterDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectCardDto>>>;
+    public filterPublicProjectCards(projectFilterDto: ProjectFilterDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectCardDto>>>;
+    public filterPublicProjectCards(projectFilterDto: ProjectFilterDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (projectFilterDto === null || projectFilterDto === undefined) {
+            throw new Error('Required parameter projectFilterDto was null or undefined when calling filterPublicProjectCards.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/public/cards/filter`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ProjectCardDto>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: projectFilterDto,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Filter project cards (GET)
+     * Filtering using query parameters as an alternative to POST
+     * @param statuses Statuses (comma-separated)
+     * @param serviceTypes Service types (comma-separated)
+     * @param priorities Priorities (comma-separated)
+     * @param technologies Technologies (comma-separated)
+     * @param location Location
+     * @param startDateFrom Start date from
+     * @param startDateTo Start date to
+     * @param searchQuery Search phrase
+     * @param minTeamSize Minimum team size
+     * @param maxTeamSize Maximum team size
+     * @param sortBy Sort by field
+     * @param sortDirection Sort direction
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public filterPublicProjectCardsGet(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, serviceTypes?: Array<'PRODUCTION_SUPPORT' | 'MACHINE_DESIGN' | 'MACHINE_REALIZATION' | 'ELECTRICAL_DESIGN' | 'ELECTRICAL_WORKS' | 'HYDRAULICS'>, priorities?: Array<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'>, technologies?: Array<'SIEMENS_S7' | 'ALLEN_BRADLEY' | 'MITSUBISHI_PLC' | 'OMRON_PLC' | 'BECKHOFF_TWINCAT' | 'SCHNEIDER_PLC' | 'FANUC_ROBOT' | 'KUKA_ROBOT' | 'ABB_ROBOT' | 'YASKAWA_ROBOT' | 'MITSUBISHI_ROBOT' | 'UNIVERSAL_ROBOTS' | 'WINCC' | 'IGNITION' | 'FACTORY_TALK_VIEW' | 'INTOUCH' | 'CITECT_SCADA' | 'AVEVA_EDGE' | 'WONDERWARE' | 'IFIX' | 'HISTORIAN' | 'PI_SYSTEM' | 'JAVA' | 'PYTHON' | 'C_SHARP' | 'C_PLUS_PLUS' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'SQL' | 'HTML' | 'CSS' | 'OPC_UA' | 'MQTT' | 'MODBUS' | 'PROFINET' | 'ETHERNET_IP' | 'DEVICENET' | 'CCLINK' | 'LINUX' | 'WINDOWS' | 'DOCKER' | 'KUBERNETES' | 'GIT' | 'JIRA' | 'OTHER_TECH'>, location?: string, startDateFrom?: string, startDateTo?: string, searchQuery?: string, minTeamSize?: number, maxTeamSize?: number, sortBy?: string, sortDirection?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectCardDto>>;
+    public filterPublicProjectCardsGet(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, serviceTypes?: Array<'PRODUCTION_SUPPORT' | 'MACHINE_DESIGN' | 'MACHINE_REALIZATION' | 'ELECTRICAL_DESIGN' | 'ELECTRICAL_WORKS' | 'HYDRAULICS'>, priorities?: Array<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'>, technologies?: Array<'SIEMENS_S7' | 'ALLEN_BRADLEY' | 'MITSUBISHI_PLC' | 'OMRON_PLC' | 'BECKHOFF_TWINCAT' | 'SCHNEIDER_PLC' | 'FANUC_ROBOT' | 'KUKA_ROBOT' | 'ABB_ROBOT' | 'YASKAWA_ROBOT' | 'MITSUBISHI_ROBOT' | 'UNIVERSAL_ROBOTS' | 'WINCC' | 'IGNITION' | 'FACTORY_TALK_VIEW' | 'INTOUCH' | 'CITECT_SCADA' | 'AVEVA_EDGE' | 'WONDERWARE' | 'IFIX' | 'HISTORIAN' | 'PI_SYSTEM' | 'JAVA' | 'PYTHON' | 'C_SHARP' | 'C_PLUS_PLUS' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'SQL' | 'HTML' | 'CSS' | 'OPC_UA' | 'MQTT' | 'MODBUS' | 'PROFINET' | 'ETHERNET_IP' | 'DEVICENET' | 'CCLINK' | 'LINUX' | 'WINDOWS' | 'DOCKER' | 'KUBERNETES' | 'GIT' | 'JIRA' | 'OTHER_TECH'>, location?: string, startDateFrom?: string, startDateTo?: string, searchQuery?: string, minTeamSize?: number, maxTeamSize?: number, sortBy?: string, sortDirection?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectCardDto>>>;
+    public filterPublicProjectCardsGet(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, serviceTypes?: Array<'PRODUCTION_SUPPORT' | 'MACHINE_DESIGN' | 'MACHINE_REALIZATION' | 'ELECTRICAL_DESIGN' | 'ELECTRICAL_WORKS' | 'HYDRAULICS'>, priorities?: Array<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'>, technologies?: Array<'SIEMENS_S7' | 'ALLEN_BRADLEY' | 'MITSUBISHI_PLC' | 'OMRON_PLC' | 'BECKHOFF_TWINCAT' | 'SCHNEIDER_PLC' | 'FANUC_ROBOT' | 'KUKA_ROBOT' | 'ABB_ROBOT' | 'YASKAWA_ROBOT' | 'MITSUBISHI_ROBOT' | 'UNIVERSAL_ROBOTS' | 'WINCC' | 'IGNITION' | 'FACTORY_TALK_VIEW' | 'INTOUCH' | 'CITECT_SCADA' | 'AVEVA_EDGE' | 'WONDERWARE' | 'IFIX' | 'HISTORIAN' | 'PI_SYSTEM' | 'JAVA' | 'PYTHON' | 'C_SHARP' | 'C_PLUS_PLUS' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'SQL' | 'HTML' | 'CSS' | 'OPC_UA' | 'MQTT' | 'MODBUS' | 'PROFINET' | 'ETHERNET_IP' | 'DEVICENET' | 'CCLINK' | 'LINUX' | 'WINDOWS' | 'DOCKER' | 'KUBERNETES' | 'GIT' | 'JIRA' | 'OTHER_TECH'>, location?: string, startDateFrom?: string, startDateTo?: string, searchQuery?: string, minTeamSize?: number, maxTeamSize?: number, sortBy?: string, sortDirection?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectCardDto>>>;
+    public filterPublicProjectCardsGet(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, serviceTypes?: Array<'PRODUCTION_SUPPORT' | 'MACHINE_DESIGN' | 'MACHINE_REALIZATION' | 'ELECTRICAL_DESIGN' | 'ELECTRICAL_WORKS' | 'HYDRAULICS'>, priorities?: Array<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'>, technologies?: Array<'SIEMENS_S7' | 'ALLEN_BRADLEY' | 'MITSUBISHI_PLC' | 'OMRON_PLC' | 'BECKHOFF_TWINCAT' | 'SCHNEIDER_PLC' | 'FANUC_ROBOT' | 'KUKA_ROBOT' | 'ABB_ROBOT' | 'YASKAWA_ROBOT' | 'MITSUBISHI_ROBOT' | 'UNIVERSAL_ROBOTS' | 'WINCC' | 'IGNITION' | 'FACTORY_TALK_VIEW' | 'INTOUCH' | 'CITECT_SCADA' | 'AVEVA_EDGE' | 'WONDERWARE' | 'IFIX' | 'HISTORIAN' | 'PI_SYSTEM' | 'JAVA' | 'PYTHON' | 'C_SHARP' | 'C_PLUS_PLUS' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'SQL' | 'HTML' | 'CSS' | 'OPC_UA' | 'MQTT' | 'MODBUS' | 'PROFINET' | 'ETHERNET_IP' | 'DEVICENET' | 'CCLINK' | 'LINUX' | 'WINDOWS' | 'DOCKER' | 'KUBERNETES' | 'GIT' | 'JIRA' | 'OTHER_TECH'>, location?: string, startDateFrom?: string, startDateTo?: string, searchQuery?: string, minTeamSize?: number, maxTeamSize?: number, sortBy?: string, sortDirection?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (statuses) {
+            statuses.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'statuses');
+            })
+        }
+        if (serviceTypes) {
+            serviceTypes.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'serviceTypes');
+            })
+        }
+        if (priorities) {
+            priorities.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'priorities');
+            })
+        }
+        if (technologies) {
+            technologies.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'technologies');
+            })
+        }
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>location, 'location');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>startDateFrom, 'startDateFrom');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>startDateTo, 'startDateTo');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>searchQuery, 'searchQuery');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>minTeamSize, 'minTeamSize');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>maxTeamSize, 'maxTeamSize');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>sortBy, 'sortBy');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>sortDirection, 'sortDirection');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/public/cards/filter`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ProjectCardDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Active projects
-     * Finds projects active within specified date range
+     * Finds projects active within a specified date range
      * @param startDate Start date filter (YYYY-MM-DD)
      * @param endDate End date filter (YYYY-MM-DD)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -306,7 +485,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Get all projects
-     * Retrieves complete list of all projects
+     * Retrieves a complete list of all projects
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -356,8 +535,161 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
     }
 
     /**
+     * Get available locations
+     * Returns a list of all project locations (for autocomplete/map)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAvailableLocations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
+    public getAvailableLocations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
+    public getAvailableLocations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
+    public getAvailableLocations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/public/locations`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<string>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get available technologies
+     * Returns a list of all technologies used in projects (for autocomplete/filters)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAvailableTechnologies(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
+    public getAvailableTechnologies(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
+    public getAvailableTechnologies(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
+    public getAvailableTechnologies(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/public/technologies`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<string>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Filter statistics
+     * Returns project counts for each filter option
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFilterStatistics(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FilterStatsDto>;
+    public getFilterStatistics(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FilterStatsDto>>;
+    public getFilterStatistics(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FilterStatsDto>>;
+    public getFilterStatistics(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/public/filter-stats`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<FilterStatsDto>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Project load by manager
-     * Returns the count of ACTIVE projects managed by each Project Manager.
+     * Returns the count of ACTIVE projects managed by each Project Manager
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -408,7 +740,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Overall project statistics
-     * Returns key metrics for the main dashboard view.
+     * Returns key metrics for the main dashboard view
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -459,7 +791,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Get project details
-     * Retrieves detailed information about specific project
+     * Retrieves detailed information about a specific project
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -569,7 +901,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Employee projects
-     * Finds all projects assigned to specific employee
+     * Finds all projects assigned to a specific employee
      * @param employeeId Employee identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -624,7 +956,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Manager projects
-     * Finds all projects managed by specific employee
+     * Finds all projects managed by a specific employee
      * @param managerId Manager employee identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -679,7 +1011,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Filter projects by status
-     * Retrieves projects with specific status
+     * Retrieves projects with a specific status
      * @param status Project status filter
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -733,8 +1065,68 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
     }
 
     /**
+     * Projects by technology
+     * Quick filter by a single technology (for top buttons)
+     * @param technology Technology name
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getProjectsByTechnology(technology: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectCardDto>>;
+    public getProjectsByTechnology(technology: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectCardDto>>>;
+    public getProjectsByTechnology(technology: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectCardDto>>>;
+    public getProjectsByTechnology(technology: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (technology === null || technology === undefined) {
+            throw new Error('Required parameter technology was null or undefined when calling getProjectsByTechnology.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>technology, 'technology');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/public/cards/by-technology`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ProjectCardDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Project count by location
-     * Returns project counts grouped by location.
+     * Returns project counts grouped by location
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -785,7 +1177,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Project count by service type
-     * Returns a map or list of counts for each ProjectServiceType.
+     * Returns a list of counts for each ProjectServiceType
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -836,7 +1228,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Project count by status
-     * Returns a map or list of counts for each ProjectStatus.
+     * Returns a list of counts for each ProjectStatus
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -886,8 +1278,69 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
     }
 
     /**
+     * Map project data
+     * Returns projects with coordinates for map display
+     * @param statuses Optional status filter
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getProjectsMapData(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectMapPointDto>>;
+    public getProjectsMapData(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectMapPointDto>>>;
+    public getProjectsMapData(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectMapPointDto>>>;
+    public getProjectsMapData(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (statuses) {
+            statuses.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'statuses');
+            })
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/public/cards/map-data`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ProjectMapPointDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Top utilized employees
-     * Returns a list of employees assigned to the most ACTIVE projects.
+     * Returns a list of employees assigned to the most ACTIVE projects
      * @param limit 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -944,7 +1397,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Projects with approaching deadlines
-     * Finds projects with an end date in the next N days (e.g., 30 days).
+     * Finds projects with an end date in the next N days (e.g., 30 days)
      * @param daysAhead 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -1001,7 +1454,7 @@ export class ProjectManagementApi extends BaseService implements ProjectManageme
 
     /**
      * Remove team members
-     * Removes employees from project team
+     * Removes employees from a project team
      * @param id Unique project identifier
      * @param requestBody 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

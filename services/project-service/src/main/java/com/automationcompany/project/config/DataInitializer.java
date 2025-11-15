@@ -1,9 +1,6 @@
 package com.automationcompany.project.config;
 
-import com.automationcompany.project.model.Project;
-import com.automationcompany.project.model.ProjectPriority;
-import com.automationcompany.project.model.ProjectServiceType;
-import com.automationcompany.project.model.ProjectStatus;
+import com.automationcompany.project.model.*;
 import com.automationcompany.project.repository.ProjectRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +43,9 @@ public class DataInitializer {
                         ProjectPriority.HIGH,
                         ProjectServiceType.PRODUCTION_SUPPORT,
                         "Tychy, Polska",
-                        Set.of(1L, 2L, 3L, 5L, 7L), // IDs pracowników z employee service
-                        3L // Project Manager ID
+                        Set.of(1L, 2L, 3L, 5L, 7L),
+                        3L,
+                        Set.of(ProjectTechnology.SIEMENS_S7, ProjectTechnology.WINCC, ProjectTechnology.OPC_UA)
                 ),
 
                 createProject(
@@ -61,7 +59,8 @@ public class DataInitializer {
                         ProjectServiceType.MACHINE_DESIGN,
                         "Warszawa, Polska",
                         Set.of(1L, 2L, 4L, 6L),
-                        6L
+                        6L,
+                        Set.of(ProjectTechnology.BECKHOFF_TWINCAT, ProjectTechnology.MQTT)
                 ),
 
                 createProject(
@@ -75,7 +74,8 @@ public class DataInitializer {
                         ProjectServiceType.ELECTRICAL_DESIGN,
                         "Kraków, Polska",
                         Set.of(4L, 5L, 10L),
-                        null
+                        null,
+                        Set.of(ProjectTechnology.SCHNEIDER_PLC, ProjectTechnology.MODBUS)
                 ),
 
                 createProject(
@@ -89,7 +89,8 @@ public class DataInitializer {
                         ProjectServiceType.MACHINE_REALIZATION,
                         "Wrocław, Polska",
                         Set.of(3L, 7L, 9L),
-                        7L
+                        7L,
+                        Set.of(ProjectTechnology.ALLEN_BRADLEY, ProjectTechnology.ETHERNET_IP)
                 ),
 
                 createProject(
@@ -103,7 +104,8 @@ public class DataInitializer {
                         ProjectServiceType.ELECTRICAL_WORKS,
                         "Poznań, Polska",
                         Set.of(4L, 5L),
-                        3L
+                        3L,
+                        Set.of(ProjectTechnology.SCHNEIDER_PLC)
                 ),
 
                 createProject(
@@ -117,7 +119,8 @@ public class DataInitializer {
                         ProjectServiceType.HYDRAULICS,
                         "Gliwice, Polska",
                         Set.of(2L, 9L),
-                        7L
+                        7L,
+                        Set.of(ProjectTechnology.OPC_UA, ProjectTechnology.C_PLUS_PLUS)
                 ),
 
                 createProject(
@@ -131,7 +134,8 @@ public class DataInitializer {
                         ProjectServiceType.PRODUCTION_SUPPORT,
                         "Gdańsk, Polska",
                         Set.of(5L, 8L),
-                        null
+                        null,
+                        Set.of(ProjectTechnology.WINCC)
                 ),
 
                 createProject(
@@ -145,7 +149,8 @@ public class DataInitializer {
                         ProjectServiceType.MACHINE_DESIGN,
                         "Katowice, Polska",
                         Set.of(1L, 2L, 3L, 4L, 7L),
-                        6L
+                        6L,
+                        Set.of(ProjectTechnology.KUKA_ROBOT, ProjectTechnology.PYTHON)
                 ),
 
                 createProject(
@@ -159,7 +164,8 @@ public class DataInitializer {
                         ProjectServiceType.ELECTRICAL_WORKS,
                         "Łódź, Polska",
                         Set.of(4L, 10L),
-                        null
+                        null,
+                        Set.of(ProjectTechnology.OMRON_PLC)
                 ),
 
                 createProject(
@@ -173,7 +179,8 @@ public class DataInitializer {
                         ProjectServiceType.MACHINE_REALIZATION,
                         "Szczecin, Polska",
                         Set.of(),
-                        null
+                        null,
+                        Set.of(ProjectTechnology.OTHER_TECH)
                 ),
 
                 createProject(
@@ -187,7 +194,8 @@ public class DataInitializer {
                         ProjectServiceType.MACHINE_DESIGN,
                         "Warszawa, Polska",
                         Set.of(1L, 2L, 6L, 7L),
-                        6L
+                        6L,
+                        Set.of(ProjectTechnology.JAVA, ProjectTechnology.DOCKER)
                 ),
 
                 createProject(
@@ -201,7 +209,8 @@ public class DataInitializer {
                         ProjectServiceType.HYDRAULICS,
                         "Tychy, Polska",
                         Set.of(9L),
-                        7L
+                        7L,
+                        Set.of(ProjectTechnology.C_SHARP)
                 )
         );
 
@@ -209,11 +218,20 @@ public class DataInitializer {
         log.info("✅ Successfully initialized database with {} projects", projects.size());
     }
 
-    private Project createProject(String name, String code, String description,
-                                  LocalDate startDate, LocalDate endDate,
-                                  ProjectStatus status, ProjectPriority priority,
-                                  ProjectServiceType serviceType, String location,
-                                  Set<Long> employeeIds, Long projectManagerId) {
+    private Project createProject(
+            String name,
+            String code,
+            String description,
+            LocalDate startDate,
+            LocalDate endDate,
+            ProjectStatus status,
+            ProjectPriority priority,
+            ProjectServiceType serviceType,
+            String location,
+            Set<Long> employeeIds,
+            Long projectManagerId,
+            Set<ProjectTechnology> technologies
+    ) {
         return Project.builder()
                 .name(name)
                 .code(code)
@@ -226,6 +244,7 @@ public class DataInitializer {
                 .location(location)
                 .employeeIds(employeeIds)
                 .projectManagerId(projectManagerId)
+                .technologies(technologies)
                 .createdBy("SYSTEM")
                 .updatedBy("SYSTEM")
                 .build();

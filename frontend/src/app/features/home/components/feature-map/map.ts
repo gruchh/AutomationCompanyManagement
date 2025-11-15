@@ -4,13 +4,6 @@ import * as L from 'leaflet';
 @Component({
   selector: 'app-map',
   templateUrl: `./map.html`,
-  styles: [`
-    :host {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-  `]
 })
 export class Map implements AfterViewInit {
   private map: L.Map | undefined;
@@ -24,12 +17,12 @@ export class Map implements AfterViewInit {
   private initMap(): void {
     this.map = L.map('map', {
       zoomControl: true,
-      attributionControl: true
+      attributionControl: true,
     }).setView([52.0, 19.5], 6);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
-      maxZoom: 19
+      maxZoom: 19,
     }).addTo(this.map);
 
     const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
@@ -44,7 +37,7 @@ export class Map implements AfterViewInit {
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       tooltipAnchor: [16, -28],
-      shadowSize: [41, 41]
+      shadowSize: [41, 41],
     });
     L.Marker.prototype.options.icon = iconDefault;
 
@@ -52,7 +45,7 @@ export class Map implements AfterViewInit {
   }
 
   private addCityMarkers(): void {
-    const gdansk = L.marker([54.3520, 18.6466]).addTo(this.map!);
+    const gdansk = L.marker([54.352, 18.6466]).addTo(this.map!);
     gdansk.bindPopup(`
       <div class="p-2">
         <h3 class="text-lg font-bold text-blue-600 mb-1">Gdańsk</h3>
@@ -76,7 +69,7 @@ export class Map implements AfterViewInit {
       </div>
     `);
 
-    const krakow = L.marker([50.0647, 19.9450]).addTo(this.map!);
+    const krakow = L.marker([50.0647, 19.945]).addTo(this.map!);
     krakow.bindPopup(`
       <div class="p-2">
         <h3 class="text-lg font-bold text-blue-600 mb-1">Kraków</h3>

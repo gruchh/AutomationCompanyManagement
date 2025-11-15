@@ -9,7 +9,7 @@ import { ProjectFilterDto } from '../../../dashboard/projects/generated/employee
   selector: 'app-project-list',
   standalone: true,
   imports: [ProjectCard, CommonModule],
-  templateUrl: './project-list.html'
+  templateUrl: './project-list.html',
 })
 export class ProjectList implements OnInit {
   private projectApi = inject(ProjectManagementApi);
@@ -28,7 +28,7 @@ export class ProjectList implements OnInit {
 
     const filter: ProjectFilterDto = {
       sortBy: 'startDate',
-      sortDirection: 'desc'
+      sortDirection: 'desc',
     };
 
     this.projectApi.filterPublicProjectCards(filter).subscribe({
@@ -40,7 +40,7 @@ export class ProjectList implements OnInit {
         console.error('Error loading projects:', err);
         this.error.set('Nie udało się załadować projektów. Spróbuj ponownie później.');
         this.loading.set(false);
-      }
+      },
     });
   }
 

@@ -7,7 +7,7 @@ import { Navbar } from '../navbar/navbar';
   selector: 'app-home-layout',
   standalone: true,
   imports: [RouterOutlet, SidebarIcons, Navbar],
-  templateUrl: './home-layout.html'
+  templateUrl: './home-layout.html',
 })
 export class HomeLayout {
 

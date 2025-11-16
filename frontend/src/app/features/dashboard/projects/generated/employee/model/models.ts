@@ -2,6 +2,7 @@ export * from './count-by-group-dto';
 export * from './employee-read-dto';
 export * from './employee-utilization-dto';
 export * from './filter-stats-dto';
+export * from './location-dto';
 export * from './project-card-dto';
 export * from './project-create-dto';
 export * from './project-dto';

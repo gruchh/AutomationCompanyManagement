@@ -1,6 +1,7 @@
 package com.automationcompany.project.config;
 
 import com.automationcompany.project.model.*;
+import com.automationcompany.project.repository.LocationRepository;
 import com.automationcompany.project.repository.ProjectRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Configuration
@@ -20,6 +23,7 @@ import java.util.Set;
 public class DataInitializer {
 
     private final ProjectRepository projectRepository;
+    private final LocationRepository locationRepository;
 
     @PostConstruct
     @Transactional
@@ -30,7 +34,12 @@ public class DataInitializer {
             return;
         }
 
-        log.info("Initializing database with sample projects...");
+        log.info("Initializing database with sample locations and projects...");
+
+        // Najpierw tworzymy lokalizacje
+        Map<String, Location> locations = createLocations();
+
+        log.info("✅ Successfully initialized {} locations", locations.size());
 
         var projects = List.of(
                 createProject(
@@ -42,7 +51,7 @@ public class DataInitializer {
                         ProjectStatus.IN_PROGRESS,
                         ProjectPriority.HIGH,
                         ProjectServiceType.PRODUCTION_SUPPORT,
-                        "Tychy, Polska",
+                        locations.get("Tychy"),
                         Set.of(1L, 2L, 3L, 5L, 7L),
                         3L,
                         Set.of(ProjectTechnology.SIEMENS_S7, ProjectTechnology.WINCC, ProjectTechnology.OPC_UA)
@@ -57,7 +66,7 @@ public class DataInitializer {
                         ProjectStatus.IN_PROGRESS,
                         ProjectPriority.CRITICAL,
                         ProjectServiceType.MACHINE_DESIGN,
-                        "Warszawa, Polska",
+                        locations.get("Warszawa"),
                         Set.of(1L, 2L, 4L, 6L),
                         6L,
                         Set.of(ProjectTechnology.BECKHOFF_TWINCAT, ProjectTechnology.MQTT)
@@ -72,7 +81,7 @@ public class DataInitializer {
                         ProjectStatus.COMPLETED,
                         ProjectPriority.MEDIUM,
                         ProjectServiceType.ELECTRICAL_DESIGN,
-                        "Kraków, Polska",
+                        locations.get("Kraków"),
                         Set.of(4L, 5L, 10L),
                         null,
                         Set.of(ProjectTechnology.SCHNEIDER_PLC, ProjectTechnology.MODBUS)
@@ -87,7 +96,7 @@ public class DataInitializer {
                         ProjectStatus.IN_PROGRESS,
                         ProjectPriority.HIGH,
                         ProjectServiceType.MACHINE_REALIZATION,
-                        "Wrocław, Polska",
+                        locations.get("Wrocław"),
                         Set.of(3L, 7L, 9L),
                         7L,
                         Set.of(ProjectTechnology.ALLEN_BRADLEY, ProjectTechnology.ETHERNET_IP)
@@ -102,7 +111,7 @@ public class DataInitializer {
                         ProjectStatus.IN_PROGRESS,
                         ProjectPriority.MEDIUM,
                         ProjectServiceType.ELECTRICAL_WORKS,
-                        "Poznań, Polska",
+                        locations.get("Poznań"),
                         Set.of(4L, 5L),
                         3L,
                         Set.of(ProjectTechnology.SCHNEIDER_PLC)
@@ -117,7 +126,7 @@ public class DataInitializer {
                         ProjectStatus.IN_PROGRESS,
                         ProjectPriority.HIGH,
                         ProjectServiceType.HYDRAULICS,
-                        "Gliwice, Polska",
+                        locations.get("Gliwice"),
                         Set.of(2L, 9L),
                         7L,
                         Set.of(ProjectTechnology.OPC_UA, ProjectTechnology.C_PLUS_PLUS)
@@ -132,7 +141,7 @@ public class DataInitializer {
                         ProjectStatus.COMPLETED,
                         ProjectPriority.LOW,
                         ProjectServiceType.PRODUCTION_SUPPORT,
-                        "Gdańsk, Polska",
+                        locations.get("Gdańsk"),
                         Set.of(5L, 8L),
                         null,
                         Set.of(ProjectTechnology.WINCC)
@@ -147,7 +156,7 @@ public class DataInitializer {
                         ProjectStatus.PLANNING,
                         ProjectPriority.CRITICAL,
                         ProjectServiceType.MACHINE_DESIGN,
-                        "Katowice, Polska",
+                        locations.get("Katowice"),
                         Set.of(1L, 2L, 3L, 4L, 7L),
                         6L,
                         Set.of(ProjectTechnology.KUKA_ROBOT, ProjectTechnology.PYTHON)
@@ -162,7 +171,7 @@ public class DataInitializer {
                         ProjectStatus.ON_HOLD,
                         ProjectPriority.MEDIUM,
                         ProjectServiceType.ELECTRICAL_WORKS,
-                        "Łódź, Polska",
+                        locations.get("Łódź"),
                         Set.of(4L, 10L),
                         null,
                         Set.of(ProjectTechnology.OMRON_PLC)
@@ -177,7 +186,7 @@ public class DataInitializer {
                         ProjectStatus.CANCELLED,
                         ProjectPriority.LOW,
                         ProjectServiceType.MACHINE_REALIZATION,
-                        "Szczecin, Polska",
+                        locations.get("Szczecin"),
                         Set.of(),
                         null,
                         Set.of(ProjectTechnology.OTHER_TECH)
@@ -192,7 +201,7 @@ public class DataInitializer {
                         ProjectStatus.IN_PROGRESS,
                         ProjectPriority.HIGH,
                         ProjectServiceType.MACHINE_DESIGN,
-                        "Warszawa, Polska",
+                        locations.get("Grudziądz"),
                         Set.of(1L, 2L, 6L, 7L),
                         6L,
                         Set.of(ProjectTechnology.JAVA, ProjectTechnology.DOCKER)
@@ -207,7 +216,7 @@ public class DataInitializer {
                         ProjectStatus.PLANNING,
                         ProjectPriority.MEDIUM,
                         ProjectServiceType.HYDRAULICS,
-                        "Tychy, Polska",
+                        locations.get("Września"),
                         Set.of(9L),
                         7L,
                         Set.of(ProjectTechnology.C_SHARP)
@@ -216,6 +225,44 @@ public class DataInitializer {
 
         projectRepository.saveAll(projects);
         log.info("✅ Successfully initialized database with {} projects", projects.size());
+    }
+
+    private Map<String, Location> createLocations() {
+        Map<String, Location> locationMap = new HashMap<>();
+
+        var locations = List.of(
+                createLocation("Warszawa, Polska", 52.2297, 21.0122, "Polska", "Warszawa"),
+                createLocation("Tychy, Polska", 50.1348, 18.9686, "Polska", "Tychy"),
+                createLocation("Kraków, Polska", 50.0647, 19.9450, "Polska", "Kraków"),
+                createLocation("Wrocław, Polska", 51.1079, 17.0385, "Polska", "Wrocław"),
+                createLocation("Poznań, Polska", 52.4064, 16.9252, "Polska", "Poznań"),
+                createLocation("Gliwice, Polska", 50.2945, 18.6714, "Polska", "Gliwice"),
+                createLocation("Gdańsk, Polska", 54.3520, 18.6466, "Polska", "Gdańsk"),
+                createLocation("Katowice, Polska", 50.2649, 19.0238, "Polska", "Katowice"),
+                createLocation("Łódź, Polska", 51.7592, 19.4560, "Polska", "Łódź"),
+                createLocation("Szczecin, Polska", 53.4285, 14.5528, "Polska", "Szczecin"),
+                createLocation("Grudziądz, Polska", 53.4838, 18.7536, "Polska", "Grudziądz"),
+                createLocation("Września, Polska", 52.3254, 17.5661, "Polska", "Września")
+        );
+
+        List<Location> savedLocations = locationRepository.saveAll(locations);
+
+        for (Location location : savedLocations) {
+            String cityName = location.getCity();
+            locationMap.put(cityName, location);
+        }
+
+        return locationMap;
+    }
+
+    private Location createLocation(String name, Double latitude, Double longitude, String country, String city) {
+        return Location.builder()
+                .name(name)
+                .latitude(latitude)
+                .longitude(longitude)
+                .country(country)
+                .city(city)
+                .build();
     }
 
     private Project createProject(
@@ -227,7 +274,7 @@ public class DataInitializer {
             ProjectStatus status,
             ProjectPriority priority,
             ProjectServiceType serviceType,
-            String location,
+            Location location,
             Set<Long> employeeIds,
             Long projectManagerId,
             Set<ProjectTechnology> technologies

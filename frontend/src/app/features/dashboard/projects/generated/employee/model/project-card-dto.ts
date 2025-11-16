@@ -10,7 +10,7 @@
 
 
 /**
- * Public project card – simplified representation used for public listings
+ * Public project card – simplified representation for project listings
  */
 export interface ProjectCardDto { 
     /**
@@ -22,19 +22,7 @@ export interface ProjectCardDto {
      */
     name?: string;
     /**
-     * Project code (initials/abbreviation)
-     */
-    code?: string;
-    /**
-     * Short project description (up to 200 characters)
-     */
-    shortDescription?: string;
-    /**
-     * Client company name
-     */
-    companyName?: string;
-    /**
-     * Project location
+     * Location name
      */
     location?: string;
     /**

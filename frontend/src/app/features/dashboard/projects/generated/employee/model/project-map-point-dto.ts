@@ -30,21 +30,17 @@ export interface ProjectMapPointDto {
      */
     location?: string;
     /**
-     * Latitude
+     * Latitude coordinate
      */
     latitude?: number;
     /**
-     * Longitude
+     * Longitude coordinate
      */
     longitude?: number;
     /**
      * Project status
      */
     status?: ProjectMapPointDtoStatusEnum;
-    /**
-     * Team size
-     */
-    teamSize?: number;
 }
 export enum ProjectMapPointDtoStatusEnum {
     PLANNING = 'PLANNING',

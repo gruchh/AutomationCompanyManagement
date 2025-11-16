@@ -3,7 +3,9 @@ package com.automationcompany.project.model.dto;
 import com.automationcompany.project.model.ProjectPriority;
 import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
+import com.automationcompany.project.model.ProjectTechnology;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -14,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -91,21 +94,19 @@ public class ProjectCreateDto {
     )
     private ProjectServiceType serviceType;
 
-    @Size(max = 150, message = "Location must not exceed 150 characters")
+    @Valid
     @Schema(
-            description = "Physical or logical location of the project (optional)",
-            example = "Warszawa, Biuro Główne",
-            maxLength = 150,
+            description = "Location details (can be existing location ID or new location data)",
             nullable = true
     )
-    private String location;
+    private LocationDto locationDto;
 
     @Schema(
             description = "Set of employee IDs assigned to the project (optional)",
             example = "[101, 102, 103]",
             nullable = true
     )
-    private Set<Long> employeeIds;
+    private List<Long> employeeIds;
 
     @Positive(message = "Project manager ID must be positive")
     @Schema(
@@ -114,4 +115,11 @@ public class ProjectCreateDto {
             nullable = true
     )
     private Long projectManagerId;
+
+    @Schema(
+            description = "List of technologies used in the project (optional)",
+            example = "[\"SIEMENS_S7_1500\", \"SCADA\", \"HMI\"]",
+            nullable = true
+    )
+    private List<ProjectTechnology> technologies;
 }

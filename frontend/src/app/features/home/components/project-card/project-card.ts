@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { Project } from '../../models/project.model';
+import { ProjectCardDto } from '../../../dashboard/projects/generated/employee';
 
 @Component({
   selector: 'app-project-card',
@@ -10,7 +11,7 @@ import { Project } from '../../models/project.model';
 })
 export class ProjectCard {
 
-  public project = input.required<Project>();
+  public project = input.required<ProjectCardDto>();
 
   public statusInfo = computed(() => {
     switch (this.project().status) {
@@ -30,7 +31,7 @@ export class ProjectCard {
   });
 
   public companyLogo = computed(() => {
-    const companyName = this.project().companyName;
+    const companyName = this.project().name;
     if (!companyName) return 'https://placehold.co/120x120/E5E7EB/6B7280?text=?';
 
     const colors = [

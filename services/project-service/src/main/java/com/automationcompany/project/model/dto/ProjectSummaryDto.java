@@ -11,32 +11,28 @@ public record ProjectSummaryDto(
         @Schema(
                 description = "Total number of projects in the system (regardless of status).",
                 example = "47",
-                minimum = "0",
-                required = true
+                minimum = "0"
         )
         Long totalProjects,
 
         @Schema(
                 description = "Total number of projects with 'ACTIVE' or 'IN_PROGRESS' status.",
                 example = "23",
-                minimum = "0",
-                required = true
+                minimum = "0"
         )
         Long activeProjects,
 
         @Schema(
                 description = "Total number of projects with 'COMPLETED' status.",
                 example = "18",
-                minimum = "0",
-                required = true
+                minimum = "0"
         )
         Long completedProjects,
 
         @Schema(
                 description = "Number of active projects whose planned end date is in the past (potential delays).",
                 example = "5",
-                minimum = "0",
-                required = true
+                minimum = "0"
         )
         Long projectsPastDeadline,
 

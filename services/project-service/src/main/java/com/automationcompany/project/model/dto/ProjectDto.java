@@ -3,6 +3,7 @@ package com.automationcompany.project.model.dto;
 import com.automationcompany.project.model.ProjectPriority;
 import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
+import com.automationcompany.project.model.ProjectTechnology;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -85,18 +87,17 @@ public class ProjectDto {
     private ProjectServiceType serviceType;
 
     @Schema(
-            description = "Physical or logical location of the project (optional)",
-            example = "Warsaw, Head Office",
+            description = "Location details including name and coordinates",
             nullable = true
     )
-    private String location;
+    private LocationDto locationDto;
 
     @Schema(
             description = "Set of employee IDs currently assigned to the project",
             example = "[101, 102, 103]",
             nullable = true
     )
-    private Set<Long> employeeIds;
+    private List<Long> employeeIds;
 
     @Schema(
             description = "ID of the employee assigned as project manager",
@@ -106,26 +107,44 @@ public class ProjectDto {
     private Long projectManagerId;
 
     @Schema(
+            description = "Set of technologies used in the project",
+            example = "[\"SIEMENS_S7_1500\", \"SCADA\", \"HMI\"]",
+            nullable = true
+    )
+    private List<ProjectTechnology> technologies;
+
+    @Schema(
+            description = "Calculated team size based on assigned employees",
+            example = "6",
+            accessMode = Schema.AccessMode.READ_ONLY
+    )
+    private Integer teamSize;
+
+    @Schema(
             description = "Timestamp when the project was created",
-            example = "2025-03-01T09:15:30"
+            example = "2025-03-01T09:15:30",
+            accessMode = Schema.AccessMode.READ_ONLY
     )
     private LocalDateTime createdAt;
 
     @Schema(
             description = "Timestamp when the project was last updated",
-            example = "2025-03-15T14:22:10"
+            example = "2025-03-15T14:22:10",
+            accessMode = Schema.AccessMode.READ_ONLY
     )
     private LocalDateTime updatedAt;
 
     @Schema(
             description = "Username or ID of the user who created the project",
-            example = "pm-john.smith"
+            example = "pm-john.smith",
+            accessMode = Schema.AccessMode.READ_ONLY
     )
     private String createdBy;
 
     @Schema(
             description = "Username or ID of the user who last updated the project",
-            example = "pm-jane.doe"
+            example = "pm-jane.doe",
+            accessMode = Schema.AccessMode.READ_ONLY
     )
     private String updatedBy;
 }

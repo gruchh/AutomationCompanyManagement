@@ -1,11 +1,18 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, inject } from '@angular/core';
 import * as L from 'leaflet';
+import { finalize } from 'rxjs/operators';
+import { ProjectManagementApi } from '../../../dashboard/projects/generated/employee/api/project-management.service';
+import {
+  ProjectMapPointDto,
+  ProjectMapPointDtoStatusEnum,
+} from '../../../dashboard/projects/generated/employee';
 
 @Component({
   selector: 'app-map',
-  templateUrl: `./map.html`,
+  templateUrl: './map.html',
 })
 export class Map implements AfterViewInit {
+  private readonly ProjectManagementApi = inject(ProjectManagementApi);
   private map: L.Map | undefined;
 
   ngAfterViewInit(): void {
@@ -41,48 +48,42 @@ export class Map implements AfterViewInit {
     });
     L.Marker.prototype.options.icon = iconDefault;
 
-    this.addCityMarkers();
+    this.loadProjectMarkers();
   }
 
-  private addCityMarkers(): void {
-    const gdansk = L.marker([54.352, 18.6466]).addTo(this.map!);
-    gdansk.bindPopup(`
-      <div class="p-2">
-        <h3 class="text-lg font-bold text-blue-600 mb-1">Gdańsk</h3>
-        <p class="text-gray-600 text-sm">Miasto portowe nad Bałtykiem</p>
-      </div>
-    `);
+  private loadProjectMarkers(): void {
+    this.ProjectManagementApi.getProjectsMapData([
+      ProjectMapPointDtoStatusEnum.PLANNING,
+      ProjectMapPointDtoStatusEnum.IN_PROGRESS,
+      ProjectMapPointDtoStatusEnum.ON_HOLD,
+      ProjectMapPointDtoStatusEnum.COMPLETED,
+      ProjectMapPointDtoStatusEnum.CANCELLED,
+    ])
+      .pipe(finalize(() => console.log('Projekty załadowane')))
+      .subscribe({
+        next: (projects: ProjectMapPointDto[]) => {
+          console.log('Otrzymane projekty z API:', projects);
+          this.addProjectMarkers(projects);
+        },
+        error: (err: any) => console.error('Błąd ładowania projektów:', err),
+      });
+  }
 
-    const katowice = L.marker([50.2649, 19.0238]).addTo(this.map!);
-    katowice.bindPopup(`
-      <div class="p-2">
-        <h3 class="text-lg font-bold text-blue-600 mb-1">Katowice</h3>
-        <p class="text-gray-600 text-sm">Stolica Górnego Śląska</p>
-      </div>
-    `);
+  private addProjectMarkers(projects: ProjectMapPointDto[]): void {
+    if (!this.map) return;
 
-    const warszawa = L.marker([52.2297, 21.0122]).addTo(this.map!);
-    warszawa.bindPopup(`
-      <div class="p-2">
-        <h3 class="text-lg font-bold text-red-600 mb-1">Warszawa</h3>
-        <p class="text-gray-600 text-sm">Stolica Polski</p>
-      </div>
-    `);
-
-    const krakow = L.marker([50.0647, 19.945]).addTo(this.map!);
-    krakow.bindPopup(`
-      <div class="p-2">
-        <h3 class="text-lg font-bold text-blue-600 mb-1">Kraków</h3>
-        <p class="text-gray-600 text-sm">Dawna stolica Polski</p>
-      </div>
-    `);
-
-    const wroclaw = L.marker([51.1079, 17.0385]).addTo(this.map!);
-    wroclaw.bindPopup(`
-      <div class="p-2">
-        <h3 class="text-lg font-bold text-blue-600 mb-1">Wrocław</h3>
-        <p class="text-gray-600 text-sm">Stolica Dolnego Śląska</p>
-      </div>
-    `);
+    projects.forEach((project) => {
+      if (project.latitude && project.longitude) {
+        const marker = L.marker([project.latitude, project.longitude]).addTo(this.map!);
+        marker.bindPopup(`
+          <div class="p-2">
+            <h3 class="text-lg font-bold mb-1">${project.name || 'Projekt'}</h3>
+            <p class="text-gray-600 text-sm">Kod: ${project.code || '-'}</p>
+            <p class="text-gray-600 text-sm">Status: ${project.status}</p>
+            <p class="text-gray-600 text-sm">Lokalizacja: ${project.location || '-'}</p>
+          </div>
+        `);
+      }
+    });
   }
 }

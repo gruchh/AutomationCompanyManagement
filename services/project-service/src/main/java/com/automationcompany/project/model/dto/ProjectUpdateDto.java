@@ -3,7 +3,9 @@ package com.automationcompany.project.model.dto;
 import com.automationcompany.project.model.ProjectPriority;
 import com.automationcompany.project.model.ProjectServiceType;
 import com.automationcompany.project.model.ProjectStatus;
+import com.automationcompany.project.model.ProjectTechnology;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -88,21 +91,19 @@ public class ProjectUpdateDto {
     )
     private ProjectServiceType serviceType;
 
-    @Size(max = 150, message = "Location must not exceed 150 characters")
+    @Valid
     @Schema(
-            description = "Updated project location (optional)",
-            example = "Krakow, Regional Office",
-            maxLength = 150,
+            description = "Updated location details (optional, can update to existing location ID or new location data)",
             nullable = true
     )
-    private String location;
+    private LocationDto locationDto;
 
     @Schema(
             description = "Updated set of employee IDs assigned to the project (optional, replaces current assignment)",
             example = "[101, 103, 105]",
             nullable = true
     )
-    private Set<Long> employeeIds;
+    private List<Long> employeeIds;
 
     @Schema(
             description = "Updated project manager ID (optional, null to remove)",
@@ -110,4 +111,11 @@ public class ProjectUpdateDto {
             nullable = true
     )
     private Long projectManagerId;
+
+    @Schema(
+            description = "Updated set of technologies used in the project (optional, replaces current technologies)",
+            example = "[\"SIEMENS_S7_1500\", \"SCADA\", \"HMI\"]",
+            nullable = true
+    )
+    private List<ProjectTechnology> technologies;
 }

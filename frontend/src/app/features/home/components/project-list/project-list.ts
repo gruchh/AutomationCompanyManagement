@@ -1,9 +1,9 @@
 import { Component, signal, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectCard } from '../project-card/project-card';
-import { Project } from '../../models/project.model';
 import { ProjectManagementApi } from '../../../dashboard/projects/generated/employee/api/project-management.service';
 import { ProjectFilterDto } from '../../../dashboard/projects/generated/employee/model/project-filter-dto';
+import { ProjectCardDto} from '../../../dashboard/projects/generated/employee';
 
 @Component({
   selector: 'app-project-list',
@@ -14,7 +14,7 @@ import { ProjectFilterDto } from '../../../dashboard/projects/generated/employee
 export class ProjectList implements OnInit {
   private projectApi = inject(ProjectManagementApi);
 
-  public projects = signal<Project[]>([]);
+  public projects = signal<ProjectCardDto[]>([]);
   public loading = signal<boolean>(true);
   public error = signal<string | null>(null);
 

@@ -46,10 +46,28 @@ public class ProjectFilterDto {
     private List<ProjectTechnology> technologies;
 
     @Schema(
-            description = "Project location (city, region) - partial match",
+            description = "Location ID to filter by specific location",
+            example = "1"
+    )
+    private Long locationId;
+
+    @Schema(
+            description = "Location name (city, region) - partial match",
             example = "Poznań"
     )
-    private String location;
+    private String locationName;
+
+    @Schema(
+            description = "Country to filter by",
+            example = "Poland"
+    )
+    private String country;
+
+    @Schema(
+            description = "City to filter by",
+            example = "Poznań"
+    )
+    private String city;
 
     @Schema(
             description = "Project start date - from",
@@ -98,7 +116,7 @@ public class ProjectFilterDto {
     private Integer maxTeamSize;
 
     @Schema(
-            description = "Sort by field: startDate, name, teamSize, status",
+            description = "Sort by field: startDate, name, teamSize, status, location",
             example = "startDate",
             defaultValue = "startDate"
     )

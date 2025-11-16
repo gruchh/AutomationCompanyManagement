@@ -16,19 +16,19 @@ export interface ProjectSummaryDto {
     /**
      * Total number of projects in the system (regardless of status).
      */
-    totalProjects: number;
+    totalProjects?: number;
     /**
      * Total number of projects with \'ACTIVE\' or \'IN_PROGRESS\' status.
      */
-    activeProjects: number;
+    activeProjects?: number;
     /**
      * Total number of projects with \'COMPLETED\' status.
      */
-    completedProjects: number;
+    completedProjects?: number;
     /**
      * Number of active projects whose planned end date is in the past (potential delays).
      */
-    projectsPastDeadline: number;
+    projectsPastDeadline?: number;
     /**
      * Average duration of completed projects in days (calculated as endDate - startDate). Returns null if no projects are completed.
      */

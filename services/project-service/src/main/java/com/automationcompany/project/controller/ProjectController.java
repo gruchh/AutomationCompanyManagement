@@ -74,12 +74,12 @@ public class ProjectController {
     }
 
     @PostMapping("/{id}/employees")
-    @Operation(summary = "Assign team members", description = "Adds employees to a project team")
+    @Operation(summary = "Assign team members", d   escription = "Adds employees to a project team")
     public ResponseEntity<ProjectDto> assignEmployees(
             @Parameter(description = "Unique project identifier", required = true, example = "1")
             @PathVariable Long id,
             @Parameter(description = "List of employee IDs to assign", example = "[2, 3, 5]")
-            @RequestBody Set<Long> employeeIds) {
+            @RequestBody List<Long> employeeIds) {
         return ResponseEntity.ok(projectService.assignEmployees(id, employeeIds));
     }
 
@@ -192,14 +192,29 @@ public class ProjectController {
             @Parameter(description = "Technologies (comma-separated)", example = "SIEMENS_S7,ALLEN_BRADLEY")
             @RequestParam(required = false) List<ProjectTechnology> technologies,
 
-            @Parameter(description = "Location", example = "Poznań")
-            @RequestParam(required = false) String location,
+            @Parameter(description = "Location ID", example = "1")
+            @RequestParam(required = false) Long locationId,
+
+            @Parameter(description = "Location name", example = "Poznań")
+            @RequestParam(required = false) String locationName,
+
+            @Parameter(description = "Country", example = "Poland")
+            @RequestParam(required = false) String country,
+
+            @Parameter(description = "City", example = "Poznań")
+            @RequestParam(required = false) String city,
 
             @Parameter(description = "Start date from", example = "2024-01-01")
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDateFrom,
 
             @Parameter(description = "Start date to", example = "2024-12-31")
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDateTo,
+
+            @Parameter(description = "End date from", example = "2024-06-01")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDateFrom,
+
+            @Parameter(description = "End date to", example = "2025-12-31")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDateTo,
 
             @Parameter(description = "Search phrase")
             @RequestParam(required = false) String searchQuery,
@@ -221,9 +236,14 @@ public class ProjectController {
                 .serviceTypes(serviceTypes)
                 .priorities(priorities)
                 .technologies(technologies)
-                .location(location)
+                .locationId(locationId)
+                .locationName(locationName)
+                .country(country)
+                .city(city)
                 .startDateFrom(startDateFrom)
                 .startDateTo(startDateTo)
+                .endDateFrom(endDateFrom)
+                .endDateTo(endDateTo)
                 .searchQuery(searchQuery)
                 .minTeamSize(minTeamSize)
                 .maxTeamSize(maxTeamSize)

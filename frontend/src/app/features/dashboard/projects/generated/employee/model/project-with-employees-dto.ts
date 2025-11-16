@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { EmployeeReadDto } from './employee-read-dto';
+import { LocationDto } from './location-dto';
 
 
 /**
@@ -51,25 +52,41 @@ export interface ProjectWithEmployeesDto {
      */
     serviceType?: ProjectWithEmployeesDtoServiceTypeEnum;
     /**
-     * Physical or logical location of the project (optional)
+     * Location details including name and coordinates
      */
-    location?: string;
+    locationDto?: LocationDto;
+    /**
+     * Set of technologies used in the project
+     */
+    technologies?: Array<ProjectWithEmployeesDtoTechnologiesEnum>;
     /**
      * Set of employees currently assigned to the project (with full details: personal, contact, position, etc.)
      */
-    employees?: Set<EmployeeReadDto>;
+    employees?: Array<EmployeeReadDto>;
     /**
      * Project manager with full employee details (personal, contact, position, etc.)
      */
     projectManager?: EmployeeReadDto;
     /**
+     * Calculated team size based on assigned employees
+     */
+    readonly teamSize?: number;
+    /**
      * Timestamp when the project was created
      */
-    createdAt?: string;
+    readonly createdAt?: string;
     /**
      * Timestamp when the project was last updated
      */
-    updatedAt?: string;
+    readonly updatedAt?: string;
+    /**
+     * Username or ID of the user who created the project
+     */
+    readonly createdBy?: string;
+    /**
+     * Username or ID of the user who last updated the project
+     */
+    readonly updatedBy?: string;
 }
 export enum ProjectWithEmployeesDtoStatusEnum {
     PLANNING = 'PLANNING',
@@ -91,6 +108,53 @@ export enum ProjectWithEmployeesDtoServiceTypeEnum {
     ELECTRICAL_DESIGN = 'ELECTRICAL_DESIGN',
     ELECTRICAL_WORKS = 'ELECTRICAL_WORKS',
     HYDRAULICS = 'HYDRAULICS'
+};
+export enum ProjectWithEmployeesDtoTechnologiesEnum {
+    SIEMENS_S7 = 'SIEMENS_S7',
+    ALLEN_BRADLEY = 'ALLEN_BRADLEY',
+    MITSUBISHI_PLC = 'MITSUBISHI_PLC',
+    OMRON_PLC = 'OMRON_PLC',
+    BECKHOFF_TWINCAT = 'BECKHOFF_TWINCAT',
+    SCHNEIDER_PLC = 'SCHNEIDER_PLC',
+    FANUC_ROBOT = 'FANUC_ROBOT',
+    KUKA_ROBOT = 'KUKA_ROBOT',
+    ABB_ROBOT = 'ABB_ROBOT',
+    YASKAWA_ROBOT = 'YASKAWA_ROBOT',
+    MITSUBISHI_ROBOT = 'MITSUBISHI_ROBOT',
+    UNIVERSAL_ROBOTS = 'UNIVERSAL_ROBOTS',
+    WINCC = 'WINCC',
+    IGNITION = 'IGNITION',
+    FACTORY_TALK_VIEW = 'FACTORY_TALK_VIEW',
+    INTOUCH = 'INTOUCH',
+    CITECT_SCADA = 'CITECT_SCADA',
+    AVEVA_EDGE = 'AVEVA_EDGE',
+    WONDERWARE = 'WONDERWARE',
+    IFIX = 'IFIX',
+    HISTORIAN = 'HISTORIAN',
+    PI_SYSTEM = 'PI_SYSTEM',
+    JAVA = 'JAVA',
+    PYTHON = 'PYTHON',
+    C_SHARP = 'C_SHARP',
+    C_PLUS_PLUS = 'C_PLUS_PLUS',
+    JAVASCRIPT = 'JAVASCRIPT',
+    TYPESCRIPT = 'TYPESCRIPT',
+    SQL = 'SQL',
+    HTML = 'HTML',
+    CSS = 'CSS',
+    OPC_UA = 'OPC_UA',
+    MQTT = 'MQTT',
+    MODBUS = 'MODBUS',
+    PROFINET = 'PROFINET',
+    ETHERNET_IP = 'ETHERNET_IP',
+    DEVICENET = 'DEVICENET',
+    CCLINK = 'CCLINK',
+    LINUX = 'LINUX',
+    WINDOWS = 'WINDOWS',
+    DOCKER = 'DOCKER',
+    KUBERNETES = 'KUBERNETES',
+    GIT = 'GIT',
+    JIRA = 'JIRA',
+    OTHER_TECH = 'OTHER_TECH'
 };
 
 

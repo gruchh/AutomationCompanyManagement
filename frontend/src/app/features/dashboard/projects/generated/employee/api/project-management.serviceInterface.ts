@@ -38,7 +38,7 @@ export interface ProjectManagementApiInterface {
      * @param id Unique project identifier
      * @param requestBody 
      */
-    assignEmployees(id: number, requestBody: Set<number>, extraHttpRequestParams?: any): Observable<ProjectDto>;
+    assignEmployees(id: number, requestBody: Array<number>, extraHttpRequestParams?: any): Observable<ProjectDto>;
 
     /**
      * Create project
@@ -68,16 +68,21 @@ export interface ProjectManagementApiInterface {
      * @param serviceTypes Service types (comma-separated)
      * @param priorities Priorities (comma-separated)
      * @param technologies Technologies (comma-separated)
-     * @param location Location
+     * @param locationId Location ID
+     * @param locationName Location name
+     * @param country Country
+     * @param city City
      * @param startDateFrom Start date from
      * @param startDateTo Start date to
+     * @param endDateFrom End date from
+     * @param endDateTo End date to
      * @param searchQuery Search phrase
      * @param minTeamSize Minimum team size
      * @param maxTeamSize Maximum team size
      * @param sortBy Sort by field
      * @param sortDirection Sort direction
      */
-    filterPublicProjectCardsGet(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, serviceTypes?: Array<'PRODUCTION_SUPPORT' | 'MACHINE_DESIGN' | 'MACHINE_REALIZATION' | 'ELECTRICAL_DESIGN' | 'ELECTRICAL_WORKS' | 'HYDRAULICS'>, priorities?: Array<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'>, technologies?: Array<'SIEMENS_S7' | 'ALLEN_BRADLEY' | 'MITSUBISHI_PLC' | 'OMRON_PLC' | 'BECKHOFF_TWINCAT' | 'SCHNEIDER_PLC' | 'FANUC_ROBOT' | 'KUKA_ROBOT' | 'ABB_ROBOT' | 'YASKAWA_ROBOT' | 'MITSUBISHI_ROBOT' | 'UNIVERSAL_ROBOTS' | 'WINCC' | 'IGNITION' | 'FACTORY_TALK_VIEW' | 'INTOUCH' | 'CITECT_SCADA' | 'AVEVA_EDGE' | 'WONDERWARE' | 'IFIX' | 'HISTORIAN' | 'PI_SYSTEM' | 'JAVA' | 'PYTHON' | 'C_SHARP' | 'C_PLUS_PLUS' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'SQL' | 'HTML' | 'CSS' | 'OPC_UA' | 'MQTT' | 'MODBUS' | 'PROFINET' | 'ETHERNET_IP' | 'DEVICENET' | 'CCLINK' | 'LINUX' | 'WINDOWS' | 'DOCKER' | 'KUBERNETES' | 'GIT' | 'JIRA' | 'OTHER_TECH'>, location?: string, startDateFrom?: string, startDateTo?: string, searchQuery?: string, minTeamSize?: number, maxTeamSize?: number, sortBy?: string, sortDirection?: string, extraHttpRequestParams?: any): Observable<Array<ProjectCardDto>>;
+    filterPublicProjectCardsGet(statuses?: Array<'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED'>, serviceTypes?: Array<'PRODUCTION_SUPPORT' | 'MACHINE_DESIGN' | 'MACHINE_REALIZATION' | 'ELECTRICAL_DESIGN' | 'ELECTRICAL_WORKS' | 'HYDRAULICS'>, priorities?: Array<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'>, technologies?: Array<'SIEMENS_S7' | 'ALLEN_BRADLEY' | 'MITSUBISHI_PLC' | 'OMRON_PLC' | 'BECKHOFF_TWINCAT' | 'SCHNEIDER_PLC' | 'FANUC_ROBOT' | 'KUKA_ROBOT' | 'ABB_ROBOT' | 'YASKAWA_ROBOT' | 'MITSUBISHI_ROBOT' | 'UNIVERSAL_ROBOTS' | 'WINCC' | 'IGNITION' | 'FACTORY_TALK_VIEW' | 'INTOUCH' | 'CITECT_SCADA' | 'AVEVA_EDGE' | 'WONDERWARE' | 'IFIX' | 'HISTORIAN' | 'PI_SYSTEM' | 'JAVA' | 'PYTHON' | 'C_SHARP' | 'C_PLUS_PLUS' | 'JAVASCRIPT' | 'TYPESCRIPT' | 'SQL' | 'HTML' | 'CSS' | 'OPC_UA' | 'MQTT' | 'MODBUS' | 'PROFINET' | 'ETHERNET_IP' | 'DEVICENET' | 'CCLINK' | 'LINUX' | 'WINDOWS' | 'DOCKER' | 'KUBERNETES' | 'GIT' | 'JIRA' | 'OTHER_TECH'>, locationId?: number, locationName?: string, country?: string, city?: string, startDateFrom?: string, startDateTo?: string, endDateFrom?: string, endDateTo?: string, searchQuery?: string, minTeamSize?: number, maxTeamSize?: number, sortBy?: string, sortDirection?: string, extraHttpRequestParams?: any): Observable<Array<ProjectCardDto>>;
 
     /**
      * Active projects

@@ -8,10 +8,7 @@ import com.automationcompany.project.exception.ProjectNotFoundException;
 import com.automationcompany.project.mapper.ProjectCardMapper;
 import com.automationcompany.project.mapper.ProjectMapPointMapper;
 import com.automationcompany.project.mapper.ProjectMapper;
-import com.automationcompany.project.model.Project;
-import com.automationcompany.project.model.ProjectServiceType;
-import com.automationcompany.project.model.ProjectStatus;
-import com.automationcompany.project.model.ProjectTechnology;
+import com.automationcompany.project.model.*;
 import com.automationcompany.project.model.dto.*;
 import com.automationcompany.project.repository.ProjectRepository;
 import jakarta.persistence.criteria.Predicate;
@@ -124,7 +121,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectDto assignEmployees(Long projectId, Set<Long> employeeIds) {
+    public ProjectDto assignEmployees(Long projectId, List<Long> employeeIds) {
         log.debug("Assigning employees {} to project {}", employeeIds, projectId);
 
         Project project = projectRepository.findById(projectId)
@@ -178,7 +175,7 @@ public class ProjectService {
         return projectMapper.toDtoList(projectRepository.findActiveProjectsBetween(startDate, endDate));
     }
 
-    private void validateEmployees(Set<Long> employeeIds, Long projectManagerId) {
+    private void validateEmployees(List<Long> employeeIds, Long projectManagerId) {
         if (projectManagerId != null) {
             validateEmployee(projectManagerId);
         }
@@ -309,7 +306,6 @@ public class ProjectService {
         return cards;
     }
 
-
     private Specification<Project> buildProjectSpecification(ProjectFilterDto filter) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -326,10 +322,31 @@ public class ProjectService {
                 predicates.add(root.get("priority").in(filter.getPriorities()));
             }
 
-            if (filter.getLocation() != null && !filter.getLocation().trim().isEmpty()) {
+            if (filter.getLocationId() != null) {
+                predicates.add(criteriaBuilder.equal(
+                        root.get("location").get("id"),
+                        filter.getLocationId()
+                ));
+            }
+
+            if (filter.getLocationName() != null && !filter.getLocationName().trim().isEmpty()) {
                 predicates.add(criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("location")),
-                        "%" + filter.getLocation().toLowerCase() + "%"
+                        criteriaBuilder.lower(root.get("location").get("name")),
+                        "%" + filter.getLocationName().toLowerCase() + "%"
+                ));
+            }
+
+            if (filter.getCountry() != null && !filter.getCountry().trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("location").get("country")),
+                        "%" + filter.getCountry().toLowerCase() + "%"
+                ));
+            }
+
+            if (filter.getCity() != null && !filter.getCity().trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("location").get("city")),
+                        "%" + filter.getCity().toLowerCase() + "%"
                 ));
             }
 
@@ -406,8 +423,10 @@ public class ProjectService {
 
     public List<String> getAvailableLocations() {
         return projectRepository.findAll().stream()
-                .map(Project::getLocation   )
-                .filter(location -> location != null && !location.trim().isEmpty())
+                .map(Project::getLocation)
+                .filter(location -> location != null)
+                .map(location -> location.getName())
+                .filter(name -> name != null && !name.trim().isEmpty())
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
@@ -423,8 +442,11 @@ public class ProjectService {
                 .collect(Collectors.groupingBy(Project::getServiceType, Collectors.counting()));
 
         Map<String, Long> locationCounts = allProjects.stream()
-                .filter(p -> p.getLocation() != null)
-                .collect(Collectors.groupingBy(Project::getLocation, Collectors.counting()));
+                .map(Project::getLocation)
+                .filter(location -> location != null)
+                .map(Location::getName)
+                .filter(name -> name != null && !name.trim().isEmpty())
+                .collect(Collectors.groupingBy(name -> name, Collectors.counting()));
 
         return FilterStatsDto.builder()
                 .statusCounts(statusCounts)
@@ -434,18 +456,15 @@ public class ProjectService {
                 .build();
     }
 
-
     public List<ProjectMapPointDto> getProjectsForMap(List<ProjectStatus> statuses) {
         List<Project> projects;
 
         if (statuses == null || statuses.isEmpty()) {
-            projects = projectRepository.findAll();
+            projects = projectRepository.findAllWithLocation();
         } else {
-            projects = projectRepository.findByStatusIn(statuses);
+            projects = projectRepository.findByStatusInWithLocation(statuses);
         }
 
-        return projects.stream()
-                .map( p -> projectMapPointMapper.toDto(p))
-                .collect(Collectors.toList());
+        return projectMapPointMapper.toDtoList(projects);
     }
 }

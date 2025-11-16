@@ -16,7 +16,7 @@ export interface EmployeeUtilizationDto {
     /**
      * Unique employee identifier from Employee Service.
      */
-    employeeId: number;
+    employeeId?: number;
     /**
      * Employee\'s first name, retrieved from Employee Service.
      */
@@ -32,7 +32,7 @@ export interface EmployeeUtilizationDto {
     /**
      * The number of active projects the employee is currently assigned to.
      */
-    activeProjectCount: number;
+    activeProjectCount?: number;
 }
 export enum EmployeeUtilizationDtoPositionLevelEnum {
     INTERN = 'INTERN',

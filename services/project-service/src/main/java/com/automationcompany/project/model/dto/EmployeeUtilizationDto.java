@@ -12,8 +12,7 @@ public record EmployeeUtilizationDto(
 
         @Schema(
                 description = "Unique employee identifier from Employee Service.",
-                example = "101",
-                required = true
+                example = "101"
         )
         Long employeeId,
 
@@ -41,8 +40,7 @@ public record EmployeeUtilizationDto(
         @Schema(
                 description = "The number of active projects the employee is currently assigned to.",
                 example = "3",
-                minimum = "0",
-                required = true
+                minimum = "0"
         )
         Long activeProjectCount
 

@@ -51,8 +51,9 @@ public class Project {
     @Column(nullable = false, length = 100)
     private ProjectServiceType serviceType;
 
-    @Column(length = 150)
-    private String location;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     @ElementCollection
     @CollectionTable(

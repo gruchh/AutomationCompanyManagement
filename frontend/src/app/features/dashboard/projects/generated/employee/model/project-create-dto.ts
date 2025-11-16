@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { LocationDto } from './location-dto';
 
 
 /**
@@ -46,17 +47,21 @@ export interface ProjectCreateDto {
      */
     serviceType: ProjectCreateDtoServiceTypeEnum;
     /**
-     * Physical or logical location of the project (optional)
+     * Location details (can be existing location ID or new location data)
      */
-    location?: string;
+    locationDto?: LocationDto;
     /**
      * Set of employee IDs assigned to the project (optional)
      */
-    employeeIds?: Set<number>;
+    employeeIds?: Array<number>;
     /**
      * ID of the employee assigned as project manager (optional)
      */
     projectManagerId?: number;
+    /**
+     * List of technologies used in the project (optional)
+     */
+    technologies?: Array<ProjectCreateDtoTechnologiesEnum>;
 }
 export enum ProjectCreateDtoStatusEnum {
     PLANNING = 'PLANNING',
@@ -78,6 +83,53 @@ export enum ProjectCreateDtoServiceTypeEnum {
     ELECTRICAL_DESIGN = 'ELECTRICAL_DESIGN',
     ELECTRICAL_WORKS = 'ELECTRICAL_WORKS',
     HYDRAULICS = 'HYDRAULICS'
+};
+export enum ProjectCreateDtoTechnologiesEnum {
+    SIEMENS_S7 = 'SIEMENS_S7',
+    ALLEN_BRADLEY = 'ALLEN_BRADLEY',
+    MITSUBISHI_PLC = 'MITSUBISHI_PLC',
+    OMRON_PLC = 'OMRON_PLC',
+    BECKHOFF_TWINCAT = 'BECKHOFF_TWINCAT',
+    SCHNEIDER_PLC = 'SCHNEIDER_PLC',
+    FANUC_ROBOT = 'FANUC_ROBOT',
+    KUKA_ROBOT = 'KUKA_ROBOT',
+    ABB_ROBOT = 'ABB_ROBOT',
+    YASKAWA_ROBOT = 'YASKAWA_ROBOT',
+    MITSUBISHI_ROBOT = 'MITSUBISHI_ROBOT',
+    UNIVERSAL_ROBOTS = 'UNIVERSAL_ROBOTS',
+    WINCC = 'WINCC',
+    IGNITION = 'IGNITION',
+    FACTORY_TALK_VIEW = 'FACTORY_TALK_VIEW',
+    INTOUCH = 'INTOUCH',
+    CITECT_SCADA = 'CITECT_SCADA',
+    AVEVA_EDGE = 'AVEVA_EDGE',
+    WONDERWARE = 'WONDERWARE',
+    IFIX = 'IFIX',
+    HISTORIAN = 'HISTORIAN',
+    PI_SYSTEM = 'PI_SYSTEM',
+    JAVA = 'JAVA',
+    PYTHON = 'PYTHON',
+    C_SHARP = 'C_SHARP',
+    C_PLUS_PLUS = 'C_PLUS_PLUS',
+    JAVASCRIPT = 'JAVASCRIPT',
+    TYPESCRIPT = 'TYPESCRIPT',
+    SQL = 'SQL',
+    HTML = 'HTML',
+    CSS = 'CSS',
+    OPC_UA = 'OPC_UA',
+    MQTT = 'MQTT',
+    MODBUS = 'MODBUS',
+    PROFINET = 'PROFINET',
+    ETHERNET_IP = 'ETHERNET_IP',
+    DEVICENET = 'DEVICENET',
+    CCLINK = 'CCLINK',
+    LINUX = 'LINUX',
+    WINDOWS = 'WINDOWS',
+    DOCKER = 'DOCKER',
+    KUBERNETES = 'KUBERNETES',
+    GIT = 'GIT',
+    JIRA = 'JIRA',
+    OTHER_TECH = 'OTHER_TECH'
 };
 
 

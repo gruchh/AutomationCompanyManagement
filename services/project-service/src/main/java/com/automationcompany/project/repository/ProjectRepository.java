@@ -18,8 +18,6 @@ import java.util.Optional;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpecificationExecutor<Project> {
 
-    Optional<Project> findByCode(String code);
-
     boolean existsByCode(String code);
 
     List<Project> findByStatus(ProjectStatus status);
@@ -29,74 +27,91 @@ public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpec
     @Query("SELECT DISTINCT p FROM Project p WHERE :employeeId MEMBER OF p.employeeIds")
     List<Project> findByEmployeeId(@Param("employeeId") Long employeeId);
 
-    @Query("SELECT p FROM Project p WHERE " +
-            "(p.startDate <= :endDate AND (p.endDate IS NULL OR p.endDate >= :startDate))")
-    List<Project> findActiveProjectsBetween(@Param("startDate") LocalDate startDate,
-                                            @Param("endDate") LocalDate endDate);
+    @Query("""
+        SELECT p FROM Project p 
+        WHERE p.startDate <= :endDate 
+        AND (p.endDate IS NULL OR p.endDate >= :startDate)
+        """)
+    List<Project> findActiveProjectsBetween(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
 
-    @Query("SELECT p FROM Project p WHERE p.status IN :statuses")
-    List<Project> findByStatusIn(@Param("statuses") List<ProjectStatus> statuses);
+    Long countByStatus(ProjectStatus status);
 
-    @Query("SELECT p FROM Project p WHERE p.startDate BETWEEN :startDate AND :endDate")
-    List<Project> findByStartDateBetween(@Param("startDate") LocalDate startDate,
-                                         @Param("endDate") LocalDate endDate);
-
-    @Query("SELECT p FROM Project p WHERE p.endDate BETWEEN :startDate AND :endDate")
-    List<Project> findByEndDateBetween(@Param("startDate") LocalDate startDate,
-                                       @Param("endDate") LocalDate endDate);
-
-    @Query("SELECT p FROM Project p WHERE p.status = 'ACTIVE' OR " +
-            "(p.status = 'IN_PROGRESS' AND (p.endDate IS NULL OR p.endDate > CURRENT_DATE))")
-    List<Project> findActiveProjects();
-
-    List<Project> findByProjectManagerIdIsNull();
-
-    @Query("SELECT p FROM Project p WHERE p.employeeIds IS NOT EMPTY AND SIZE(p.employeeIds) > 0")
-    List<Project> findByEmployeeIdsNotEmpty();
-
-    List<Project> findByServiceType(ProjectServiceType serviceType);
-
-    @Query("SELECT p FROM Project p WHERE " +
-            "LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-            "LOWER(p.code) LIKE LOWER(CONCAT('%', :search, '%'))")
-    List<Project> findByNameOrCodeContainingIgnoreCase(@Param("search") String search);
-
-    @Query("SELECT p FROM Project p ORDER BY p.startDate DESC")
-    List<Project> findAllOrderByStartDateDesc();
-
-    List<Project> findByPriority(ProjectPriority priority);
-
-    long countByStatus(ProjectStatus status);
-
-    @Query("SELECT COUNT(p) FROM Project p WHERE p.endDate < CURRENT_DATE AND p.status != 'COMPLETED'")
+    @Query("""
+        SELECT COUNT(p) FROM Project p 
+        WHERE p.status NOT IN ('COMPLETED', 'CANCELLED')
+        AND p.endDate IS NOT NULL
+        AND p.endDate < CURRENT_DATE
+        """)
     Long countProjectsPastDeadline();
 
-    @Query(value = "SELECT AVG(DATEDIFF('DAY', p.start_date, p.end_date)) " +
-                  "FROM projects p WHERE p.status = 'COMPLETED' " +
-                  "AND p.start_date IS NOT NULL AND p.end_date IS NOT NULL",
-          nativeQuery = true)
+    @Query("""
+        SELECT AVG(CAST((p.endDate - p.startDate) AS double))
+        FROM Project p
+        WHERE p.status = 'COMPLETED'
+        AND p.endDate IS NOT NULL
+        """)
     Double getAverageCompletedProjectDuration();
 
-    @Query("SELECT new com.automationcompany.project.model.dto.CountByGroupDto(p.status, COUNT(p)) " +
-            "FROM Project p GROUP BY p.status")
+    @Query("""
+        SELECT new com.automationcompany.project.model.dto.CountByGroupDto(
+            CAST(p.status AS string), COUNT(p)
+        )
+        FROM Project p 
+        GROUP BY p.status
+        """)
     List<CountByGroupDto> countProjectsByStatus();
 
-    @Query("SELECT new com.automationcompany.project.model.dto.CountByGroupDto(p.serviceType, COUNT(p)) " +
-            "FROM Project p GROUP BY p.serviceType")
+    @Query("""
+        SELECT new com.automationcompany.project.model.dto.CountByGroupDto(
+            CAST(p.serviceType AS string), COUNT(p)
+        )
+        FROM Project p 
+        GROUP BY p.serviceType
+        """)
     List<CountByGroupDto> countProjectsByServiceType();
 
-    @Query("SELECT new com.automationcompany.project.model.dto.CountByGroupDto(p.location, COUNT(p)) " +
-            "FROM Project p WHERE p.location IS NOT NULL AND p.location != '' GROUP BY p.location")
+    @Query("""
+        SELECT new com.automationcompany.project.model.dto.CountByGroupDto(
+            p.location.name, COUNT(p)
+        )
+        FROM Project p
+        WHERE p.location IS NOT NULL
+        GROUP BY p.location.name
+        """)
     List<CountByGroupDto> countProjectsByLocation();
 
-    @Query("SELECT new com.automationcompany.project.model.dto.CountByGroupDto(CAST(p.projectManagerId as string), COUNT(p)) " +
-            "FROM Project p WHERE p.projectManagerId IS NOT NULL AND p.status = 'ACTIVE' GROUP BY p.projectManagerId")
+    @Query("""
+        SELECT new com.automationcompany.project.model.dto.CountByGroupDto(
+            CONCAT('Manager ', CAST(p.projectManagerId AS string)), COUNT(p)
+        )
+        FROM Project p 
+        WHERE p.projectManagerId IS NOT NULL 
+        AND p.status = 'IN_PROGRESS'
+        GROUP BY p.projectManagerId
+        """)
     List<CountByGroupDto> countActiveProjectsByManager();
 
-    List<Project> findByEndDateBetweenAndStatusIsNot(LocalDate start, LocalDate end, ProjectStatus projectStatus);
+    List<Project> findByEndDateBetweenAndStatusIsNot(
+            LocalDate start,
+            LocalDate end,
+            ProjectStatus projectStatus
+    );
 
-    List<Project> findByLocationContainingIgnoreCase(String location);
+    @Query("""
+        SELECT DISTINCT p FROM Project p
+        LEFT JOIN FETCH p.location
+        WHERE p.location IS NOT NULL
+        """)
+    List<Project> findAllWithLocation();
 
-    @Query("SELECT p FROM Project p WHERE p.status IN ('ACTIVE', 'PLANNED') ORDER BY p.startDate DESC")
-    List<Project> findActiveProjectsForCards();
+    @Query("""
+        SELECT DISTINCT p FROM Project p
+        LEFT JOIN FETCH p.location
+        WHERE p.status IN :statuses
+        AND p.location IS NOT NULL
+        """)
+    List<Project> findByStatusInWithLocation(@Param("statuses") List<ProjectStatus> statuses);
 }

@@ -30,9 +30,21 @@ export interface ProjectFilterDto {
      */
     technologies?: Array<ProjectFilterDtoTechnologiesEnum>;
     /**
-     * Project location (city, region) - partial match
+     * Location ID to filter by specific location
      */
-    location?: string;
+    locationId?: number;
+    /**
+     * Location name (city, region) - partial match
+     */
+    locationName?: string;
+    /**
+     * Country to filter by
+     */
+    country?: string;
+    /**
+     * City to filter by
+     */
+    city?: string;
     /**
      * Project start date - from
      */
@@ -62,7 +74,7 @@ export interface ProjectFilterDto {
      */
     maxTeamSize?: number;
     /**
-     * Sort by field: startDate, name, teamSize, status
+     * Sort by field: startDate, name, teamSize, status, location
      */
     sortBy?: string;
     /**

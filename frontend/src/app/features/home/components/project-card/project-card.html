@@ -6,7 +6,7 @@
     <div class="flex items-start min-w-0">
       <img
         [src]="companyLogo()"
-        [alt]="project().companyName || 'Logo klienta'"
+        [alt]="project().name || 'Logo klienta'"
         class="w-12 h-12 rounded-xl mr-4 flex-shrink-0"
       />
       <div class="min-w-0">
@@ -15,7 +15,7 @@
         <div
           class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-3 gap-y-1 text-sm text-gray-600 mt-1"
         >
-          <span class="font-semibold">{{ project().companyName }}</span>
+          <span class="font-semibold">{{ project().name }}</span>
 
           @if (project().location) {
           <span class="flex items-center">

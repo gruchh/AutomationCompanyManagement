@@ -1,6 +1,13 @@
 package com.automationcompany.employee.config;
 
-import com.automationcompany.employee.model.*;
+import com.automationcompany.commondomain.DepartmentType;
+import com.automationcompany.commondomain.EmployeeStatus;
+import com.automationcompany.commondomain.EmploymentType;
+import com.automationcompany.commondomain.PositionLevel;
+import com.automationcompany.employee.model.Address;
+import com.automationcompany.employee.model.BankDetails;
+import com.automationcompany.employee.model.EmergencyContact;
+import com.automationcompany.employee.model.Employee;
 import com.automationcompany.employee.repository.EmployeeRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

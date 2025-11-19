@@ -1,1 +1,126 @@
-<p>messages works!</p>
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            @if (unreadCount() > 0) {
+            <span
+              class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                {{ unreadCount() }}
+              </span>
+            }
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-white">Notifications</h1>
+            <p class="text-sm text-slate-400">{{ unreadCount() }} unread messages</p>
+          </div>
+        </div>
+        <button
+          (click)="markAllAsRead()"
+          class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          Mark all read
+        </button>
+      </div>
+      <div class="relative mb-4">
+        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" fill="none"
+             stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search notifications..."
+          [value]="searchQuery()"
+          (input)="updateSearchQuery($any($event.target).value)"
+          class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        @for (filterOption of [{value: 'all', label: 'All'}, {value: 'unread', label: 'Unread'}, {value: 'system',
+        label: 'System'}, {value: 'users', label: 'Team'}]; track filterOption.value) {
+        <button
+          (click)="setFilter($any(filterOption.value))"
+          [class]="filter() === filterOption.value
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'bg-slate-800 text-slate-300 hover:bg-slate-700'"
+          class="px-4 py-2 rounded-lg font-medium transition-all">
+          {{ filterOption.label }}
+          <span class="text-xs opacity-75">({{ getFilterCount($any(filterOption.value)) }})</span>
+        </button>
+        }
+      </div>
+    </div>
+    <div class="space-y-3">
+      @if (filteredNotifications().length === 0) {
+      <div class="text-center py-12 bg-slate-800/50 rounded-xl border border-slate-700">
+        <svg class="w-12 h-12 text-slate-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <p class="text-slate-400">No notifications found</p>
+      </div>
+      } @else {
+      @for (notification of filteredNotifications(); track notification.id) {
+      <div
+        [class]="'group bg-slate-800/70 backdrop-blur-sm border border-slate-700 rounded-xl p-4 hover:bg-slate-800 transition-all ' + (!notification.isRead ? 'border-l-4 border-l-blue-500' : '')">
+        <div class="flex gap-4">
+          <div
+            [class]="'flex-shrink-0 w-12 h-12 ' + getCategoryColor(notification.category) + ' rounded-xl flex items-center justify-center'">
+            @if (notification.type === 'USER' && notification.senderName) {
+            <span class="text-white font-bold text-sm">{{ getInitials(notification.senderName) }}</span>
+            } @else {
+            <span class="text-2xl">{{ getCategoryIcon(notification.category) }}</span>
+            }
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2 mb-1">
+              <h3 [class]="'font-semibold ' + (!notification.isRead ? 'text-white' : 'text-slate-300')">
+                {{ notification.subject }}
+              </h3>
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                @if (!notification.isRead) {
+                <button
+                  (click)="markAsRead(notification.id)"
+                  class="p-1.5 hover:bg-slate-700 rounded-lg transition-colors"
+                  title="Mark as read">
+                  <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                </button>
+                }
+                <button
+                  (click)="deleteNotification(notification.id)"
+                  class="p-1.5 hover:bg-slate-700 rounded-lg transition-colors"
+                  title="Delete">
+                  <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <p class="text-slate-400 text-sm mb-2">{{ notification.content }}</p>
+            <div class="flex items-center gap-3 text-xs">
+              <span class="text-slate-500">{{ formatTime(notification.sentAt) }}</span>
+              <span class="text-slate-600">•</span>
+              <span class="text-slate-500">{{ notification.senderName || 'System' }}</span>
+              @if (notification.priority === 'HIGH') {
+              <span class="text-slate-600">•</span>
+              <span class="px-2 py-0.5 bg-red-500/20 text-red-400 rounded-full">High Priority</span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+      }
+    </div>
+  </div>
+</div>

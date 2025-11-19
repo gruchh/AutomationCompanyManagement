@@ -7,7 +7,7 @@ import { ProjectFilters } from '../../models/project-filters';
   selector: 'app-filters',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './filters.html',
+  templateUrl: './filters.html'
 })
 export class Filters {
   filtersChange = output<ProjectFilters>();

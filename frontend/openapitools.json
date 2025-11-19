@@ -2,6 +2,66 @@
   "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.16.0"
+    "version": "7.16.0",
+    "generators": {
+      "employee-api": {
+        "generatorName": "typescript-angular",
+        "output": "./src/app/features/dashboard/employees/service/generated/employee",
+        "inputSpec": "http://localhost:8080/employee-service/v3/api-docs",
+        "additional-properties": {
+          "ngVersion": "20.3.0",
+          "supportsES6": true,
+          "withInterfaces": true,
+          "withSeparateModelsAndApi": true,
+          "exportIndex": true,
+          "fileNaming": "kebab-case",
+          "serviceSuffix": "Api",
+          "removeOperationIdPrefix": true,
+          "skipDtoSuffix": true,
+          "modelPropertyNaming": "camelCase",
+          "stringEnums": true,
+          "enumPropertyNaming": "UPPERCASE",
+          "removeEnumValuePrefix": true,
+          "useSingleRequestParameter": false,
+          "readonlyProperties": true,
+          "dateLibrary": "string"
+        },
+        "type-mappings": {
+          "BigDecimal": "number",
+          "LocalDate": "string",
+          "LocalDateTime": "string"
+        },
+        "import-mappings": {}
+      },
+      "project-api": {
+        "generatorName": "typescript-angular",
+        "output": "./src/app/features/dashboard/projects/generated/employee",
+        "inputSpec": "http://localhost:8080/project-service/v3/api-docs",
+        "additional-properties": {
+          "ngVersion": "20.3.0",
+          "supportsES6": true,
+          "withInterfaces": true,
+          "withSeparateModelsAndApi": true,
+          "exportIndex": true,
+          "fileNaming": "kebab-case",
+          "serviceSuffix": "Api",
+          "removeOperationIdPrefix": true,
+          "skipDtoSuffix": true,
+          "modelPropertyNaming": "camelCase",
+          "stringEnums": true,
+          "enumPropertyNaming": "UPPERCASE",
+          "removeEnumValuePrefix": true,
+          "useSingleRequestParameter": false,
+          "readonlyProperties": true,
+          "dateLibrary": "string"
+        },
+        "type-mappings": {
+          "BigDecimal": "number",
+          "LocalDate": "string",
+          "LocalDateTime": "string"
+        },
+        "import-mappings": {}
+      }
+    }
   }
 }

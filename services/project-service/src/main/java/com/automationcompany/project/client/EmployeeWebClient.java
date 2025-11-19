@@ -1,6 +1,6 @@
 package com.automationcompany.project.client;
 
-import com.automationcompany.project.model.dto.EmployeeDto;
+import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class EmployeeWebClient {
 
     private final WebClient employeeWebClient;
 
-    public Optional<EmployeeDto> getEmployeeById(Long id) {
+    public Optional<EmployeeReadDto> getEmployeeById(Long id) {
         return employeeWebClient.get()
                 .uri("/{id}", id)
                 .retrieve()
@@ -25,12 +25,12 @@ public class EmployeeWebClient {
                         Mono.error(new RuntimeException("Employee not found: " + id)))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
                         Mono.error(new RuntimeException("Server error")))
-                .bodyToMono(EmployeeDto.class)
+                .bodyToMono(EmployeeReadDto.class)
                 .onErrorReturn(null)
                 .blockOptional();
     }
 
-    public List<EmployeeDto> getEmployeesByIds(List<Long> ids) {
+    public List<EmployeeReadDto> getEmployeesByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return Collections.emptyList();
         }
@@ -43,7 +43,7 @@ public class EmployeeWebClient {
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, response ->
                         Mono.error(new RuntimeException("Failed to fetch employees")))
-                .bodyToFlux(EmployeeDto.class)
+                .bodyToFlux(EmployeeReadDto.class)
                 .collectList()
                 .onErrorReturn(Collections.emptyList())
                 .block();

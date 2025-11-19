@@ -1,26 +1,25 @@
 package com.automationcompany.employee.mapper;
 
+import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.model.Employee;
-import com.automationcompany.employee.model.dto.EmployeeCreateDTO;
-import com.automationcompany.employee.model.dto.EmployeeReadDTO;
-import com.automationcompany.employee.model.dto.EmployeeUpdateDTO;
+import com.automationcompany.employee.model.dto.EmployeeCreateDto;
+import com.automationcompany.employee.model.dto.EmployeeUpdateDto;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        uses = {AddressMapper.class, BankDetailsMapper.class, EmergencyContactMapper.class}
+)
 public interface EmployeeMapper {
-
-    EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "terminationDate", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    Employee toEntity(EmployeeCreateDTO dto);
+    Employee toEntity(EmployeeCreateDto dto);
 
-    EmployeeReadDTO toReadDTO(Employee employee);
+    EmployeeReadDto toReadDTO(Employee employee);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
@@ -31,5 +30,5 @@ public interface EmployeeMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
-    void updateEmployeeFromDto(EmployeeUpdateDTO dto, @MappingTarget Employee employee);
+    void updateEmployeeFromDto(EmployeeUpdateDto dto, @MappingTarget Employee employee);
 }

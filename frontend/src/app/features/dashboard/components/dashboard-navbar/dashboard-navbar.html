@@ -6,32 +6,32 @@
     </button>
   </div>
   @if (isMenuOpen()) {
-    <div
-      class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
-      (click)="closeMenu()"
-    ></div>
-    <div
-      class="absolute right-4 top-16 bg-[#1e293b] text-gray-200 shadow-lg border border-gray-700 rounded-lg w-48 z-50"
-    >
-      <div class="flex flex-col gap-2 p-3">
-        <a
-          routerLink="/dashboard"
-          class="flex items-center gap-3 p-2 rounded hover:bg-[#334155] hover:text-white transition"
-          (click)="closeMenu()"
-        >
-          <lucide-icon [img]="Menu" class="w-5 h-5"></lucide-icon>
-          <span>Dashboard</span>
-        </a>
-        <a
-          routerLink="/logout"
-          class="flex items-center gap-3 p-2 rounded hover:bg-[#334155] hover:text-white transition"
-          (click)="closeMenu()"
-        >
-          <lucide-icon [img]="Bell" class="w-5 h-5"></lucide-icon>
-          <span>Logout</span>
-        </a>
-      </div>
+  <div
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+    (click)="closeMenu()"
+  ></div>
+  <div
+    class="absolute right-4 top-16 bg-[#1e293b] text-gray-200 shadow-lg border border-gray-700 rounded-lg w-48 z-50"
+  >
+    <div class="flex flex-col gap-2 p-3">
+      <a
+        routerLink="/dashboard"
+        class="flex items-center gap-3 p-2 rounded hover:bg-[#334155] hover:text-white transition"
+        (click)="closeMenu()"
+      >
+        <lucide-icon [img]="Menu" class="w-5 h-5"></lucide-icon>
+        <span>Dashboard</span>
+      </a>
+      <a
+        routerLink="/logout"
+        class="flex items-center gap-3 p-2 rounded hover:bg-[#334155] hover:text-white transition"
+        (click)="closeMenu()"
+      >
+        <lucide-icon [img]="Bell" class="w-5 h-5"></lucide-icon>
+        <span>Logout</span>
+      </a>
     </div>
+  </div>
   }
 </div>
 

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Embeddable
 public class EmergencyContact {
+
     private String name;
     private String phone;
     private String relation;

@@ -1,13 +1,12 @@
 export interface Project {
-    id: string | number;
-    title: string;
-    client: {
-      name: string;
-      logoUrl: string;
-    };
-    location: string;
-    teamSize: number;
-    startDate: Date;
-    technologies: string[];
-    status: 'new' | 'in_progress' | 'completed';
-  }
+  id?: number;
+  name?: string;
+  code?: string;
+  shortDescription?: string;
+  companyName?: string;
+  location?: string;
+  status?: 'PLANNING' | 'IN_PROGRESS' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';
+  teamSize?: number;
+  technologies?: string[];
+  startDate?: string;
+}

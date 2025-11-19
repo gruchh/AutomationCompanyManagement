@@ -43,6 +43,7 @@
         <module>services/employee-service</module>
         <module>services/project-service</module>
         <module>services/notification-service</module>
+        <module>services/common-domain</module>
     </modules>
 
     <build>

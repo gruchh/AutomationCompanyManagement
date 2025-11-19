@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Embeddable
 public class BankDetails {
+
     private String bankAccountNumber;
     private String bankName;
     private String taxId;

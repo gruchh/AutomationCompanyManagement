@@ -8,7 +8,7 @@
     >
       <lucide-icon [img]="Worm" class="w-6 h-6 text-indigo-400 md:block lg:hidden"></lucide-icon>
       <span class="hidden lg:block text-2xl font-bold text-indigo-400 tracking-wide"
-        >WireWhisperer</span
+      >WireWhisperer</span
       >
     </a>
   </div>
@@ -40,8 +40,7 @@
   </div>
   <div class="mt-4 flex justify-center lg:justify-start">
     <a
-      [routerLink]="'/logout'"
-      class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#1e293b] hover:text-white transition justify-center lg:justify-start"
+      class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#1e293b] hover:text-white transition justify-center lg:justify-start" (click)="logout()"
     >
       <lucide-icon [img]="LogOut" class="w-5 h-5"></lucide-icon>
       <span class="hidden lg:inline">Logout</span>

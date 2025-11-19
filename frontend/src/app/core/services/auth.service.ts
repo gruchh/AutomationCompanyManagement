@@ -1,5 +1,5 @@
 import Keycloak from 'keycloak-js';
-import { effect, inject, Injectable, signal } from "@angular/core";
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { KEYCLOAK_EVENT_SIGNAL, KeycloakEventType } from 'keycloak-angular';
 import { User } from '../models/user';
 
@@ -38,8 +38,8 @@ export class AuthService {
   }
 
   logout() {
-  this.isLoggedIn.set(false);
-  this.user.set(null);
-  this.keycloak.logout({ redirectUri: window.location.origin });
+    this.isLoggedIn.set(false);
+    this.user.set(null);
+    this.keycloak.logout({ redirectUri: window.location.origin });
   }
 }

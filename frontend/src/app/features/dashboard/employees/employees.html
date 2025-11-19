@@ -1,7 +1,5 @@
 <div class="h-full flex flex-col bg-gray-50 overflow-hidden">
-  <!-- STATYCZNA CZĘŚĆ - nie scrolluje się -->
   <div class="flex-shrink-0 p-6 pb-0">
-    <!-- Header -->
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-semibold text-gray-900">Pracownicy</h1>
       <button
@@ -12,63 +10,63 @@
         Dodaj nowego pracownika
       </button>
     </div>
-
-    <!-- 4 karty statystyk -->
     <div class="grid grid-cols-4 gap-4 mb-6">
       <div class="bg-white p-5 rounded-lg border border-gray-200">
         <div class="flex items-center gap-2 mb-3">
           <lucide-icon [img]="UsersIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
-          <span class="text-sm text-gray-600">Total Employees</span>
+          <span class="text-sm text-gray-600">Wszyscy pracownicy</span>
         </div>
         <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().totalEmployees }}</div>
         <div class="text-sm text-green-600">
           +{{ stats().changeFromLastMonth }} od ostatniego roku
         </div>
       </div>
-
       <div class="bg-white p-5 rounded-lg border border-gray-200">
         <div class="flex items-center gap-2 mb-3">
           <lucide-icon [img]="UserPlusIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
-          <span class="text-sm text-gray-600">New Hires This Month</span>
+          <span class="text-sm text-gray-600">Nowi w tym miesiącu</span>
         </div>
         <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().newHires }}</div>
         <div class="text-sm text-green-600">+{{ stats().newHiresChange }} od ostatniego roku</div>
       </div>
-
       <div class="bg-white p-5 rounded-lg border border-gray-200">
         <div class="flex items-center gap-2 mb-3">
           <lucide-icon [img]="CalendarIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
-          <span class="text-sm text-gray-600">Średnio (Years)</span>
+          <span class="text-sm text-gray-600">Średni staż (lata)</span>
         </div>
         <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().averageTenure }}</div>
-        <div class="text-sm text-green-600">+{{ stats().tenureChange }}% from last year</div>
+        <div class="text-sm text-green-600">+{{ stats().tenureChange }}% od ostatniego roku</div>
       </div>
-
       <div class="bg-white p-5 rounded-lg border border-gray-200">
         <div class="flex items-center gap-2 mb-3">
           <lucide-icon [img]="BuildingIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
-          <span class="text-sm text-gray-600">Active Departments</span>
+          <span class="text-sm text-gray-600">Aktywne działy</span>
         </div>
         <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().activeDepartments }}</div>
-        <div class="text-sm text-red-600">{{ stats().departmentsChange }} from last year</div>
+        <div class="text-sm text-red-600">{{ stats().departmentsChange }} od ostatniego roku</div>
       </div>
     </div>
   </div>
-
-  <!-- SCROLLOWALNA CZĘŚĆ - tylko tabela -->
   <div class="flex-1 min-h-0 px-6 pb-6">
     <div class="h-full flex flex-col bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <!-- Header tabeli - zawsze widoczny -->
       <div class="flex-shrink-0 flex justify-between items-center p-4 border-b border-gray-200">
         <div class="flex items-center gap-2 text-sm text-gray-700">
           <lucide-icon [img]="UsersIcon" class="w-4 h-4"></lucide-icon>
           <span
-            >Total Employees: <strong>{{ employees().length }} employees</strong></span
+            >Liczba pracowników: <strong>{{ employees().length }}</strong></span
           >
         </div>
       </div>
-
-      <!-- TUTAJ SCROLLUJE -->
+      @if (isLoading()) {
+      <div class="flex-1 flex justify-center items-center">
+        <div class="text-center">
+          <div
+            class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-3"
+          ></div>
+          <p class="text-gray-500">Ładowanie pracowników...</p>
+        </div>
+      </div>
+      } @else {
       <div class="flex-1 overflow-y-auto">
         <table class="w-full">
           <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
@@ -77,7 +75,7 @@
               <th
                 class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
               >
-                Name
+                Imię i nazwisko
               </th>
               <th
                 class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
@@ -87,12 +85,12 @@
               <th
                 class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
               >
-                Posada
+                Stanowisko
               </th>
               <th
                 class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
               >
-                Typ
+                Typ umowy
               </th>
               <th
                 class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
@@ -178,28 +176,28 @@
                     class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
                   >
                     <lucide-icon [img]="EyeIcon" class="w-4 h-4"></lucide-icon>
-                    <span>View Profile</span>
+                    <span>Zobacz profil</span>
                   </button>
                   <button
                     (click)="editDetails(employee)"
                     class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
                   >
                     <lucide-icon [img]="EditIcon" class="w-4 h-4"></lucide-icon>
-                    <span>Edit Details</span>
+                    <span>Edytuj dane</span>
                   </button>
                   <button
                     (click)="viewPerformance(employee)"
                     class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
                   >
                     <lucide-icon [img]="TrendingUpIcon" class="w-4 h-4"></lucide-icon>
-                    <span>View Performance</span>
+                    <span>Zobacz wydajność</span>
                   </button>
                   <button
                     (click)="deleteEmployee(employee)"
                     class="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
                   >
                     <lucide-icon [img]="Trash2Icon" class="w-4 h-4"></lucide-icon>
-                    <span>Delete Employee</span>
+                    <span>Usuń pracownika</span>
                   </button>
                 </div>
                 }
@@ -209,6 +207,7 @@
           </tbody>
         </table>
       </div>
+      }
     </div>
   </div>
 </div>

@@ -1,1 +1,223 @@
-<p>projects works!</p>
+<div class="h-full flex flex-col bg-gray-50 overflow-hidden">
+  <!-- STATYCZNA CZĘŚĆ - nie scrolluje się -->
+  <div class="flex-shrink-0 p-6 pb-0">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold text-gray-900">Projekty</h1>
+      <button
+        (click)="addNewProject()"
+        class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 flex items-center gap-2"
+      >
+        <lucide-icon [img]="PlusIcon" class="w-4 h-4"></lucide-icon>
+        Dodaj nowy projekt
+      </button>
+    </div>
+
+    <!-- 4 karty statystyk -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="bg-white p-5 rounded-lg border border-gray-200">
+        <div class="flex items-center gap-2 mb-3">
+          <lucide-icon [img]="BriefcaseIcon" class="w-5 h-5 text-indigo-600"></lucide-icon>
+          <span class="text-sm text-gray-600">Wszystkie projekty</span>
+        </div>
+        <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().totalProjects }}</div>
+        <div class="text-sm text-gray-500">Łącznie w systemie</div>
+      </div>
+
+      <div class="bg-white p-5 rounded-lg border border-gray-200">
+        <div class="flex items-center gap-2 mb-3">
+          <lucide-icon [img]="ClockIcon" class="w-5 h-5 text-blue-600"></lucide-icon>
+          <span class="text-sm text-gray-600">Aktywne projekty</span>
+        </div>
+        <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().activeProjects }}</div>
+        <div class="text-sm text-blue-600">W trakcie realizacji</div>
+      </div>
+
+      <div class="bg-white p-5 rounded-lg border border-gray-200">
+        <div class="flex items-center gap-2 mb-3">
+          <lucide-icon [img]="CheckCircleIcon" class="w-5 h-5 text-green-600"></lucide-icon>
+          <span class="text-sm text-gray-600">Zakończone</span>
+        </div>
+        <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().completedProjects }}</div>
+        <div class="text-sm text-green-600">Ukończonych projektów</div>
+      </div>
+
+      <div class="bg-white p-5 rounded-lg border border-gray-200">
+        <div class="flex items-center gap-2 mb-3">
+          <lucide-icon [img]="AlertCircleIcon" class="w-5 h-5 text-red-600"></lucide-icon>
+          <span class="text-sm text-gray-600">Po terminie</span>
+        </div>
+        <div class="text-3xl font-semibold text-gray-900 mb-2">{{ stats().projectsPastDeadline }}</div>
+        <div class="text-sm text-red-600">Wymagają uwagi</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLLOWALNA CZĘŚĆ - tylko tabela -->
+  <div class="flex-1 min-h-0 px-6 pb-6">
+    <div class="h-full flex flex-col bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <!-- Header tabeli - zawsze widoczny -->
+      <div class="flex-shrink-0 flex justify-between items-center p-4 border-b border-gray-200">
+        <div class="flex items-center gap-2 text-sm text-gray-700">
+          <lucide-icon [img]="BriefcaseIcon" class="w-4 h-4"></lucide-icon>
+          <span>Liczba projektów: <strong>{{ projects().length }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      @if (isLoading()) {
+        <div class="flex-1 flex justify-center items-center">
+          <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-3"></div>
+            <p class="text-gray-500">Ładowanie projektów...</p>
+          </div>
+        </div>
+      } @else {
+        <!-- TUTAJ SCROLLUJE -->
+        <div class="flex-1 overflow-y-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+              <tr>
+                <th class="w-10 px-4 py-3"></th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                >
+                  Nazwa projektu
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                >
+                  Lokalizacja
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                >
+                  Zespół
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                >
+                  Technologie
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                >
+                  Data rozpoczęcia
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                >
+                  Akcje
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              @for (project of projects(); track project.id) {
+              <tr [class.bg-blue-50]="project.selected" class="hover:bg-gray-50 transition-colors">
+                <td class="px-4 py-3">
+                  <input
+                    type="checkbox"
+                    [checked]="project.selected"
+                    (change)="toggleProject(project)"
+                    class="w-4 h-4 text-indigo-600 rounded cursor-pointer"
+                  />
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-semibold"
+                    >
+                      {{ getProjectInitials(project) }}
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="text-sm font-medium text-gray-900">{{ project.name }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  {{ project.location || '-' }}
+                </td>
+                <td class="px-4 py-3">
+                  <span
+                    [ngClass]="{
+                      'bg-yellow-100 text-yellow-800': project.status === 'PLANNING',
+                      'bg-blue-100 text-blue-800': project.status === 'IN_PROGRESS',
+                      'bg-orange-100 text-orange-800': project.status === 'ON_HOLD',
+                      'bg-green-100 text-green-800': project.status === 'COMPLETED',
+                      'bg-red-100 text-red-800': project.status === 'CANCELLED'
+                    }"
+                    class="inline-block px-3 py-1 rounded-full text-xs font-medium"
+                  >
+                    {{ formatStatus(project.status) }}
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-1 text-sm text-gray-700">
+                    <lucide-icon [img]="UsersIcon" class="w-4 h-4 text-gray-400"></lucide-icon>
+                    <span>{{ project.teamSize || 0 }}</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  <span class="truncate max-w-xs block" [title]="project.technologies?.join(', ')">
+                    {{ formatTechnologies(project.technologies) }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-700">{{ project.startDate || '-' }}</td>
+                <td class="px-4 py-3 relative">
+                  <button
+                    (click)="toggleMenu(project.id, $event)"
+                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded p-1 text-xl"
+                  >
+                    ⋮
+                  </button>
+
+                  @if (openMenuId() === project.id) {
+                  <div
+                    (click)="$event.stopPropagation()"
+                    class="absolute right-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                  >
+                    <button
+                      (click)="viewProject(project)"
+                      class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
+                    >
+                      <lucide-icon [img]="EyeIcon" class="w-4 h-4"></lucide-icon>
+                      <span>Zobacz projekt</span>
+                    </button>
+                    <button
+                      (click)="editProject(project)"
+                      class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
+                    >
+                      <lucide-icon [img]="EditIcon" class="w-4 h-4"></lucide-icon>
+                      <span>Edytuj projekt</span>
+                    </button>
+                    <button
+                      (click)="viewDetails(project)"
+                      class="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100"
+                    >
+                      <lucide-icon [img]="TrendingUpIcon" class="w-4 h-4"></lucide-icon>
+                      <span>Szczegóły</span>
+                    </button>
+                    <button
+                      (click)="deleteProject(project)"
+                      class="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
+                    >
+                      <lucide-icon [img]="Trash2Icon" class="w-4 h-4"></lucide-icon>
+                      <span>Usuń projekt</span>
+                    </button>
+                  </div>
+                  }
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</div>

@@ -1,16 +1,16 @@
-import { Component, HostListener, signal, computed, effect, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, computed, effect, HostListener, inject, OnInit, signal } from '@angular/core';
 import {
-  LucideAngularModule,
-  Plus,
-  Eye,
-  Edit,
-  TrendingUp,
-  Trash2,
+  AlertCircle,
   Briefcase,
   CheckCircle,
   Clock,
-  AlertCircle,
+  Edit,
+  Eye,
+  LucideAngularModule,
+  Plus,
+  Trash2,
+  TrendingUp,
   Users,
 } from 'lucide-angular';
 import { ProjectCardDto, ProjectCardDtoStatusEnum, ProjectManagementApi, ProjectSummaryDto } from './generated/employee';

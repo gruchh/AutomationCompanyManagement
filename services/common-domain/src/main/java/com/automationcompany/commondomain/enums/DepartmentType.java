@@ -1,4 +1,4 @@
-package com.automationcompany.commondomain;
+package com.automationcompany.commondomain.enums;
 
 public enum DepartmentType {
 

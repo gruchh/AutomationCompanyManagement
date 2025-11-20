@@ -1,6 +1,6 @@
 package com.automationcompany.project.model.dto;
 
-import com.automationcompany.commondomain.PositionLevel;
+import com.automationcompany.commondomain.enums.PositionLevel;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(

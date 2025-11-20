@@ -22,8 +22,7 @@ public class EmployeeDeleteDto {
     @Positive(message = "Employee ID must be a positive number")
     @Schema(
             description = "Unique identifier of the employee to be deleted",
-            example = "42",
-            required = true
+            example = "42"
     )
     private Long id;
 }

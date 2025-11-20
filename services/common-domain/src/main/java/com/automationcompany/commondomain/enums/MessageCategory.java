@@ -1,4 +1,4 @@
-package com.automationcompany.employee.model;
+package com.automationcompany.commondomain.enums;
 
 public enum MessageCategory {
 

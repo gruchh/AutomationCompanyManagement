@@ -1,7 +1,7 @@
 package com.automationcompany.notification.service;
 
 import com.automationcompany.commondomain.dto.NotificationEventDto;
-import com.automationcompany.notification.mapper.UserMessageMapper; // <-- Import mappera
+import com.automationcompany.notification.mapper.UserMessageMapper;
 import com.automationcompany.notification.model.UserMessage;
 import com.automationcompany.notification.repository.UserMessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +23,15 @@ public class MessageService {
         UserMessage message = userMessageMapper.toEntity(event);
 
         userMessageRepository.save(message);
-        log.info("Message saved to MongoDB for recipient ID: {}", event.getRecipientId());
+        log.info("Message saved to MongoDB for recipient: {}", event.getRecipientEmail());
     }
 
-    public List<UserMessage> getMessagesForUser(Long userId) {
-        return userMessageRepository.findByRecipientIdOrderBySentAtDesc(userId);
+    public List<UserMessage> getMessagesForUserByEmail(String email) {
+        return userMessageRepository.findByRecipientEmailOrderBySentAtDesc(email);
+    }
+
+    public long countUnreadByEmail(String email) {
+        return userMessageRepository.countByRecipientEmailAndIsReadFalse(email);
     }
 
     public void markAsRead(String messageId) {
@@ -39,9 +43,5 @@ public class MessageService {
                 log.info("Message {} marked as read", messageId);
             }
         });
-    }
-
-    public long countUnread(Long userId) {
-        return userMessageRepository.countByRecipientIdAndIsReadFalse(userId);
     }
 }

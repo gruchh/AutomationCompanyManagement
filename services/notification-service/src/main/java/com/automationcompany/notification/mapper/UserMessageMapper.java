@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 public interface UserMessageMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "read", constant = "false")
     @Mapping(target = "readAt", ignore = true)
+    @Mapping(target = "isRead", constant = "false")
     @Mapping(target = "sentAt", expression = "java(dto.getSentAt() != null ? dto.getSentAt() : LocalDateTime.now())")
     UserMessage toEntity(NotificationEventDto dto);
 }

@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NotificationKafkaListener {
 
-    private final MessageService messageStorageService;
+    private final MessageService messageService;
 
     @KafkaListener(topics = "user-message", groupId = "notification-service-group")
     public void handleUserMessage(NotificationEventDto event) {
         log.info("Received Kafka message for user: {}", event.getRecipientId());
-        messageStorageService.saveMessageFromKafka(event);
+        messageService.saveMessageFromKafka(event);
     }
 }

@@ -23,17 +23,14 @@ public class UserMessage {
 
     private Long senderId;
     private Long recipientId;
-
+    private String recipientEmail;
     private String subject;
     private String content;
-
     private MessageCategory category;
     private MessagePriority priority;
-
     private LocalDateTime sentAt;
 
     @Builder.Default
     private boolean isRead = false;
-
     private LocalDateTime readAt;
 }

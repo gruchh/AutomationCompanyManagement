@@ -7,13 +7,13 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://mongo-prod:27017/notifications_db
+      uri: ${MONGO_URI:mongodb://mongodb:27017/notifications_db}
 
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     consumer:
       group-id: notification-service-group
-      auto-offset-reset: latest
+      auto-offset-reset: earliest
       properties:
         spring.json.trusted.packages: "*"
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -22,33 +22,34 @@ spring:
       key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       acks: all
+      retries: 3
 
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/automation-company-management-system
-          jwk-set-uri: http://localhost:8180/realms/automation-company-management-system/protocol/openid-connect/certs
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://keycloak:8080/realms/automation-company-management-system}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://keycloak:8080/realms/automation-company-management-system/protocol/openid-connect/certs}
 
 notification:
   websocket:
     endpoint: /ws/notifications
-    allowed-origins: https://app.automation-company.com
+    allowed-origins: ${ALLOWED_ORIGINS:https://app.automation-company.com}
 
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:}
+      defaultZone: ${EUREKA_URI:http://service-registry:8761/eureka/}
   instance:
     prefer-ip-address: true
-    hostname: ${HOSTNAME:employee-service}
-    instance-id: ${spring.application.name}:${HOSTNAME:employee-service}:${server.port}
+    hostname: ${HOSTNAME:notification-service}
+    instance-id: ${spring.application.name}:${random.value}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,prometheus
   endpoint:
     health:
       show-details: never

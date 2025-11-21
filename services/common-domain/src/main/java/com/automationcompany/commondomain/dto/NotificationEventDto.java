@@ -17,13 +17,10 @@ import java.time.LocalDateTime;
 public class NotificationEventDto {
 
     private Long senderId;
-
     private Long recipientId;
-
+    private String recipientEmail;
     private String subject;
-
     private String content;
-
     private MessageCategory category;
     private MessagePriority priority;
     private MessageType type;

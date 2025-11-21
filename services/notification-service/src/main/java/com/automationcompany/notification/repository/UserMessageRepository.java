@@ -8,8 +8,8 @@ import java.util.List;
 
 @Repository
 public interface UserMessageRepository extends MongoRepository<UserMessage, String> {
-    
-    List<UserMessage> findByRecipientIdOrderBySentAtDesc(Long recipientId);
-    
-    long countByRecipientIdAndIsReadFalse(Long recipientId);
+
+    List<UserMessage> findByRecipientEmailOrderBySentAtDesc(String email);
+
+    long countByRecipientEmailAndIsReadFalse(String email);
 }

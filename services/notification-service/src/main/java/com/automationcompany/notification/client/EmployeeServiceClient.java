@@ -1,6 +1,10 @@
+package com.automationcompany.notification.client;
+
+import com.automationcompany.commondomain.dto.EmployeeSimpleDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @RequiredArgsConstructor
@@ -11,9 +15,9 @@ public class EmployeeServiceClient {
 
     public EmployeeSimpleDto getEmployeeBasicInfo(Long employeeId) {
         return employeeWebClient.get()
-                .uri("/api/employees/{id}/simple", employeeId) // Endpoint zwracający lekkie DTO
+                .uri("/api/employees/{id}/simple", employeeId)
                 .retrieve()
-                .bodyToMono(EmployeeSimpleDto.class) // Mapujemy na klasę z common-domain
+                .bodyToMono(EmployeeSimpleDto.class)
                 .block();
     }
 }

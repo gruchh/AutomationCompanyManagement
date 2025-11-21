@@ -2,10 +2,12 @@ package com.automationcompany.notification.controller;
 
 import com.automationcompany.notification.model.UserMessage;
 import com.automationcompany.notification.service.MessageService;
-import com.automationcompany.notification.service.MessageStorageService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,16 +20,18 @@ public class MessageController {
     private final MessageService messageService;
 
     @GetMapping
-    @Operation(summary = "Get my messages", description = "Returns list of messages for current user")
+    @Operation(summary = "Get my messages")
     public ResponseEntity<List<UserMessage>> getMyMessages(
-            @RequestHeader(name = "X-User-Id") Long userId) { 
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
 
-        return ResponseEntity.ok(messageService.getMessagesForUser(userId));
+        String email = jwt.getClaimAsString("email");
+        return ResponseEntity.ok(messageService.getMessagesForUserByEmail(email));
     }
 
     @GetMapping("/unread-count")
-    public ResponseEntity<Long> getUnreadCount(@RequestHeader(name = "X-User-Id") Long userId) {
-        return ResponseEntity.ok(messageService.countUnread(userId));
+    public ResponseEntity<Long> getUnreadCount(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getClaimAsString("email");
+        return ResponseEntity.ok(messageService.countUnreadByEmail(email));
     }
 
     @PatchMapping("/{messageId}/read")

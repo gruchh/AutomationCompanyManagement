@@ -1,5 +1,6 @@
 package com.automationcompany.employee.controller;
 
+import com.automationcompany.commondomain.dto.EmployeeSimpleDto;
 import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.model.dto.EmployeeCreateDto;
 import com.automationcompany.employee.model.dto.EmployeeUpdateDto;
@@ -77,5 +78,10 @@ public class EmployeeController {
                         "roles", authentication.getAuthorities()
                 )
         );
+    }
+
+    @GetMapping("/{id}/simple")
+    public ResponseEntity<EmployeeSimpleDto> getSimpleEmployee(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getSimpleEmployeeById(id));
     }
 }

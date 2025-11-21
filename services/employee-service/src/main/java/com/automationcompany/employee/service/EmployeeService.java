@@ -1,5 +1,6 @@
 package com.automationcompany.employee.service;
 
+import com.automationcompany.commondomain.dto.EmployeeSimpleDto;
 import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.exception.EmployeeAlreadyExistsException;
 import com.automationcompany.employee.exception.EmployeeNotFoundException;
@@ -10,6 +11,8 @@ import com.automationcompany.employee.model.dto.EmployeeUpdateDto;
 import com.automationcompany.employee.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,7 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Transactional
     public EmployeeReadDto create(EmployeeCreateDto dto) {
@@ -87,5 +91,12 @@ public class EmployeeService {
 
         employeeRepository.deleteById(id);
         log.info("Employee deleted successfully with id: {}", id);
+    }
+
+    public EmployeeSimpleDto getSimpleEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        return employeeMapper.toSimpleDto(employee);
     }
 }

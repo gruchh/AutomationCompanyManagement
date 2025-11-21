@@ -1,5 +1,6 @@
 package com.automationcompany.employee.mapper;
 
+import com.automationcompany.commondomain.dto.EmployeeSimpleDto;
 import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.model.Employee;
 import com.automationcompany.employee.model.dto.EmployeeCreateDto;
@@ -20,6 +21,8 @@ public interface EmployeeMapper {
     Employee toEntity(EmployeeCreateDto dto);
 
     EmployeeReadDto toReadDTO(Employee employee);
+
+    EmployeeSimpleDto toSimpleDto(Employee employee);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)

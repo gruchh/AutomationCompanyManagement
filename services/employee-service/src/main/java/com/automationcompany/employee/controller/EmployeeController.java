@@ -4,6 +4,7 @@ import com.automationcompany.commondomain.dto.EmployeeSimpleDto;
 import com.automationcompany.commondomain.dto.EmployeeReadDto;
 import com.automationcompany.employee.model.dto.EmployeeCreateDto;
 import com.automationcompany.employee.model.dto.EmployeeUpdateDto;
+import com.automationcompany.employee.model.dto.SendMessageDto;
 import com.automationcompany.employee.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -83,5 +84,15 @@ public class EmployeeController {
     @GetMapping("/{id}/simple")
     public ResponseEntity<EmployeeSimpleDto> getSimpleEmployee(@PathVariable Long id) {
         return ResponseEntity.ok(employeeService.getSimpleEmployeeById(id));
+    }
+
+    @PostMapping("/{recipientId}/messages")
+    public ResponseEntity<Void> sendMessage(
+            @PathVariable Long recipientId,
+            @Valid @RequestBody SendMessageDto request,
+            Authentication authentication) {
+
+        employeeService.sendMessageToEmployee(recipientId, request, authentication);
+        return ResponseEntity.accepted().build();
     }
 }

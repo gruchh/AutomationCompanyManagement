@@ -4,75 +4,78 @@ spring:
 
   cloud:
     gateway:
-      server:
-        webflux:
-          routes:
-            - id: employee-service-openapi
-              uri: lb://employee-service
-              predicates:
-                - Path=/employee-service/v3/api-docs/**
-              filters:
-                - RewritePath=/employee-service/(?<segment>.*), /$\{segment}
+      routes:
+        - id: notification-service-ws
+          uri: lb:ws://notification-service
+          predicates:
+            - Path=/ws-notifications/**
 
-            - id: employee-service
-              uri: lb://employee-service
-              predicates:
-                - Path=/employee-service/**
-              filters:
-                - StripPrefix=1
+        - id: employee-service-openapi
+          uri: lb://employee-service
+          predicates:
+            - Path=/employee-service/v3/api-docs/**
+          filters:
+            - RewritePath=/employee-service/(?<segment>.*), /$\{segment}
 
-            - id: project-service-openapi
-              uri: lb://project-service
-              predicates:
-                - Path=/project-service/v3/api-docs/**
-              filters:
-                - RewritePath=/project-service/(?<segment>.*), /$\{segment}
+        - id: employee-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/employee-service/**
+          filters:
+            - StripPrefix=1
 
-            - id: project-service
-              uri: lb://project-service
-              predicates:
-                - Path=/project-service/**
-              filters:
-                - StripPrefix=1
+        - id: project-service-openapi
+          uri: lb://project-service
+          predicates:
+            - Path=/project-service/v3/api-docs/**
+          filters:
+            - RewritePath=/project-service/(?<segment>.*), /$\{segment}
 
-            - id: notification-service-openapi
-              uri: lb://notification-service
-              predicates:
-                - Path=/notification-service/v3/api-docs/**
-              filters:
-                - RewritePath=/notification-service/(?<segment>.*), /$\{segment}
+        - id: project-service
+          uri: lb://project-service
+          predicates:
+            - Path=/project-service/**
+          filters:
+            - StripPrefix=1
 
-            - id: notification-service
-              uri: lb://notification-service
-              predicates:
-                - Path=/notification-service/**
-              filters:
-                - StripPrefix=1
+        - id: notification-service-openapi
+          uri: lb://notification-service
+          predicates:
+            - Path=/notification-service/v3/api-docs/**
+          filters:
+            - RewritePath=/notification-service/(?<segment>.*), /$\{segment}
 
-          discovery:
-            locator:
-              enabled: true
-              lower-case-service-id: true
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/notification-service/**
+          filters:
+            - StripPrefix=1
 
-          globalcors:
-            cors-configurations:
-              '[/**]':
-                allowed-origins:
-                  - "http://localhost:4200"
-                allowed-methods:
-                  - GET
-                  - POST
-                  - PUT
-                  - DELETE
-                  - OPTIONS
-                  - PATCH
-                allowed-headers: "*"
-                allow-credentials: true
-                max-age: 3600
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
 
-          httpclient:
-            connect-timeout: 5000
-            response-timeout: 10s
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:4200"
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            allowed-headers: "*"
+            allow-credentials: true
+            max-age: 3600
+
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 10s
 
 server:
   port: 8080

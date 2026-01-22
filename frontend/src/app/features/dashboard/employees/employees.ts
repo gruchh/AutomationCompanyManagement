@@ -1,4 +1,4 @@
-import { Component, HostListener, signal, computed, effect } from '@angular/core';
+import { Component, HostListener, signal, computed, effect, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -21,7 +21,8 @@ import {
   EmployeeReadDtoPositionLevelEnum,
   EmployeeReadDtoDepartmentEnum,
   EmployeeReadDtoEmploymentTypeEnum,
-  EmployeeReadDtoStatusEnum
+  EmployeeReadDtoStatusEnum,
+  EmployeeManagementApi,
 } from './service/generated/employee';
 
 @Component({
@@ -30,7 +31,9 @@ import {
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './employees.html',
 })
-export class Employees {
+export class Employees implements OnInit {
+  private employeeApi = inject(EmployeeManagementApi);
+
   readonly UploadIcon = Upload;
   readonly DownloadIcon = Download;
   readonly PlusIcon = Plus;
@@ -46,146 +49,62 @@ export class Employees {
   readonly BuildingIcon = Building;
 
   openMenuId = signal<number | null>(null);
+  employees = signal<(EmployeeReadDto & { selected?: boolean })[]>([]);
+  isLoading = signal<boolean>(true);
 
-  stats = signal({
-    totalEmployees: 134,
-    changeFromLastMonth: 2,
-    newHires: 5,
-    newHiresChange: 2,
-    averageTenure: 2.8,
-    tenureChange: 1.2,
-    activeDepartments: 7,
-    departmentsChange: -1,
+  stats = computed(() => {
+    const emps = this.employees();
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    const newHires = emps.filter((emp) => {
+      const hireDate = new Date(emp.hireDate!);
+      return hireDate.getFullYear() === currentYear && hireDate.getMonth() === currentMonth;
+    }).length;
+
+    const totalTenure = emps.reduce((sum, emp) => {
+      const hireDate = new Date(emp.hireDate!);
+      const years = (now.getTime() - hireDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+      return sum + years;
+    }, 0);
+    const averageTenure = emps.length > 0 ? (totalTenure / emps.length).toFixed(1) : '0';
+
+    const departments = new Set(emps.map((emp) => emp.department));
+
+    return {
+      totalEmployees: emps.length,
+      changeFromLastMonth: 2,
+      newHires,
+      newHiresChange: 2,
+      averageTenure,
+      tenureChange: 1.2,
+      activeDepartments: departments.size,
+      departmentsChange: -1,
+    };
   });
-
-  employees = signal<(EmployeeReadDto & { selected?: boolean })[]>([
-    {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@company.com',
-      phoneNumber: '+48 123 456 789',
-      department: EmployeeReadDtoDepartmentEnum.MECHANICAL,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.MANAGER,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
-      status: EmployeeReadDtoStatusEnum.ACTIVE,
-      hireDate: '2021-03-15',
-      salary: 8500,
-    },
-    {
-      id: 2,
-      firstName: 'Maria',
-      lastName: 'Tan',
-      email: 'maria.tan@company.com',
-      phoneNumber: '+48 234 567 890',
-      department: EmployeeReadDtoDepartmentEnum.FINANCE,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.SENIOR,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
-      status: EmployeeReadDtoStatusEnum.ON_LEAVE,
-      hireDate: '2020-07-22',
-      salary: 7200,
-      selected: true,
-    },
-    {
-      id: 3,
-      firstName: 'Charlie',
-      lastName: 'Brown',
-      email: 'charlie.brown@company.com',
-      phoneNumber: '+48 345 678 901',
-      department: EmployeeReadDtoDepartmentEnum.SOFTWARE,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.MID,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
-      status: EmployeeReadDtoStatusEnum.ACTIVE,
-      hireDate: '2022-01-10',
-      salary: 6500,
-    },
-    {
-      id: 4,
-      firstName: 'Dana',
-      lastName: 'White',
-      email: 'dana.white@company.com',
-      phoneNumber: '+48 456 789 012',
-      department: EmployeeReadDtoDepartmentEnum.HR,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.MID,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
-      status: EmployeeReadDtoStatusEnum.ACTIVE,
-      hireDate: '2021-11-05',
-      salary: 5800,
-    },
-    {
-      id: 5,
-      firstName: 'Ethan',
-      lastName: 'Hunt',
-      email: 'ethan.hunt@company.com',
-      phoneNumber: '+48 567 890 123',
-      department: EmployeeReadDtoDepartmentEnum.ELECTRICAL,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.SENIOR,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
-      status: EmployeeReadDtoStatusEnum.ACTIVE,
-      hireDate: '2021-06-20',
-      salary: 7500,
-      selected: true,
-    },
-    {
-      id: 6,
-      firstName: 'Fiona',
-      lastName: 'Glenanne',
-      email: 'fiona.g@company.com',
-      phoneNumber: '+48 678 901 234',
-      department: EmployeeReadDtoDepartmentEnum.FINANCE,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.JUNIOR,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
-      status: EmployeeReadDtoStatusEnum.TERMINATED,
-      hireDate: '2018-05-10',
-      terminationDate: '2024-03-15',
-      salary: 4500,
-    },
-    {
-      id: 7,
-      firstName: 'George',
-      lastName: 'Lucas',
-      email: 'george.lucas@company.com',
-      phoneNumber: '+48 789 012 345',
-      department: EmployeeReadDtoDepartmentEnum.SOFTWARE,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.LEAD,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.CONTRACT,
-      status: EmployeeReadDtoStatusEnum.ON_LEAVE,
-      hireDate: '2021-02-22',
-      salary: 9200,
-    },
-    {
-      id: 8,
-      firstName: 'Hannah',
-      lastName: 'Montana',
-      email: 'hannah.montana@company.com',
-      phoneNumber: '+48 890 123 456',
-      department: EmployeeReadDtoDepartmentEnum.AUTOMATION,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.MID,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
-      status: EmployeeReadDtoStatusEnum.ACTIVE,
-      hireDate: '2020-09-18',
-      salary: 6800,
-      selected: true,
-    },
-    {
-      id: 9,
-      firstName: 'Hannah',
-      lastName: 'Montana',
-      email: 'hannah.montana@company.com',
-      phoneNumber: '+48 890 123 456',
-      department: EmployeeReadDtoDepartmentEnum.AUTOMATION,
-      positionLevel: EmployeeReadDtoPositionLevelEnum.MID,
-      employmentType: EmployeeReadDtoEmploymentTypeEnum.FULL_TIME,
-      status: EmployeeReadDtoStatusEnum.ACTIVE,
-      hireDate: '2020-09-18',
-      salary: 6800,
-      selected: true,
-    },
-  ]);
 
   constructor() {
     effect(() => {
       console.log('Employees updated:', this.employees());
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadEmployees();
+  }
+
+  private loadEmployees(): void {
+    this.isLoading.set(true);
+    this.employeeApi.getAll().subscribe({
+      next: (employees) => {
+        this.employees.set(employees.map((emp) => ({ ...emp, selected: false })));
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading employees:', error);
+        this.isLoading.set(false);
+      },
     });
   }
 
@@ -238,9 +157,18 @@ export class Employees {
   }
 
   deleteEmployee(employee: EmployeeReadDto): void {
-    if (confirm(`Are you sure you want to delete ${employee.firstName} ${employee.lastName}?`)) {
-      console.log('Delete employee:', employee);
-      this.closeMenu();
+    if (employee.id) {
+      this.employeeApi._delete(employee.id).subscribe({
+        next: () => {
+          console.log('Employee deleted:', employee);
+          this.loadEmployees();
+          this.closeMenu();
+        },
+        error: (error) => {
+          console.error('Error deleting employee:', error);
+          this.closeMenu();
+        },
+      });
     }
   }
 

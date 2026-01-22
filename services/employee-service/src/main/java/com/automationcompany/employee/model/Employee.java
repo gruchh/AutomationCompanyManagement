@@ -1,9 +1,9 @@
 package com.automationcompany.employee.model;
 
-import com.automationcompany.commondomain.DepartmentType;
-import com.automationcompany.commondomain.EmployeeStatus;
-import com.automationcompany.commondomain.EmploymentType;
-import com.automationcompany.commondomain.PositionLevel;
+import com.automationcompany.commondomain.enums.DepartmentType;
+import com.automationcompany.commondomain.enums.EmployeeStatus;
+import com.automationcompany.commondomain.enums.EmploymentType;
+import com.automationcompany.commondomain.enums.PositionLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,9 +1,9 @@
 package com.automationcompany.employee.config;
 
-import com.automationcompany.commondomain.DepartmentType;
-import com.automationcompany.commondomain.EmployeeStatus;
-import com.automationcompany.commondomain.EmploymentType;
-import com.automationcompany.commondomain.PositionLevel;
+import com.automationcompany.commondomain.enums.DepartmentType;
+import com.automationcompany.commondomain.enums.EmployeeStatus;
+import com.automationcompany.commondomain.enums.EmploymentType;
+import com.automationcompany.commondomain.enums.PositionLevel;
 import com.automationcompany.employee.model.Address;
 import com.automationcompany.employee.model.BankDetails;
 import com.automationcompany.employee.model.EmergencyContact;
@@ -12,8 +12,10 @@ import com.automationcompany.employee.repository.EmployeeRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -28,7 +30,7 @@ public class DataInitializer {
 
     private final EmployeeRepository employeeRepository;
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void initDatabase() {
         if (employeeRepository.count() > 0) {

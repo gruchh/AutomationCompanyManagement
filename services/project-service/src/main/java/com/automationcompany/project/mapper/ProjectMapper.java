@@ -5,7 +5,6 @@ import com.automationcompany.project.model.Project;
 import com.automationcompany.project.model.dto.*;
 import org.mapstruct.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 

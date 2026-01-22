@@ -74,7 +74,7 @@ public class ProjectController {
     }
 
     @PostMapping("/{id}/employees")
-    @Operation(summary = "Assign team members", d   escription = "Adds employees to a project team")
+    @Operation(summary = "Assign team members", description = "Adds employees to a project team")
     public ResponseEntity<ProjectDto> assignEmployees(
             @Parameter(description = "Unique project identifier", required = true, example = "1")
             @PathVariable Long id,

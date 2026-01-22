@@ -1,9 +1,9 @@
 package com.automationcompany.employee.model.dto;
 
-import com.automationcompany.commondomain.DepartmentType;
-import com.automationcompany.commondomain.EmployeeStatus;
-import com.automationcompany.commondomain.EmploymentType;
-import com.automationcompany.commondomain.PositionLevel;
+import com.automationcompany.commondomain.enums.DepartmentType;
+import com.automationcompany.commondomain.enums.EmployeeStatus;
+import com.automationcompany.commondomain.enums.EmploymentType;
+import com.automationcompany.commondomain.enums.PositionLevel;
 import com.automationcompany.employee.model.Address;
 import com.automationcompany.employee.model.BankDetails;
 import com.automationcompany.employee.model.EmergencyContact;

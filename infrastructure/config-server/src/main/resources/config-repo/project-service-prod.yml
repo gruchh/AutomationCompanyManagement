@@ -6,7 +6,7 @@ spring:
     name: project-service
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/${PROJECT_POSTGRES_DB}
+    url: jdbc:postgresql://postgres:5432/${PROJECTS_POSTGRES_DB}
     driver-class-name: org.postgresql.Driver
     username: ${PROJECTS_POSTGRES_USER}
     password: ${PROJECTS_POSTGRES_PASSWORD}
@@ -36,8 +36,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/automation-company-management-system
-          jwk-set-uri: http://localhost:8180/realms/automation-company-management-system/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:8080/realms/automation-company-management-system
+          jwk-set-uri: http://keycloak:8080/realms/automation-company-management-system/protocol/openid-connect/certs
 
 eureka:
   client:
@@ -45,8 +45,8 @@ eureka:
       defaultZone: ${EUREKA_URL}
   instance:
     prefer-ip-address: true
-    hostname: ${HOSTNAME:employee-service}
-    instance-id: ${spring.application.name}:${HOSTNAME:employee-service}:${server.port}
+    hostname: ${HOSTNAME:project-service}
+    instance-id: ${spring.application.name}:${HOSTNAME:project-service}:${server.port}
 
 management:
   endpoints:

@@ -142,7 +142,7 @@ services:
     container_name: employee-service
     restart: unless-stopped
     ports:
-      - "8081:8081"
+      - "8081:8080"
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       SPRING_CONFIG_IMPORT: ${SPRING_CONFIG_IMPORT:-configserver:http://config-server:8888}
@@ -168,7 +168,7 @@ services:
     container_name: project-service
     restart: unless-stopped
     ports:
-      - "8082:8082"
+      - "8082:8080"
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       SPRING_CONFIG_IMPORT: ${SPRING_CONFIG_IMPORT:-configserver:http://config-server:8888}
@@ -194,7 +194,7 @@ services:
     container_name: notification-service
     restart: unless-stopped
     ports:
-      - "8083:8083"
+      - "8083:8080"
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       SPRING_CONFIG_IMPORT: ${SPRING_CONFIG_IMPORT:-configserver:http://config-server:8888}

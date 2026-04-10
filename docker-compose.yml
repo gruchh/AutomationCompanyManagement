@@ -194,7 +194,7 @@ services:
     container_name: notification-service
     restart: unless-stopped
     ports:
-      - "8083:8080"
+      - "8084:8080"
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       SPRING_CONFIG_IMPORT: ${SPRING_CONFIG_IMPORT:-configserver:http://config-server:8888}

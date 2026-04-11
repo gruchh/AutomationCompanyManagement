@@ -1,62 +1,118 @@
-# Automation Company Management System
+# CMMS Lite — Lightweight Maintenance Management System
 
-This project is a cloud-native management system for a small automation company, built using a **microservices architecture** with Java and the Spring Boot framework. The system is designed to be scalable, resilient, and secure, leveraging modern technologies for messaging, monitoring, and identity management.
+A full-stack web application for managing maintenance operations in industrial facilities.
+Designed to streamline breakdown reporting, spare parts inventory, workforce management,
+and shift scheduling — all in one place.
 
 ## Architecture
 
-The application is decomposed into smaller, independent services communicating asynchronously via Apache Kafka and registered dynamically in a service registry (Eureka).
+The application follows a **feature-slice / domain-driven** structure on the backend,
+with each domain module owning its full vertical slice — controller, service, repository,
+mapper, DTO, and exception handling. The Angular frontend is generated from the OpenAPI
+spec for a fully type-safe API contract.
 
-### Components
-* **External Identity Provider (Keycloak)**: Handles authentication & authorization.
-* **API Gateway (Spring Cloud Gateway)**: Single entry point, routes requests, validates JWT tokens.
-* **Service Registry (Eureka)**: Enables service discovery.
-* **Config Server**: Centralized configuration for all services.
-* **Project Service**: Manages projects and tasks, publishes events to Kafka.
-* **Employee Service**: Manages employee data.
-* **Notification Service**: Subscribes to Kafka events, delivers real-time notifications via WebSockets.
-* **Monitoring & Observability**: Spring Boot Actuator, Micrometer with Prometheus + Grafana.
-* **API Documentation**: Swagger UI powered by SpringDoc OpenAPI.
-* **Apache Kafka (KRaft mode)**: Central event bus.
+### Backend Modules
+
+* **Security**: JWT-based authentication, role-based access control (`ADMIN`, `TECHNICIAN`, `SUBCONTRACTOR`)
+* **Breakdown**: Full breakdown lifecycle — anonymous field report → technician assignment → resolution with cost tracking
+* **Breakdown Type**: Fault categories (`MECHANICAL`, `AUTOMATIC`, `PARAMETRIC`)
+* **Machine**: Equipment CRUD and assignment to breakdowns
+* **Spare Part**: Searchable inventory catalogue with automatic usage logging and cost calculation
+* **Employee**: Employee profiles, brigade assignment, contract and salary data
+* **Shift Schedule**: Multi-brigade (A/B/C/D) rotation generation with DAY / NIGHT / OFF cycles
+* **Dashboard**: KPI aggregation — OEE, MTBF, MTTR, weekly efficiency trends
+* **Config**: Application configuration and dev data seeding via JavaFaker
+
+### Frontend Modules
+
+* **Core**: Guards, interceptors, type-safe API client (auto-generated from OpenAPI spec)
+* **Features**: Business modules — dashboard, home, breakdowns, employees, spare parts, schedules
+* **Layout**: Navigation, responsive collapsible sidebar
+* **Shared**: Reusable UI components — modals, tables, forms
 
 ### Database Strategy
-Polyglot persistence approach:
-* **PostgreSQL**: Structured relational data (projects, employees).
-* **MongoDB**: Flexible storage for notifications.
+
+* **PostgreSQL**: Production relational data (breakdowns, employees, machines, spare parts, schedules)
+* **H2**: In-memory database for the `dev` profile with automatic sample data seeding
 
 ## Technology Stack
-* Java 17+
-* Spring Boot & Spring Cloud (Gateway, Config, Eureka)
-* Spring Security (OAuth2 Resource Server)
-* Apache Kafka
-* Spring Data JPA + PostgreSQL
-* Spring Data MongoDB
-* Spring WebSocket
-* Keycloak
-* Spring Boot Actuator + Micrometer + Prometheus
+
+**Backend**
+* Java 17
+* Spring Boot 3.5.4
+* Spring Security + JWT
+* Spring Data JPA + Hibernate + PostgreSQL
+* Flyway — versioned database migrations
+* MapStruct + Lombok
 * SpringDoc OpenAPI (Swagger UI)
-* Maven
+* JavaFaker — dev data seeding
+
+**Frontend**
+* Angular ~20
+* Tailwind CSS ~4
+* FullCalendar ~6 — shift schedule visualisation
+* OpenAPI Generator CLI — type-safe HTTP client generation
+* ngx-toastr, ng-icons
+
+**Infrastructure**
 * Docker & Docker Compose
+* Maven
+
+## Screenshots
+
+*Coming soon.*
 
 ## Getting Started
 
 ### Prerequisites
+
 * JDK 17+
+* Node.js 18+
 * Apache Maven
 * Docker + Docker Compose
 
 ### Running the Application
-Run the full stack with Docker Compose (`docker-compose.yml`):
+
+Run the full stack with Docker Compose:
+
+```bash
+git clone https://github.com/gruchh/MaintenanceCMMSLite.git
+cd MaintenanceCMMSLite
+docker-compose up --build
+```
+
+Services started:
+
 1. PostgreSQL
-2. MongoDB
-3. Apache Kafka (KRaft mode)
-4. Keycloak
-5. Config Server
-6. Eureka Service Registry
-7. API Gateway
-8. Business microservices (`project-service`, `employee-service`, `notification-service`)
-9. Frontend application (see below)
+2. Backend API (`http://localhost:8080`)
+3. Angular Frontend (`http://localhost:4200`)
+4. API Documentation — Swagger UI (`http://localhost:8080/swagger-ui-custom.html`)
 
-## Frontend
+### Running Locally (without Docker)
 
-The frontend (e.g., React, Angular, or Vue) is developed as a **separate module** under the root project:
+**Backend** (H2 in-memory database, auto-seeded with sample data):
+```bash
+cd backend
+./mvnw spring-boot:run -Dspring.profiles.active=dev
+```
 
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### Regenerating the API Client (after backend changes)
+
+```bash
+# From local backend
+npm run api:generate:dev
+
+# From Docker
+npm run api:generate:docker
+```
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

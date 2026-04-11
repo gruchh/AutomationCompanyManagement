@@ -16,11 +16,12 @@ export const provideKeycloakAngular = () =>
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
       redirectUri: window.location.origin + '/',
+      checkLoginIframe: false,
     },
     features: [
       withAutoRefreshToken({
         onInactivityTimeout: 'logout',
-        sessionTimeout: 1000,
+        sessionTimeout: 30000,
       }),
     ],
     providers: [

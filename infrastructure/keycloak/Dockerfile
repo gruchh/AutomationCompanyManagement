@@ -1,10 +1,9 @@
-FROM quay.io/keycloak/keycloak:26.0.5
+FROM quay.io/keycloak/keycloak:26.0.6
+USER root
+RUN microdnf update -y && \
+    microdnf install -y bash curl && \
+    microdnf clean all
 
-COPY ./realm-export.json /opt/keycloak/data/import/realm-export.json
-
-ENV KC_HTTP_ENABLED=true
-ENV KC_HEALTH_ENABLED=true
-ENV KC_HOSTNAME_STRICT=false
-
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
-CMD ["start", "--import-realm"]
+COPY init-users.sh /opt/keycloak/bin/init-users.sh
+RUN chmod +x /opt/keycloak/bin/init-users.sh
+USER keycloak

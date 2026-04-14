@@ -73,13 +73,17 @@ services:
       dockerfile: Dockerfile
     container_name: keycloak
     restart: unless-stopped
+    command: ${KEYCLOAK_CMD} --import-realm  
     environment:
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_HEALTH_ENABLED: "true"
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_POSTGRES_DB:-keycloak}
       KC_DB_USERNAME: ${POSTGRES_USER:-postgres}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
     ports:
       - "8180:8080"
     depends_on:
@@ -94,6 +98,25 @@ services:
     networks:
       - app-network
 
+      
+  keycloak-init:
+    build:
+      context: ./infrastructure/keycloak
+      dockerfile: Dockerfile
+    container_name: keycloak-init
+    restart: no
+    entrypoint: ["/bin/bash", "/opt/keycloak/bin/init-users.sh"]
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-master}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    networks:
+      - app-network
+      
   config-server:
     build:
       context: .

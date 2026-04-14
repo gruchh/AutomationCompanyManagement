@@ -10,15 +10,19 @@ import { LucideAngularModule, LayoutDashboard, TowerControl, Search, ShieldCheck
   templateUrl: './navbar.html',
 })
 export class Navbar {
+
   performSearch() {
     throw new Error('Method not implemented.');
   }
+
   filterByTechnology(arg0: string) {
     throw new Error('Method not implemented.');
   }
+
   onSearch($event: Event) {
     throw new Error('Method not implemented.');
   }
+  
   private auth = inject(AuthService);
 
   user = this.auth.user;

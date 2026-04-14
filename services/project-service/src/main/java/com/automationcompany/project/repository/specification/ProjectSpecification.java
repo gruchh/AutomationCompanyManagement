@@ -1,5 +1,6 @@
 package com.automationcompany.project.repository.specification;
 
+import com.automationcompany.employee.model.Employee;
 import com.automationcompany.project.model.Project;
 import com.automationcompany.project.model.ProjectTechnology;
 import com.automationcompany.project.model.dto.ProjectFilterDto;
@@ -35,19 +36,16 @@ public class ProjectSpecification {
                 query.distinct(true);
             }
 
-            // MANAGER
             if (f.getManagerId() != null) {
                 predicates.add(cb.equal(root.get("manager").get("id"), f.getManagerId()));
             }
 
-            // EMPLOYEE (ManyToMany)
             if (f.getEmployeeId() != null) {
                 Join<Project, Employee> empJoin = root.join("employees");
                 predicates.add(cb.equal(empJoin.get("id"), f.getEmployeeId()));
                 query.distinct(true);
             }
 
-            // LOCATION
             if (f.getLocationId() != null) {
                 predicates.add(cb.equal(root.get("location").get("id"), f.getLocationId()));
             }
@@ -84,7 +82,6 @@ public class ProjectSpecification {
                 predicates.add(cb.lessThanOrEqualTo(root.get("endDate"), f.getEndDateTo()));
             }
 
-            // SEARCH
             if (f.getSearchQuery() != null && !f.getSearchQuery().isBlank()) {
                 String like = "%" + f.getSearchQuery().toLowerCase() + "%";
 

@@ -15,11 +15,7 @@ import {
   Users,
 } from 'lucide-angular';
 
-import {
-  ProjectCardDto,
-  ProjectFilterDto,
-  ProjectControllerApi
-} from './service/generated';
+import { ProjectCardDto, ProjectFilterDto, ProjectControllerApi } from './service/generated';
 
 @Component({
   selector: 'app-projects',
@@ -44,56 +40,45 @@ export class Projects implements OnInit {
   openMenuId = signal<number | null>(null);
   isLoading = signal(false);
 
-  // ONLY SEARCH RESULT
   projects = signal<(ProjectCardDto & { selected?: boolean })[]>([]);
 
-  // optional local stats (no backend dependency)
   stats = computed(() => ({
     total: this.projects().length,
-    active: this.projects().filter(p => p.status === 'IN_PROGRESS').length,
-    completed: this.projects().filter(p => p.status === 'COMPLETED').length,
+    active: this.projects().filter((p) => p.status === 'IN_PROGRESS').length,
+    completed: this.projects().filter((p) => p.status === 'COMPLETED').length,
   }));
 
   ngOnInit(): void {
     this.loadProjects();
   }
 
-  // ======================================================
-  // SEARCH ONLY
-  // ======================================================
   private loadProjects(): void {
     this.isLoading.set(true);
 
     const filter: ProjectFilterDto = {
-      sortBy: 'startDate'
+      sortBy: 'startDate',
     };
 
-    this.api.getProjectCards(filter)
+    this.api
+      .getProjectCards(filter)
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: (projects) => {
-          this.projects.set(
-            projects.map(p => ({ ...p, selected: false }))
-          );
+          this.projects.set(projects.map((p) => ({ ...p, selected: false })));
         },
-        error: (err) => console.error('Load projects error', err)
+        error: (err) => console.error('Load projects error', err),
       });
   }
 
-  // ======================================================
-  // UI
-  // ======================================================
   toggleProject(p: ProjectCardDto & { selected?: boolean }): void {
-    this.projects.update(list =>
-      list.map(x =>
-        x.id === p.id ? { ...x, selected: !x.selected } : x
-      )
+    this.projects.update((list) =>
+      list.map((x) => (x.id === p.id ? { ...x, selected: !x.selected } : x)),
     );
   }
 
   toggleMenu(id?: number, e?: Event): void {
     e?.stopPropagation();
-    this.openMenuId.set(this.openMenuId() === id ? null : id ?? null);
+    this.openMenuId.set(this.openMenuId() === id ? null : (id ?? null));
   }
 
   closeMenu(): void {
@@ -105,9 +90,6 @@ export class Projects implements OnInit {
     this.closeMenu();
   }
 
-  // ======================================================
-  // HELPERS
-  // ======================================================
   getInitials(p: ProjectCardDto): string {
     if (!p.name) return '??';
     const w = p.name.split(' ');
@@ -133,5 +115,4 @@ export class Projects implements OnInit {
     if (t.length <= 3) return t.join(', ');
     return `${t.slice(0, 3).join(', ')} +${t.length - 3}`;
   }
-
 }

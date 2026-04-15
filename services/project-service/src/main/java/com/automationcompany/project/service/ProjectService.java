@@ -38,7 +38,6 @@ public class ProjectService {
     private String mapSortField(String sortBy) {
         return switch (sortBy) {
             case "name" -> "name";
-            case "teamSize" -> "employees.size";
             case "status" -> "status";
             case "location" -> "location.name";
             default -> "startDate";

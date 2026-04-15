@@ -6,10 +6,7 @@ import com.automationcompany.project.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,13 +17,13 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    @GetMapping("/cards")
+    @PostMapping("/cards/search")
     @Operation(
             summary = "Search and filter projects",
-            description = "One endpoint for all search needs, including live search"
+            description = "Advanced filtering via request body (recommended)"
     )
-    public ResponseEntity<List<ProjectCardDto>> getProjectCards(
-            @ModelAttribute ProjectFilterDto filter
+    public ResponseEntity<List<ProjectCardDto>> searchProjectCards(
+            @RequestBody ProjectFilterDto filter
     ) {
         return ResponseEntity.ok(projectService.filterProjects(filter));
     }

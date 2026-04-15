@@ -1,10 +1,8 @@
 package com.automationcompany.project.repository.specification;
 
-import com.automationcompany.employee.model.Employee;
 import com.automationcompany.project.model.Project;
 import com.automationcompany.project.model.ProjectTechnology;
 import com.automationcompany.project.model.dto.ProjectFilterDto;
-import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -31,18 +29,16 @@ public class ProjectSpecification {
             }
 
             if (f.getTechnologies() != null && !f.getTechnologies().isEmpty()) {
-                Join<Project, ProjectTechnology> techJoin = root.join("technologies");
-                predicates.add(techJoin.in(f.getTechnologies()));
+                predicates.add(root.get("technologies").in(f.getTechnologies()));
                 query.distinct(true);
             }
 
             if (f.getManagerId() != null) {
-                predicates.add(cb.equal(root.get("manager").get("id"), f.getManagerId()));
+                predicates.add(cb.equal(root.get("projectManagerId"), f.getManagerId()));
             }
 
             if (f.getEmployeeId() != null) {
-                Join<Project, Employee> empJoin = root.join("employees");
-                predicates.add(cb.equal(empJoin.get("id"), f.getEmployeeId()));
+                predicates.add(cb.isMember(f.getEmployeeId(), root.get("employeeIds")));
                 query.distinct(true);
             }
 
@@ -50,7 +46,7 @@ public class ProjectSpecification {
                 predicates.add(cb.equal(root.get("location").get("id"), f.getLocationId()));
             }
 
-            if (f.getLocationName() != null) {
+            if (f.getLocationName() != null && !f.getLocationName().isBlank()) {
                 predicates.add(cb.like(
                         cb.lower(root.get("location").get("name")),
                         "%" + f.getLocationName().toLowerCase() + "%"
@@ -65,7 +61,6 @@ public class ProjectSpecification {
                 predicates.add(cb.equal(root.get("location").get("city"), f.getCity()));
             }
 
-            // DATES
             if (f.getStartDateFrom() != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("startDate"), f.getStartDateFrom()));
             }
@@ -92,11 +87,11 @@ public class ProjectSpecification {
             }
 
             if (f.getMinTeamSize() != null) {
-                predicates.add(cb.ge(cb.size(root.get("employees")), f.getMinTeamSize()));
+                predicates.add(cb.ge(cb.size(root.get("employeeIds")), f.getMinTeamSize()));
             }
 
             if (f.getMaxTeamSize() != null) {
-                predicates.add(cb.le(cb.size(root.get("employees")), f.getMaxTeamSize()));
+                predicates.add(cb.le(cb.size(root.get("employeeIds")), f.getMaxTeamSize()));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

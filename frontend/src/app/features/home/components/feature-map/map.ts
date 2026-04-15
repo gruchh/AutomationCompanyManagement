@@ -1,7 +1,11 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
 import * as L from 'leaflet';
 import { finalize } from 'rxjs/operators';
-import { ProjectCardDto, ProjectControllerApi, ProjectFilterDto } from '../../../dashboard/projects/service/generated';
+import {
+  ProjectCardDto,
+  ProjectControllerApi,
+  ProjectFilterDto,
+} from '../../../dashboard/projects/service/generated';
 
 @Component({
   selector: 'app-map',
@@ -9,7 +13,6 @@ import { ProjectCardDto, ProjectControllerApi, ProjectFilterDto } from '../../..
   templateUrl: './map.html',
 })
 export class MapComponent implements AfterViewInit {
-
   private api = inject(ProjectControllerApi);
   private map?: L.Map;
 
@@ -29,20 +32,17 @@ export class MapComponent implements AfterViewInit {
   }
 
   private loadMarkers(): void {
-
     const filter: ProjectFilterDto = {
       sortBy: ProjectFilterDto.SortByEnum.StartDate,
       sortDirection: ProjectFilterDto.SortDirectionEnum.Desc,
     };
 
-    this.api.getProjectCards(filter)
+    this.api
+      .getProjectCards(filter)
       .pipe(finalize(() => console.log('Map loaded')))
       .subscribe({
         next: (projects: ProjectCardDto[]) => {
-
-          const withLocation = projects.filter(p =>
-            p.latitude != null && p.longitude != null
-          );
+          const withLocation = projects.filter((p) => p.latitude != null && p.longitude != null);
 
           this.renderMarkers(withLocation);
         },
@@ -51,7 +51,6 @@ export class MapComponent implements AfterViewInit {
   }
 
   private renderMarkers(projects: ProjectCardDto[]): void {
-
     if (!this.map) return;
 
     const icon = L.icon({
@@ -65,10 +64,8 @@ export class MapComponent implements AfterViewInit {
 
     L.Marker.prototype.options.icon = icon;
 
-    projects.forEach(p => {
-      L.marker([p.latitude!, p.longitude!])
-        .addTo(this.map!)
-        .bindPopup(`
+    projects.forEach((p) => {
+      L.marker([p.latitude!, p.longitude!]).addTo(this.map!).bindPopup(`
           <div style="padding:6px">
             <b>${p.name ?? 'Projekt'}</b><br/>
             <span>${p.location ?? '-'}</span><br/>

@@ -1,12 +1,14 @@
 package com.automationcompany.project.mapper;
 
 import com.automationcompany.commondomain.dto.EmployeeReadDto;
+import com.automationcompany.project.model.Location;
 import com.automationcompany.project.model.Project;
 import com.automationcompany.project.model.dto.*;
 import org.mapstruct.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Mapper(
         componentModel = "spring",
@@ -26,6 +28,7 @@ public interface ProjectMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "employeeIds", ignore = true)
     @Mapping(target = "location", source = "locationDto")
     Project toEntity(ProjectCreateDto createDto);
 
@@ -35,6 +38,7 @@ public interface ProjectMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
+    @Mapping(target = "employeeIds", ignore = true)
     @Mapping(target = "location", source = "locationDto")
     void updateEntityFromDto(ProjectUpdateDto updateDto, @MappingTarget Project project);
 
@@ -56,6 +60,13 @@ public interface ProjectMapper {
         return dto;
     }
 
+    @Mapping(target = "location", source = "location")
+    @Mapping(target = "teamSize", source = "employeeIds")
+    @Mapping(target = "latitude", source = "location.latitude")
+    @Mapping(target = "longitude", source = "location.longitude")
+    ProjectCardDto toCardDto(Project project);
+
+    List<ProjectCardDto> toCardDtoList(List<Project> projects);
 
     @Mapping(target = "location", source = "location.name")
     @Mapping(target = "latitude", source = "location.latitude")
@@ -63,4 +74,12 @@ public interface ProjectMapper {
     ProjectMapPointDto toMapPointDto(Project project);
 
     List<ProjectMapPointDto> toMapPointDtoList(List<Project> projects);
+
+    default Integer map(Set<Long> employeeIds) {
+        return employeeIds != null ? employeeIds.size() : 0;
+    }
+
+    default String map(Location location) {
+        return location != null ? location.getName() : null;
+    }
 }

@@ -1,12 +1,23 @@
-import { effect, inject, signal } from "@angular/core";
-import { ProjectFilterDto } from "../../../dashboard/projects/generated/employee/model/project-filter-dto";
-import { ProjectCardDto, ProjectManagementApi } from "../../../dashboard/projects/generated/employee";
+import { Component, effect, inject, signal } from "@angular/core";
 import { ProjectFilterStore } from "../../../../core/store/project-filter.store";
 
-export class ProjectList {
-  private projectApi = inject(ProjectManagementApi);
-  private filterStore = inject(ProjectFilterStore);
+import {
+  ProjectCardDto,
+  ProjectFilterDto,
+  ProjectControllerApi
+} from "../../../dashboard/projects/service/generated";
+import { ProjectCard } from "../project-card/project-card";
 
+@Component({
+  selector: 'app-project-list',
+  standalone: true,
+  imports: [ProjectCard],
+  templateUrl: './project-list.html',
+})
+export class ProjectList {
+
+  private projectApi = inject(ProjectControllerApi);
+  private filterStore = inject(ProjectFilterStore);
   public projects = signal<ProjectCardDto[]>([]);
   public loading = signal<boolean>(true);
   public error = signal<string | null>(null);
@@ -22,17 +33,18 @@ export class ProjectList {
     this.loading.set(true);
     this.error.set(null);
 
-    this.projectApi.filterPublicProjectCards(filter).subscribe({
-      next: (data) => {
-        this.projects.set(data);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error(err);
-        this.error.set('Nie udało się załadować projektów.');
-        this.loading.set(false);
-      },
-    });
+    this.projectApi.getProjectCards(filter)
+      .subscribe({
+        next: (data: ProjectCardDto[]) => {
+          this.projects.set(data);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.error.set('Nie udało się załadować projektów.');
+          this.loading.set(false);
+        },
+      });
   }
 
   retry() {

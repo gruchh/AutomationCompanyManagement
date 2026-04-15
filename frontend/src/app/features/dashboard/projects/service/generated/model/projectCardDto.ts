@@ -26,6 +26,14 @@ export interface ProjectCardDto {
      */
     location?: string;
     /**
+     * Latitude
+     */
+    latitude?: number;
+    /**
+     * Longitude
+     */
+    longitude?: number;
+    /**
      * Project status
      */
     status?: ProjectCardDto.StatusEnum;

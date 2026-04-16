@@ -35,6 +35,12 @@ public class ProjectCardDto {
     )
     private String location;
 
+    @Schema(description = "Latitude", example = "52.4064", nullable = true)
+    private Double latitude;
+
+    @Schema(description = "Longitude", example = "16.9252", nullable = true)
+    private Double longitude;
+
     @Schema(description = "Project status", example = "IN_PROGRESS")
     private ProjectStatus status;
 

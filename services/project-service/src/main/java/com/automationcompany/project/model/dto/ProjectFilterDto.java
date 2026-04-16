@@ -18,114 +18,73 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "Parameters for filtering projects in the public view")
+@Schema(description = "DTO used for filtering and searching projects")
 public class ProjectFilterDto {
 
-    @Schema(
-            description = "List of project statuses to filter by",
-            example = "[\"PLANNED\", \"IN_PROGRESS\"]"
-    )
+    @Schema(description = "Filter by project statuses", example = "[\"ACTIVE\", \"COMPLETED\"]")
     private List<ProjectStatus> statuses;
 
-    @Schema(
-            description = "List of service types to filter by",
-            example = "[\"MACHINE_REALIZATION\", \"MODERNIZATION\"]"
-    )
+    @Schema(description = "Filter by service type", example = "[\"OUTSOURCING\", \"MAINTENANCE\"]")
     private List<ProjectServiceType> serviceTypes;
 
-    @Schema(
-            description = "List of project priorities to filter by",
-            example = "[\"HIGH\", \"CRITICAL\"]"
-    )
+    @Schema(description = "Filter by project priority", example = "[\"HIGH\", \"MEDIUM\"]")
     private List<ProjectPriority> priorities;
 
-    @Schema(
-            description = "List of technologies or controllers to filter by",
-            example = "[\"SIEMENS_S7_1500\", \"ALLEN_BRADLEY\", \"SCADA\"]"
-    )
+    @Schema(description = "Filter by technologies used in project", example = "[\"JAVA\", \"ANGULAR\"]")
     private List<ProjectTechnology> technologies;
 
-    @Schema(
-            description = "Location ID to filter by specific location",
-            example = "1"
-    )
+    @Schema(description = "Filter by project manager ID", example = "12")
+    private Long managerId;
+
+    @Schema(description = "Filter by assigned employee ID", example = "34")
+    private Long employeeId;
+
+    @Schema(description = "Filter by location ID", example = "5")
     private Long locationId;
 
-    @Schema(
-            description = "Location name (city, region) - partial match",
-            example = "Poznań"
-    )
+    @Schema(description = "Filter by partial location name (case-insensitive)", example = "Warsaw")
     private String locationName;
 
-    @Schema(
-            description = "Country to filter by",
-            example = "Poland"
-    )
+    @Schema(description = "Filter by country", example = "Poland")
     private String country;
 
-    @Schema(
-            description = "City to filter by",
-            example = "Poznań"
-    )
+    @Schema(description = "Filter by city", example = "Katowice")
     private String city;
 
-    @Schema(
-            description = "Project start date - from",
-            example = "2024-01-01"
-    )
+    @Schema(description = "Start date from (inclusive)", example = "2025-01-01")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate startDateFrom;
 
-    @Schema(
-            description = "Project start date - to",
-            example = "2024-12-31"
-    )
+    @Schema(description = "Start date to (inclusive)", example = "2025-12-31")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate startDateTo;
 
-    @Schema(
-            description = "Project end date - from",
-            example = "2024-06-01"
-    )
+    @Schema(description = "End date from (inclusive)", example = "2025-01-01")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endDateFrom;
 
-    @Schema(
-            description = "Project end date - to",
-            example = "2025-12-31"
-    )
+    @Schema(description = "End date to (inclusive)", example = "2025-12-31")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endDateTo;
 
-    @Schema(
-            description = "Search phrase to match against project name or description",
-            example = "automation"
-    )
+    @Schema(description = "Global search (project name + description)", example = "crm system")
     private String searchQuery;
 
-    @Schema(
-            description = "Minimum team size",
-            example = "3"
-    )
+    @Schema(description = "Minimum team size", example = "3")
     private Integer minTeamSize;
 
-    @Schema(
-            description = "Maximum team size",
-            example = "10"
-    )
+    @Schema(description = "Maximum team size", example = "20")
     private Integer maxTeamSize;
 
-    @Schema(
-            description = "Sort by field: startDate, name, teamSize, status, location",
+    @Schema(description = "Field used for sorting results",
             example = "startDate",
-            defaultValue = "startDate"
-    )
-    private String sortBy;
+            allowableValues = {"startDate", "endDate", "name", "createdAt"})
+    @Builder.Default
+    private String sortBy = "startDate";
 
-    @Schema(
-            description = "Sort direction: asc or desc",
+    @Schema(description = "Sort direction",
             example = "desc",
-            defaultValue = "desc"
-    )
-    private String sortDirection;
+            allowableValues = {"asc", "desc"})
+    @Builder.Default
+    private String sortDirection = "desc";
 }

@@ -1,175 +1,105 @@
 <nav
   class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 border-b border-purple-700 px-6 py-3 flex items-center justify-between shadow-lg z-20"
 >
+  <!-- LEFT -->
   <div class="flex items-center space-x-3">
     <div class="w-9 h-9 bg-purple-600 rounded-lg flex items-center justify-center shadow-md">
       <lucide-angular [img]="TowerControl" class="w-5 h-5 text-white"></lucide-angular>
     </div>
     <div class="flex flex-col">
-      <span class="text-lg font-bold text-white tracking-tight">WireWhisperer</span>
-      <span class="md:block hidden text-xs text-purple-200">every cable tells a story – we make it sing</span>
+      <span class="text-lg font-bold text-white">WireWhisperer</span>
+      <span class="text-xs text-purple-200 hidden md:block">
+        every cable tells a story – we make it sing
+      </span>
     </div>
   </div>
+
+  <!-- SEARCH -->
   <div class="flex-1 max-w-2xl mx-6">
     <div class="relative flex gap-2">
       <div class="relative flex-1">
         <input
           type="text"
           placeholder="Szukaj projektów, klientów, technologii..."
-          aria-label="Szukaj projektów"
           (input)="onSearch($event)"
-          class="w-full pl-10 pr-4 py-2 rounded-lg bg-white/90 backdrop-blur-sm border border-purple-200 focus:outline-none focus:ring-2 focus:ring-white focus:bg-white text-gray-800 placeholder-gray-500 shadow-sm text-sm"
+          class="w-full pl-10 pr-4 py-2 rounded-lg bg-white/90 border text-sm"
         />
         <lucide-angular
           [img]="Search"
-          class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-purple-400"
+          class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-400"
         ></lucide-angular>
       </div>
+
       <button
         (click)="performSearch()"
-        aria-label="Wyszukaj"
-        class="bg-white text-purple-600 font-semibold px-5 py-2 rounded-lg shadow-sm hover:shadow-md hover:bg-purple-50 transition duration-200 flex items-center space-x-2 text-sm"
+        class="bg-white text-purple-600 px-5 py-2 rounded-lg text-sm font-semibold"
       >
-        <lucide-angular [img]="Search" class="w-4 h-4"></lucide-angular>
-        <span>Szukaj</span>
+        Szukaj
       </button>
     </div>
   </div>
 
+  <!-- RIGHT -->
   <div class="flex items-center space-x-4">
     @if (!isLoggedIn()) {
-    <button
-      (click)="login()"
-      aria-label="Zaloguj się z Keycloak"
-      class="bg-white text-purple-700 font-semibold py-2 px-5 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition duration-200 text-sm flex items-center gap-2"
-    >
-      <lucide-angular [img]="ShieldCheck" class="w-5 h-5 text-purple-600"></lucide-angular>
-      <span>Zaloguj się z Keycloak</span>
-    </button>
-    } @else {
-    <div class="flex flex-row gap-3 items-center">
       <button
-        [routerLink]="['/dashboard']"
-        class="p-2.5 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-200 hover:scale-105 shadow-sm"
-        aria-label="Przejdź do Dashboard"
+        (click)="login()"
+        class="bg-white text-purple-700 px-5 py-2 rounded-lg text-sm font-semibold"
       >
+        <lucide-angular [img]="ShieldCheck" class="w-5 h-5 inline"></lucide-angular>
+        Zaloguj
+      </button>
+    } @else {
+      <button [routerLink]="['/dashboard']">
         <lucide-angular [img]="LayoutDashboard" class="w-5 h-5 text-white"></lucide-angular>
       </button>
 
-      <div class="flex items-center gap-3 bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm">
-        <a
-          [routerLink]="['/profile']"
-          class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm text-white font-semibold uppercase cursor-pointer hover:scale-110 transition-transform duration-200"
-          [attr.aria-label]="'Profil użytkownika ' + (user()?.name || '')"
-        >
-          {{ user()?.name?.charAt(0) || 'U' }}
-        </a>
-        <span class="text-white text-sm font-medium">{{ user()?.name || 'Użytkownik' }}</span>
-        <button
-          (click)="logout()"
-          aria-label="Wyloguj się"
-          class="text-white/80 hover:text-white text-xs underline"
-        >
+      <div class="flex items-center gap-3 text-white">
+        <span>{{ user()?.name || 'User' }}</span>
+        <button (click)="logout()" class="text-xs underline">
           Wyloguj
         </button>
       </div>
-    </div>
     }
   </div>
 </nav>
 
-<div
-  class="bg-gradient-to-r from-gray-50 to-gray-100 py-1 px-6 border-b border-gray-200 shadow-sm overflow-visible"
->
-  <div class="flex items-center justify-center gap-6 overflow-x-auto py-1">
-    <button
-      (click)="filterByTechnology('siemens')"
-      class="text-center cursor-pointer group flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-indigo-400 rounded-lg"
-      aria-label="Filtruj projekty Siemens S7 - 105 projektów"
-    >
-      <div
-        class="relative w-11 h-11 mx-auto rounded-lg bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-200 shadow-md"
-      >
-        <span class="text-white font-bold text-sm">S7</span>
-        <span
-          class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md"
-          aria-hidden="true"
-        >105</span
-        >
-      </div>
-      <p class="text-[10px] mt-1.5 text-gray-700 font-medium">Siemens</p>
-    </button>
+<!-- TECHNOLOGY FILTER BAR -->
+<div class="bg-gray-100 px-6 py-2 flex gap-4 overflow-x-auto">
 
-    <button
-      (click)="filterByTechnology('mitsubishi')"
-      class="text-center cursor-pointer group flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-red-400 rounded-lg"
-      aria-label="Filtruj projekty Mitsubishi iQ - 62 projekty"
-    >
-      <div
-        class="relative w-11 h-11 mx-auto rounded-lg bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-200 shadow-md"
-      >
-        <span class="text-white font-bold text-sm">iQ</span>
-        <span
-          class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md"
-          aria-hidden="true"
-        >62</span
-        >
-      </div>
-      <p class="text-[10px] mt-1.5 text-gray-700 font-medium">Mitsubishi</p>
-    </button>
+  <button (click)="filterByTechnology(Tech.SiemensS7)" class="text-center">
+    <div class="w-11 h-11 bg-indigo-500 rounded-lg flex items-center justify-center">
+      <span class="text-white font-bold text-sm">S7</span>
+    </div>
+    <p class="text-[10px] mt-1">Siemens</p>
+  </button>
 
-    <button
-      (click)="filterByTechnology('allen-bradley')"
-      class="text-center cursor-pointer group flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-green-400 rounded-lg"
-      aria-label="Filtruj projekty Allen Bradley - 338 projektów"
-    >
-      <div
-        class="relative w-11 h-11 mx-auto rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-200 shadow-md"
-      >
-        <span class="text-white font-bold text-sm">AB</span>
-        <span
-          class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md"
-          aria-hidden="true"
-        >338</span
-        >
-      </div>
-      <p class="text-[10px] mt-1.5 text-gray-700 font-medium">Allen Bradley</p>
-    </button>
+  <button (click)="filterByTechnology(Tech.MitsubishiPlc)" class="text-center">
+    <div class="w-11 h-11 bg-red-500 rounded-lg flex items-center justify-center">
+      <span class="text-white font-bold text-sm">iQ</span>
+    </div>
+    <p class="text-[10px] mt-1">Mitsubishi</p>
+  </button>
 
-    <button
-      (click)="filterByTechnology('scada')"
-      class="text-center cursor-pointer group flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded-lg"
-      aria-label="Filtruj projekty SCADA - 453 projekty"
-    >
-      <div
-        class="relative w-11 h-11 mx-auto rounded-lg bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-200 shadow-md"
-      >
-        <span class="text-white font-bold text-sm">SC</span>
-        <span
-          class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md"
-          aria-hidden="true"
-        >453</span
-        >
-      </div>
-      <p class="text-[10px] mt-1.5 text-gray-700 font-medium">SCADA</p>
-    </button>
+  <button (click)="filterByTechnology(Tech.AllenBradley)" class="text-center">
+    <div class="w-11 h-11 bg-green-500 rounded-lg flex items-center justify-center">
+      <span class="text-white font-bold text-sm">AB</span>
+    </div>
+    <p class="text-[10px] mt-1">Allen Bradley</p>
+  </button>
 
-    <button
-      (click)="filterByTechnology('supprot')"
-      class="text-center cursor-pointer group flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg"
-      aria-label="Filtruj projekty Support - 928 projektów"
-    >
-      <div
-        class="relative w-11 h-11 mx-auto rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center group-hover:scale-110 group-hover:shadow-lg transition-all duration-200 shadow-md"
-      >
-        <span class="text-white font-bold text-sm">SP</span>
-        <span
-          class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md"
-          aria-hidden="true"
-        >928</span
-        >
-      </div>
-      <p class="text-[10px] mt-1.5 text-gray-700 font-medium">Support</p>
-    </button>
-  </div>
+  <button (click)="filterByTechnology(Tech.Ignition)" class="text-center">
+    <div class="w-11 h-11 bg-orange-500 rounded-lg flex items-center justify-center">
+      <span class="text-white font-bold text-sm">SC</span>
+    </div>
+    <p class="text-[10px] mt-1">SCADA</p>
+  </button>
+
+  <button (click)="filterByTechnology(Tech.OtherTech)" class="text-center">
+    <div class="w-11 h-11 bg-blue-500 rounded-lg flex items-center justify-center">
+      <span class="text-white font-bold text-sm">SP</span>
+    </div>
+    <p class="text-[10px] mt-1">Support</p>
+  </button>
+
 </div>

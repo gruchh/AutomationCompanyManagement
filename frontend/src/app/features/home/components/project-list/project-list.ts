@@ -1,12 +1,12 @@
 import { Component, effect, inject, signal } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { ProjectFilterStore } from '../../../../core/store/project-filter.store';
-
 import {
   ProjectCardDto,
   ProjectFilterDto,
   ProjectControllerApi,
 } from '../../../dashboard/projects/service/generated';
-
 import { ProjectCard } from '../project-card/project-card';
 
 @Component({
@@ -23,36 +23,42 @@ export class ProjectList {
   public loading = signal<boolean>(true);
   public error = signal<string | null>(null);
 
+  private filter$ = new Subject<ProjectFilterDto>();
+
   constructor() {
+    this.filter$
+      .pipe(
+        debounceTime(300),
+        switchMap((filter) =>
+          this.projectApi.searchProjectCards(
+            { projectFilterDto: filter },
+            undefined,
+            undefined,
+            { httpHeaderAccept: 'application/json' }
+          )
+        )
+      )
+      .subscribe({
+        next: (projects: ProjectCardDto[]) => {
+          this.projects.set(projects ?? []);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.error.set('Nie udało się załadować projektów.');
+          this.loading.set(false);
+        },
+      });
+
     effect(() => {
-      const filters = this.cleanFilter(this.filterStore.filters());
-      this.loadProjects(filters);
+      this.loading.set(true);
+      this.error.set(null);
+      this.filter$.next(this.cleanFilter(this.filterStore.filters()));
     });
   }
 
-  private loadProjects(filter: ProjectFilterDto) {
-    console.log('FILTER SENT:', filter);
-    this.loading.set(true);
-    this.error.set(null);
-
-    this.projectApi.searchProjectCards({
-      projectFilterDto: filter
-    }).subscribe({
-      next: (projects: ProjectCardDto[]) => {
-        console.log('RAW:', projects);
-        this.projects.set(projects ?? []);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error(err);
-        this.error.set('Nie udało się załadować projektów.');
-        this.loading.set(false);
-      },
-    });
-  }
-
-  retry() {
-    this.loadProjects(this.filterStore.filters());
+  public retry(): void {
+    this.filter$.next(this.filterStore.filters());
   }
 
   private cleanFilter(filter: ProjectFilterDto): ProjectFilterDto {

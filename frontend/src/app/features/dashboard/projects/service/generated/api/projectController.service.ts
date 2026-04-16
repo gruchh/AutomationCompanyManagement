@@ -46,10 +46,10 @@ export class ProjectControllerApi extends BaseService implements ProjectControll
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectCardDto>>;
-    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectCardDto>>>;
-    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectCardDto>>>;
-    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectCardDto>>;
+    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectCardDto>>>;
+    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectCardDto>>>;
+    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         const projectFilterDto = requestParameters?.projectFilterDto;
         if (projectFilterDto === null || projectFilterDto === undefined) {
             throw new Error('Required parameter projectFilterDto was null or undefined when calling searchProjectCards.');
@@ -58,7 +58,7 @@ export class ProjectControllerApi extends BaseService implements ProjectControll
         let localVarHeaders = this.defaultHeaders;
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

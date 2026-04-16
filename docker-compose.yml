@@ -75,6 +75,7 @@ services:
     restart: unless-stopped
     command: ${KEYCLOAK_CMD} --import-realm  
     environment:
+      KC_HEALTH_ENABLED: "true"
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
       KC_DB: postgres
@@ -84,7 +85,7 @@ services:
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME_STRICT: "false"
     ports:
-      - "8180:8080" # Keycloak dostępny pod http://localhost:8180
+      - "8180:8080"
     depends_on:
       postgres:
         condition: service_healthy

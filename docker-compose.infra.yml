@@ -75,6 +75,7 @@ services:
     restart: unless-stopped
     command: ${KEYCLOAK_CMD} --import-realm  
     environment:
+      KC_HEALTH_ENABLED: "true"
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
       KC_DB: postgres
@@ -99,6 +100,24 @@ services:
     networks:
       - app-network
 
+  keycloak-init:
+    build:
+      context: ./infrastructure/keycloak
+      dockerfile: Dockerfile
+    container_name: keycloak-init
+    restart: no
+    entrypoint: ["/bin/bash", "/opt/keycloak/bin/init-users.sh"]
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-master}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    networks:
+      - app-network
+      
   config-server:
     build:
       context: .

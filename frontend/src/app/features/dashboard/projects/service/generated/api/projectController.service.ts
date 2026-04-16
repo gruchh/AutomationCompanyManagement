@@ -25,36 +25,35 @@ import { ProjectFilterDto } from '../model/projectFilterDto';
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 import { BaseService } from '../api.base.service';
+import {
+    ProjectControllerApiInterface,
+    SearchProjectCardsRequestParams
+} from './projectController.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectControllerApi extends BaseService {
+export class ProjectControllerApi extends BaseService implements ProjectControllerApiInterface {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * Search and filter projects
-     * One endpoint for all search needs, including live search
-     * @param filter 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProjectCards(filter: ProjectFilterDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectCardDto>>;
-    public getProjectCards(filter: ProjectFilterDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectCardDto>>>;
-    public getProjectCards(filter: ProjectFilterDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectCardDto>>>;
-    public getProjectCards(filter: ProjectFilterDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (filter === null || filter === undefined) {
-            throw new Error('Required parameter filter was null or undefined when calling getProjectCards.');
+    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectCardDto>>;
+    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectCardDto>>>;
+    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectCardDto>>>;
+    public searchProjectCards(requestParameters: SearchProjectCardsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const projectFilterDto = requestParameters?.projectFilterDto;
+        if (projectFilterDto === null || projectFilterDto === undefined) {
+            throw new Error('Required parameter projectFilterDto was null or undefined when calling searchProjectCards.');
         }
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>filter, 'filter');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -70,6 +69,15 @@ export class ProjectControllerApi extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -81,12 +89,12 @@ export class ProjectControllerApi extends BaseService {
             }
         }
 
-        let localVarPath = `/api/public/projects/cards`;
+        let localVarPath = `/api/public/projects/cards/search`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ProjectCardDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ProjectCardDto>>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
+                body: projectFilterDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

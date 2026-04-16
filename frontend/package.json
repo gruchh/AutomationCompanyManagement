@@ -8,8 +8,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "api:generate:employee": "openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/employee-service/v3/api-docs -o src/app/features/dashboard/employees/service/generated --additional-properties=ngVersion=20.3.0,serviceSuffix=Api,withSeparateModelsAndApi=true",
-    "api:generate:project": "openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/project-service/v3/api-docs -o src/app/features/dashboard/projects/service/generated --additional-properties=ngVersion=20.3.0,serviceSuffix=Api,withSeparateModelsAndApi=true",
+    "api:generate:employee": "openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/employee-service/v3/api-docs -o src/app/features/dashboard/employees/service/generated --additional-properties=ngVersion=20.3.0,serviceSuffix=Api,withSeparateModelsAndApi=true,useSingleRequestParameter=true,modelPropertyNaming=camelCase,withInterfaces=true,typescriptThreePlus=true",
+    "api:generate:project": "openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/project-service/v3/api-docs -o src/app/features/dashboard/projects/service/generated --additional-properties=ngVersion=20.3.0,serviceSuffix=Api,withSeparateModelsAndApi=true,useSingleRequestParameter=true,modelPropertyNaming=camelCase,withInterfaces=true,typescriptThreePlus=true",
     "api:generate:notification": "openapi-generator-cli generate -g typescript-angular -i http://localhost:8080/notification-service/v3/api-docs -o src/app/core/api/generated/notification --additional-properties=ngVersion=20.3.0,serviceSuffix=Api,withSeparateModelsAndApi=true",
     "api:generate:all": "npm run api:generate:employee && npm run api:generate:project && npm run api:generate:notification"
 

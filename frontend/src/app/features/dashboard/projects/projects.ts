@@ -60,7 +60,7 @@ export class Projects implements OnInit {
     };
 
     this.api
-      .getProjectCards(filter)
+      .searchProjectCards({ projectFilterDto: filter })
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: (projects) => {

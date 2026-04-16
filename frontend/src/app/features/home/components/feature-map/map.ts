@@ -30,7 +30,7 @@ export class MapComponent implements AfterViewInit {
 
     this.loadMarkers();
   }
-
+  
   private loadMarkers(): void {
     const filter: ProjectFilterDto = {
       sortBy: ProjectFilterDto.SortByEnum.StartDate,
@@ -38,12 +38,11 @@ export class MapComponent implements AfterViewInit {
     };
 
     this.api
-      .getProjectCards(filter)
+      .searchProjectCards({ projectFilterDto: filter }) // ← opakuj w obiekt
       .pipe(finalize(() => console.log('Map loaded')))
       .subscribe({
         next: (projects: ProjectCardDto[]) => {
           const withLocation = projects.filter((p) => p.latitude != null && p.longitude != null);
-
           this.renderMarkers(withLocation);
         },
         error: (err) => console.error('Map error:', err),

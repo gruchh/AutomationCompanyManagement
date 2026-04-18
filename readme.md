@@ -1,118 +1,141 @@
-# CMMS Lite — Lightweight Maintenance Management System
+# Automation Company Manager — Microservices Architecture (Educational Project)
 
-A full-stack web application for managing maintenance operations in industrial facilities.
-Designed to streamline breakdown reporting, spare parts inventory, workforce management,
-and shift scheduling — all in one place.
+A full-stack project focused on exploring and learning **microservices architecture** in the context of a company management system.
 
-## Architecture
+The application simulates a simplified automation company environment and was built to experiment with service decomposition, infrastructure components, and communication patterns commonly used in modern backend systems.
 
-The application follows a **feature-slice / domain-driven** structure on the backend,
-with each domain module owning its full vertical slice — controller, service, repository,
-mapper, DTO, and exception handling. The Angular frontend is generated from the OpenAPI
-spec for a fully type-safe API contract.
+> ⚠️ This project is educational in nature — many aspects are simplified to better understand architectural concepts.
 
-### Backend Modules
+---
 
-* **Security**: JWT-based authentication, role-based access control (`ADMIN`, `TECHNICIAN`, `SUBCONTRACTOR`)
-* **Breakdown**: Full breakdown lifecycle — anonymous field report → technician assignment → resolution with cost tracking
-* **Breakdown Type**: Fault categories (`MECHANICAL`, `AUTOMATIC`, `PARAMETRIC`)
-* **Machine**: Equipment CRUD and assignment to breakdowns
-* **Spare Part**: Searchable inventory catalogue with automatic usage logging and cost calculation
-* **Employee**: Employee profiles, brigade assignment, contract and salary data
-* **Shift Schedule**: Multi-brigade (A/B/C/D) rotation generation with DAY / NIGHT / OFF cycles
-* **Dashboard**: KPI aggregation — OEE, MTBF, MTTR, weekly efficiency trends
-* **Config**: Application configuration and dev data seeding via JavaFaker
+## 🚀 Highlights
 
-### Frontend Modules
+- Microservices architecture with Spring Cloud ecosystem  
+- API Gateway + Service Discovery (Eureka)  
+- Centralized configuration (Config Server)  
+- Secure authentication with Keycloak (OAuth2 + JWT)  
+- Hybrid approach: Spring MVC + WebFlux  
+- Event-driven communication with Kafka  
+- Type-safe frontend integration (Angular + OpenAPI)  
 
-* **Core**: Guards, interceptors, type-safe API client (auto-generated from OpenAPI spec)
-* **Features**: Business modules — dashboard, home, breakdowns, employees, spare parts, schedules
-* **Layout**: Navigation, responsive collapsible sidebar
-* **Shared**: Reusable UI components — modals, tables, forms
+---
 
-### Database Strategy
+## 🧠 Project Focus
 
-* **PostgreSQL**: Production relational data (breakdowns, employees, machines, spare parts, schedules)
-* **H2**: In-memory database for the `dev` profile with automatic sample data seeding
+- Learning how to structure microservices-based systems  
+- Understanding communication between services  
+- Exploring Spring Cloud ecosystem components  
+- Applying DDD-inspired modular design  
+- Building a realistic backend architecture in practice  
 
-## Technology Stack
+---
 
-**Backend**
-* Java 17
-* Spring Boot 3.5.4
-* Spring Security + JWT
-* Spring Data JPA + Hibernate + PostgreSQL
-* Flyway — versioned database migrations
-* MapStruct + Lombok
-* SpringDoc OpenAPI (Swagger UI)
-* JavaFaker — dev data seeding
+## 🏗️ System Architecture
 
-**Frontend**
-* Angular ~20
-* Tailwind CSS ~4
-* FullCalendar ~6 — shift schedule visualisation
-* OpenAPI Generator CLI — type-safe HTTP client generation
-* ngx-toastr, ng-icons
+The system is divided into three main layers:
 
-**Infrastructure**
-* Docker & Docker Compose
-* Maven
+### 1. Frontend
+Angular application acting as a client for backend services.
 
-## Screenshots
+### 2. Infrastructure Layer
 
-*Coming soon.*
+Handles cross-cutting concerns:
 
-## Getting Started
+- Config Server — centralized configuration  
+- Service Registry — service discovery (Eureka)  
+- API Gateway — single entry point for requests  
+- Keycloak — authentication and authorization  
+
+### 3. Business Services
+
+Each service is independently deployable and follows a consistent structure:
+
+- Controller  
+- Service layer  
+- Repository  
+- DTOs & Mappers  
+- Exception handling  
+
+---
+
+## 🔧 Services Overview
+
+### 👷 Employee Service
+- Employee management  
+- Standard Spring MVC (blocking)
+
+### 📁 Project Service
+- Project and task management  
+- Uses WebFlux (reactive approach)
+
+### 📢 Notification Service
+- System notifications  
+- Prepared for event-driven communication  
+
+### 📦 Common Domain
+- Shared models and reusable components  
+
+---
+
+## ⚙️ Technology Stack
+
+### Backend
+- Java 17  
+- Spring Boot  
+- Spring Web (REST) & Spring WebFlux  
+- Spring Security (OAuth2 Resource Server + JWT)  
+- Keycloak (authentication & authorization)  
+- Spring Data JPA (Hibernate)  
+- Flyway (database migrations)  
+- Spring Cloud (Config Server, Eureka, API Gateway)  
+- Apache Kafka  
+- MapStruct  
+- Lombok  
+- SpringDoc OpenAPI  
+- Spring Boot Actuator  
+
+---
+
+### Frontend
+- Angular 20  
+- Tailwind CSS  
+- RxJS  
+- Chart.js  
+- Keycloak Angular  
+- OpenAPI Generator  
+
+---
+
+### Infrastructure & DevOps
+- Docker & Docker Compose  
+- Maven  
+- PostgreSQL  
+- H2 (development profile)  
+
+---
+
+## 🔐 Security
+
+- Authentication handled via Keycloak  
+- OAuth2 Resource Server + JWT  
+- Frontend integration via Keycloak Angular 
+
+---
+
+## 🗄️ Configuration Management
+
+- Centralized configuration via Config Server  
+- Environment-based configs (`dev` / `prod`)  
+- Externalized configuration per service  
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-* JDK 17+
-* Node.js 18+
-* Apache Maven
-* Docker + Docker Compose
+- Java 17+  
+- Node.js 18+  
+- Docker & Docker Compose  
 
-### Running the Application
-
-Run the full stack with Docker Compose:
-
-```bash
-git clone https://github.com/gruchh/MaintenanceCMMSLite.git
-cd MaintenanceCMMSLite
-docker-compose up --build
-```
-
-Services started:
-
-1. PostgreSQL
-2. Backend API (`http://localhost:8080`)
-3. Angular Frontend (`http://localhost:4200`)
-4. API Documentation — Swagger UI (`http://localhost:8080/swagger-ui-custom.html`)
-
-### Running Locally (without Docker)
-
-**Backend** (H2 in-memory database, auto-seeded with sample data):
-```bash
-cd backend
-./mvnw spring-boot:run -Dspring.profiles.active=dev
-```
-
-**Frontend:**
-```bash
-cd frontend
-npm install
-npm start
-```
-
-### Regenerating the API Client (after backend changes)
-
-```bash
-# From local backend
-npm run api:generate:dev
-
-# From Docker
-npm run api:generate:docker
-```
-
-## License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+---

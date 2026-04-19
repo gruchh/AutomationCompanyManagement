@@ -36,7 +36,6 @@ public class DataInitializer {
 
         log.info("Initializing database with sample locations and projects...");
 
-        // Najpierw tworzymy lokalizacje
         Map<String, Location> locations = createLocations();
 
         log.info("✅ Successfully initialized {} locations", locations.size());

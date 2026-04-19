@@ -1,6 +1,7 @@
 package com.automationcompany.project.client;
 
 import com.automationcompany.commondomain.dto.EmployeeReadDto;
+import com.automationcompany.project.exception.EmployeeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,12 @@ public class EmployeeWebClient {
                 .uri("/{id}", id)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
-                        Mono.error(new RuntimeException("Employee not found: " + id)))
+                        Mono.error(new EmployeeNotFoundException("Employee not found: " + id)))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
                         Mono.error(new RuntimeException("Server error")))
                 .bodyToMono(EmployeeReadDto.class)
-                .onErrorReturn(null)
+                .onErrorResume(EmployeeNotFoundException.class, e -> Mono.error(e))
+                .onErrorResume(e -> Mono.empty())
                 .blockOptional();
     }
 
@@ -40,6 +42,18 @@ public class EmployeeWebClient {
                         .path("/batch")
                         .queryParam("ids", ids)
                         .build())
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, response ->
+                        Mono.error(new RuntimeException("Failed to fetch employees")))
+                .bodyToFlux(EmployeeReadDto.class)
+                .collectList()
+                .onErrorReturn(Collections.emptyList())
+                .block();
+    }
+
+    public List<EmployeeReadDto> getAllEmployees() {
+        return employeeWebClient.get()
+                .uri("")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, response ->
                         Mono.error(new RuntimeException("Failed to fetch employees")))

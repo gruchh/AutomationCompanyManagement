@@ -11,12 +11,19 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
+import { EmployeeReadDto } from '../model/models';
 import { ProjectCardDto } from '../model/models';
+import { ProjectCreateDto } from '../model/models';
+import { ProjectDto } from '../model/models';
 import { ProjectFilterDto } from '../model/models';
 
 
 import { Configuration }                                     from '../configuration';
 
+
+export interface CreateProjectRequestParams {
+    projectCreateDto: ProjectCreateDto;
+}
 
 export interface SearchProjectCardsRequestParams {
     projectFilterDto: ProjectFilterDto;
@@ -26,6 +33,19 @@ export interface SearchProjectCardsRequestParams {
 export interface ProjectControllerApiInterface {
     defaultHeaders: HttpHeaders;
     configuration: Configuration;
+
+    /**
+     * 
+     * 
+* @param requestParameters
+     */
+    createProject(requestParameters: CreateProjectRequestParams, extraHttpRequestParams?: any): Observable<ProjectDto>;
+
+    /**
+     * 
+     * 
+*/
+    getAllEmployees(extraHttpRequestParams?: any): Observable<Array<EmployeeReadDto>>;
 
     /**
      * 

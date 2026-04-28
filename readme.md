@@ -1,60 +1,53 @@
-# Automation Company Manager — Microservices Architecture (Educational Project)
+# 🚀 Automation Company Manager — Microservices Architecture (Educational Project)
 
-A full-stack project focused on exploring and learning **microservices architecture** in the context of a company management system.
+A full-stack application designed to explore and understand **microservices architecture** using a realistic company management scenario.
 
-The application simulates a simplified automation company environment and was built to experiment with service decomposition, infrastructure components, and communication patterns commonly used in modern backend systems.
+The system simulates an automation company environment and demonstrates how modern backend systems are structured using **Spring Cloud**, **event-driven communication**, and **secure authentication flows**.
 
-> ⚠️ This project is educational in nature — many aspects are simplified to better understand architectural concepts.
-
----
-
-## 🚀 Highlights
-
-- Microservices architecture with Spring Cloud ecosystem  
-- API Gateway + Service Discovery (Eureka)  
-- Centralized configuration (Config Server)  
-- Secure authentication with Keycloak (OAuth2 + JWT)  
-- Hybrid approach: Spring MVC + WebFlux  
-- Event-driven communication with Kafka  
-- Type-safe frontend integration (Angular + OpenAPI)  
+> ⚠️ This project is educational — some implementations are intentionally simplified to focus on architectural concepts.
 
 ---
 
-## 🧠 Project Focus
+## 🧠 Project Goals
 
-- Learning how to structure microservices-based systems  
-- Understanding communication between services  
-- Exploring Spring Cloud ecosystem components  
-- Applying DDD-inspired modular design  
-- Building a realistic backend architecture in practice  
+- Design and implement a **microservices-based system**
+- Understand **service-to-service communication**
+- Explore **Spring Cloud ecosystem**
+- Apply **DDD-inspired modular design**
+- Build a **real-world backend architecture**
 
 ---
 
 ## 🏗️ System Architecture
 
-The system is divided into three main layers:
+The system is structured into three main layers:
 
 ### 1. Frontend
-Angular application acting as a client for backend services.
+- Angular application acting as a client
+- Communicates via API Gateway
+- Type-safe integration using OpenAPI
 
 ### 2. Infrastructure Layer
 
 Handles cross-cutting concerns:
 
-- Config Server — centralized configuration  
-- Service Registry — service discovery (Eureka)  
-- API Gateway — single entry point for requests  
-- Keycloak — authentication and authorization  
+- **Config Server** — centralized configuration  
+- **Service Registry (Eureka)** — service discovery  
+- **API Gateway** — single entry point  
+- **Keycloak** — authentication & authorization  
 
 ### 3. Business Services
 
-Each service is independently deployable and follows a consistent structure:
+Each microservice is:
 
-- Controller  
-- Service layer  
-- Repository  
-- DTOs & Mappers  
-- Exception handling  
+- Independently deployable  
+- Focused on a single domain  
+- Built with a consistent internal structure:
+  - Controller
+  - Service layer
+  - Repository
+  - DTOs & Mappers
+  - Exception handling
 
 ---
 
@@ -62,18 +55,68 @@ Each service is independently deployable and follows a consistent structure:
 
 ### 👷 Employee Service
 - Employee management  
-- Standard Spring MVC (blocking)
+- Built with **Spring MVC (blocking)**  
 
 ### 📁 Project Service
-- Project and task management  
-- Uses WebFlux (reactive approach)
+- Project & task management  
+- Built with **Spring WebFlux (reactive)**  
 
 ### 📢 Notification Service
-- System notifications  
-- Prepared for event-driven communication  
+- Handles system notifications  
+- Prepared for **event-driven communication (Kafka)**  
 
 ### 📦 Common Domain
-- Shared models and reusable components  
+- Shared models  
+- Reusable components  
+
+---
+
+## 🔄 Communication
+
+- **Synchronous:** REST via API Gateway  
+- **Asynchronous:** Apache Kafka (event-driven)  
+
+---
+
+## 🔐 Security
+
+- Authentication via **Keycloak**
+- OAuth2 Resource Server + JWT
+- Frontend integration using Keycloak Angular
+
+---
+
+## 🗄️ Configuration Management
+
+- Centralized configuration via Config Server  
+- Environment-based configs (`dev` / `prod`)  
+- Externalized configuration per service  
+
+---
+
+## 🖼️ Application UI
+
+### 🧭 Main Dashboard
+Central overview of the system with access to core modules.  
+![Main Dashboard](docs/images/main.png)
+
+---
+
+### 👷 Employee Management
+Manage employees and organizational structure.  
+![Employees](docs/images/employees.png)
+
+---
+
+### 📁 Project Management
+Handle projects and tasks using a reactive service.  
+![Projects](docs/images/projects.png)
+
+---
+
+### 🔐 Authentication (Keycloak)
+Secure login powered by OAuth2 and JWT.  
+![Keycloak Login](docs/images/keycloak.png)
 
 ---
 
@@ -82,19 +125,17 @@ Each service is independently deployable and follows a consistent structure:
 ### Backend
 - Java 17  
 - Spring Boot  
-- Spring Web (REST) & Spring WebFlux  
-- Spring Security (OAuth2 Resource Server + JWT)  
-- Keycloak (authentication & authorization)  
+- Spring Web (REST) & WebFlux  
+- Spring Security (OAuth2 + JWT)  
+- Keycloak  
 - Spring Data JPA (Hibernate)  
-- Flyway (database migrations)  
-- Spring Cloud (Config Server, Eureka, API Gateway)  
+- Flyway  
+- Spring Cloud (Config Server, Eureka, Gateway)  
 - Apache Kafka  
 - MapStruct  
 - Lombok  
 - SpringDoc OpenAPI  
 - Spring Boot Actuator  
-
----
 
 ### Frontend
 - Angular 20  
@@ -104,29 +145,11 @@ Each service is independently deployable and follows a consistent structure:
 - Keycloak Angular  
 - OpenAPI Generator  
 
----
-
 ### Infrastructure & DevOps
 - Docker & Docker Compose  
 - Maven  
 - PostgreSQL  
-- H2 (development profile)  
-
----
-
-## 🔐 Security
-
-- Authentication handled via Keycloak  
-- OAuth2 Resource Server + JWT  
-- Frontend integration via Keycloak Angular 
-
----
-
-## 🗄️ Configuration Management
-
-- Centralized configuration via Config Server  
-- Environment-based configs (`dev` / `prod`)  
-- Externalized configuration per service  
+- H2 (dev profile)  
 
 ---
 
@@ -139,3 +162,14 @@ Each service is independently deployable and follows a consistent structure:
 - Docker & Docker Compose  
 
 ---
+
+### Run the application
+
+```bash
+# clone repository
+git clone https://github.com/your-username/your-repo.git
+
+cd your-repo
+
+# start infrastructure & services
+docker-compose up --build

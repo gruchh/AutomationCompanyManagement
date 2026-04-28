@@ -1,80 +1,121 @@
 <div class="h-full flex flex-col bg-gray-50 overflow-hidden">
-  <!-- HEADER -->
   <div class="p-6 pb-0">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-semibold">Projekty</h1>
-
-      <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg flex items-center gap-2">
-        <lucide-icon [img]="PlusIcon"></lucide-icon>
+      <h1 class="text-2xl font-semibold text-gray-900">Projekty</h1>
+      <button
+        class="px-4 py-2 bg-indigo-600 text-white rounded-lg flex items-center gap-2 hover:bg-indigo-700 transition-colors text-sm font-medium"
+      >
+        <lucide-icon [img]="PlusIcon" class="w-4 h-4"></lucide-icon>
         Dodaj
       </button>
     </div>
 
-    <!-- STATS (LOCAL ONLY) -->
     <div class="grid grid-cols-3 gap-4 mb-6">
-      <div class="bg-white p-4 rounded-lg border">
+      <div class="bg-white p-4 rounded-lg border border-gray-200">
         <div class="text-sm text-gray-500">Wszystkie</div>
-        <div class="text-2xl font-bold">{{ stats().total }}</div>
+        <div class="text-2xl font-bold text-gray-900">{{ stats().total }}</div>
       </div>
-
-      <div class="bg-white p-4 rounded-lg border">
+      <div class="bg-white p-4 rounded-lg border border-gray-200">
         <div class="text-sm text-gray-500">Aktywne</div>
-        <div class="text-2xl font-bold">{{ stats().active }}</div>
+        <div class="text-2xl font-bold text-blue-600">{{ stats().active }}</div>
       </div>
-
-      <div class="bg-white p-4 rounded-lg border">
+      <div class="bg-white p-4 rounded-lg border border-gray-200">
         <div class="text-sm text-gray-500">Zakończone</div>
-        <div class="text-2xl font-bold">{{ stats().completed }}</div>
+        <div class="text-2xl font-bold text-green-600">{{ stats().completed }}</div>
       </div>
     </div>
   </div>
 
-  <!-- TABLE -->
   <div class="flex-1 px-6 pb-6 overflow-hidden">
-    <div class="bg-white border rounded-lg h-full flex flex-col">
-      <!-- LOADING -->
+    <div class="bg-white border border-gray-200 rounded-lg h-full flex flex-col">
       @if (isLoading()) {
-        <div class="flex-1 flex items-center justify-center">Ładowanie...</div>
+        <div class="flex-1 flex items-center justify-center text-gray-500">
+          <div class="text-center">
+            <div
+              class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-3"
+            ></div>
+            <p class="text-sm">Ładowanie...</p>
+          </div>
+        </div>
+      } @else if (projects().length === 0) {
+        <div class="flex-1 flex items-center justify-center text-gray-400 text-sm">
+          Brak projektów
+        </div>
       } @else {
-        <div class="overflow-y-auto">
-          <table class="w-full">
-            <thead class="sticky top-0 bg-gray-50">
+        <div class="overflow-y-auto flex-1">
+          <table class="w-full text-sm text-left">
+            <thead class="sticky top-0 bg-gray-50 border-b border-gray-200">
               <tr>
-                <th></th>
-                <th>Nazwa</th>
-                <th>Status</th>
-                <th>Tech</th>
-                <th>Start</th>
-                <th></th>
+                <th class="p-3 w-8"></th>
+                <th class="p-3 font-medium text-gray-600">Nazwa</th>
+                <th class="p-3 font-medium text-gray-600">Status</th>
+                <th class="p-3 font-medium text-gray-600">Technologie</th>
+                <th class="p-3 font-medium text-gray-600">Start</th>
+                <th class="p-3 w-10"></th>
               </tr>
             </thead>
-
-            <tbody>
+            <tbody class="divide-y divide-gray-100">
               @for (p of projects(); track p.id) {
-                <tr class="hover:bg-gray-50">
-                  <td>
-                    <input type="checkbox" (change)="toggleProject(p)" [checked]="p.selected" />
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="p-3">
+                    <input
+                      type="checkbox"
+                      (change)="toggleProject(p)"
+                      [checked]="p.selected"
+                      class="rounded border-gray-300 text-indigo-600"
+                    />
                   </td>
-
-                  <td>
-                    <div class="flex items-center gap-2">
+                  <td class="p-3">
+                    <div class="flex items-center gap-3">
                       <div
-                        class="w-8 h-8 bg-indigo-500 text-white flex items-center justify-center rounded"
+                        class="w-8 h-8 bg-indigo-500 text-white flex items-center justify-center rounded text-xs font-semibold flex-shrink-0"
                       >
-                        {{ getInitials(p) }}
+                        {{ getInitials(p.name) }}
                       </div>
-                      {{ p.name }}
+                      <span class="font-medium text-gray-900">{{ p.name }}</span>
                     </div>
                   </td>
-
-                  <td>{{ formatStatus(p.status) }}</td>
-
-                  <td>{{ formatTech(p.technologies) }}</td>
-
-                  <td>{{ p.startDate || '-' }}</td>
-
-                  <td>
-                    <button (click)="toggleMenu(p.id, $event)">⋮</button>
+                  <td class="p-3">
+                    <span
+                      class="px-2 py-1 rounded-full text-xs font-medium"
+                      [ngClass]="getStatusBadge(p.status)"
+                    >
+                      {{ getStatusLabel(p.status) }}
+                    </span>
+                  </td>
+                  <td class="p-3 text-gray-500">{{ formatTech(p.technologies) }}</td>
+                  <td class="p-3 text-gray-500 whitespace-nowrap">{{ p.startDate || '-' }}</td>
+                  <td class="p-3 relative">
+                    <button
+                      (click)="toggleMenu(p.id, $event)"
+                      class="p-1.5 hover:bg-gray-100 rounded text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      ⋮
+                    </button>
+                    @if (openMenuId() === p.id) {
+                      <div
+                        class="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg z-10 w-36 py-1"
+                      >
+                        <button
+                          class="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <lucide-icon [img]="EyeIcon" class="w-4 h-4 text-gray-400"></lucide-icon>
+                          Zobacz projekt
+                        </button>
+                        <button
+                          class="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                        >
+                          <lucide-icon [img]="EditIcon" class="w-4 h-4 text-gray-400"></lucide-icon>
+                          Edytuj projekt
+                        </button>
+                        <button
+                          class="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 text-red-600 flex items-center gap-2"
+                        >
+                          <lucide-icon [img]="Trash2Icon" class="w-4 h-4"></lucide-icon>
+                          Usuń projekt
+                        </button>
+                      </div>
+                    }
                   </td>
                 </tr>
               }

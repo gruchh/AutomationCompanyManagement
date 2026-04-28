@@ -9,8 +9,15 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/addressDto.ts
+model/bankDetailsDto.ts
+model/emergencyContactDto.ts
+model/employeeReadDto.ts
+model/locationDto.ts
 model/models.ts
 model/projectCardDto.ts
+model/projectCreateDto.ts
+model/projectDto.ts
 model/projectFilterDto.ts
 param.ts
 provide-api.ts

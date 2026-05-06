@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
@@ -18,23 +19,20 @@ public class EmployeeWebClient {
 
     private final WebClient employeeWebClient;
 
-    public Optional<EmployeeReadDto> getEmployeeById(Long id) {
+    public Mono<EmployeeReadDto> getEmployeeById(Long id) {
         return employeeWebClient.get()
                 .uri("/{id}", id)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
+                .onStatus(HttpStatusCode::is4xxClientError, response ->
                         Mono.error(new EmployeeNotFoundException("Employee not found: " + id)))
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse ->
+                .onStatus(HttpStatusCode::is5xxServerError, response ->
                         Mono.error(new RuntimeException("Server error")))
-                .bodyToMono(EmployeeReadDto.class)
-                .onErrorResume(EmployeeNotFoundException.class, e -> Mono.error(e))
-                .onErrorResume(e -> Mono.empty())
-                .blockOptional();
+                .bodyToMono(EmployeeReadDto.class);
     }
 
-    public List<EmployeeReadDto> getEmployeesByIds(List<Long> ids) {
+    public Flux<EmployeeReadDto> getEmployeesByIds(List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
-            return Collections.emptyList();
+            return Flux.empty();
         }
 
         return employeeWebClient.get()
@@ -45,21 +43,15 @@ public class EmployeeWebClient {
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, response ->
                         Mono.error(new RuntimeException("Failed to fetch employees")))
-                .bodyToFlux(EmployeeReadDto.class)
-                .collectList()
-                .onErrorReturn(Collections.emptyList())
-                .block();
+                .bodyToFlux(EmployeeReadDto.class);
     }
 
-    public List<EmployeeReadDto> getAllEmployees() {
+    public Flux<EmployeeReadDto> getAllEmployees() {
         return employeeWebClient.get()
                 .uri("")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, response ->
                         Mono.error(new RuntimeException("Failed to fetch employees")))
-                .bodyToFlux(EmployeeReadDto.class)
-                .collectList()
-                .onErrorReturn(Collections.emptyList())
-                .block();
+                .bodyToFlux(EmployeeReadDto.class);
     }
 }

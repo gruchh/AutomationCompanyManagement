@@ -11,11 +11,11 @@ import com.automationcompany.project.model.dto.ProjectDto;
 import com.automationcompany.project.model.dto.ProjectFilterDto;
 import com.automationcompany.project.repository.ProjectRepository;
 import com.automationcompany.project.repository.specification.ProjectSpecification;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Sort;
+import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
 import java.util.List;
@@ -54,37 +54,34 @@ public class ProjectService {
         };
     }
 
-    @Transactional
-    public ProjectDto createProject(ProjectCreateDto dto) {
+    public Mono<ProjectDto> createProject(ProjectCreateDto dto) {
+        return Mono.zip(validateManager(dto.getProjectManagerId()), validateEmployees(dto.getEmployeeIds()))
+                .then(Mono.fromCallable(() -> {
+                    Project project = projectMapper.toEntity(dto);
+                    if (dto.getEmployeeIds() != null) {
+                        project.setEmployeeIds(new HashSet<>(dto.getEmployeeIds()));
+                    }
+                    return projectMapper.toDto(projectRepository.save(project));
+                }));
+    }
 
-        if (dto.getProjectManagerId() != null) {
-            employeeWebClient.getEmployeeById(dto.getProjectManagerId())
-                    .orElseThrow(() -> new EmployeeNotFoundException(
-                            "Project manager not found: " + dto.getProjectManagerId()));
-        }
+    private Mono<Boolean> validateManager(Long managerId) {
+        if (managerId == null) return Mono.just(true);
+        return employeeWebClient.getEmployeeById(managerId)
+                .switchIfEmpty(Mono.error(new EmployeeNotFoundException("Project manager not found: " + managerId)))
+                .thenReturn(true);
+    }
 
-        if (dto.getEmployeeIds() != null && !dto.getEmployeeIds().isEmpty()) {
-            List<EmployeeReadDto> found = employeeWebClient.getEmployeesByIds(dto.getEmployeeIds());
-
-            Set<Long> foundIds = found.stream()
-                    .map(EmployeeReadDto::getId)
-                    .collect(Collectors.toSet());
-
-            List<Long> missing = dto.getEmployeeIds().stream()
-                    .filter(id -> !foundIds.contains(id))
-                    .toList();
-
-            if (!missing.isEmpty()) {
-                throw new EmployeeNotFoundException("Employees not found: " + missing);
-            }
-        }
-
-        Project project = projectMapper.toEntity(dto);
-
-        if (dto.getEmployeeIds() != null) {
-            project.setEmployeeIds(new HashSet<>(dto.getEmployeeIds()));
-        }
-
-        return projectMapper.toDto(projectRepository.save(project));
+    private Mono<Boolean> validateEmployees(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) return Mono.just(true);
+        return employeeWebClient.getEmployeesByIds(ids)
+                .map(EmployeeReadDto::getId)
+                .collect(Collectors.toSet())
+                .flatMap(foundIds -> {
+                    List<Long> missing = ids.stream().filter(id -> !foundIds.contains(id)).toList();
+                    return missing.isEmpty()
+                            ? Mono.just(true)
+                            : Mono.error(new EmployeeNotFoundException("Employees not found: " + missing));
+                });
     }
 }

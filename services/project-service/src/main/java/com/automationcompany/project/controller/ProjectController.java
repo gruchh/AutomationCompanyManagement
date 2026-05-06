@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -23,20 +25,13 @@ public class ProjectController {
     private final ProjectService projectService;
     private final EmployeeWebClient employeeWebClient;
 
-    @PostMapping(value = "/cards/search", produces = "application/json")
-    public ResponseEntity<List<ProjectCardDto>> searchProjectCards(
-            @RequestBody ProjectFilterDto filter
-    ) {
-        return ResponseEntity.ok(projectService.filterProjects(filter));
+    @PostMapping
+    public ResponseEntity<Mono<ProjectDto>> createProject(@RequestBody @Valid ProjectCreateDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.createProject(dto));
     }
 
     @GetMapping("/employees")
-    public ResponseEntity<List<EmployeeReadDto>> getAllEmployees() {
-        return ResponseEntity.ok(employeeWebClient.getAllEmployees());
-    }
-
-    @PostMapping
-    public ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectCreateDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.createProject(dto));
+    public Flux<EmployeeReadDto> getAllEmployees() {
+        return employeeWebClient.getAllEmployees();
     }
 }
